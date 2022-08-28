@@ -2,17 +2,13 @@
 
 namespace Http\Controllers\Comment;
 
-use App\Http\Controllers\Comment\CommentController;
-use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-
 class CommentControllerTest extends TestCase
 {
-
     public function testComment()
     {
         $this->withoutExceptionHandling();
@@ -26,7 +22,6 @@ class CommentControllerTest extends TestCase
         $user->delete();
         $post->comments()->each(fn ($comment) => $comment->delete());
         $post->delete();
-
     }
 
     public function testReply()
@@ -45,7 +40,7 @@ class CommentControllerTest extends TestCase
             'post_id' => $post->id,
         ])->assertStatus(Response::HTTP_OK);
         $user->delete();
-        $post->comments()->each(function ($comment){
+        $post->comments()->each(function ($comment) {
             $comment->replies()->each(fn ($reply) => $reply->delete());
             $comment->delete();
         });
@@ -71,7 +66,7 @@ class CommentControllerTest extends TestCase
         $user = User::factory()->make();
         $postc = Post::factory()->create();
         $post = Post::query()->first();
-        $this->actingAs($user)->call('GET',route('comment.get'),['post_id' => $post->id])
+        $this->actingAs($user)->call('GET', route('comment.get'), ['post_id' => $post->id])
             ->assertJson($post->comments()->with(['replies', 'owner'])->get()->toArray());
         $postc->delete();
     }

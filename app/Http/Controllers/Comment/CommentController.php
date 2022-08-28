@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Comment;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Post;
-use App\Models\task;
 use App\Models\User;
 use App\Notifications\CommentReplyNotification;
 use Illuminate\Http\Request;
@@ -56,7 +55,8 @@ class CommentController extends Controller
             'post_id' => 'required|exists:posts,id',
         ]);
 
-        return response(Comment::query()->with(['replies', 'owner'])->whereHas('commentable',
+        return response(Comment::query()->with(['replies', 'owner'])->whereHas(
+            'commentable',
             fn ($query) => $query->where('posts.id', $request->query('post_id'))
         )->get());
     }

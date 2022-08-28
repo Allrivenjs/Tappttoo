@@ -17,7 +17,8 @@ class CommentReplyNotification extends Notification implements ShouldBroadcast
      * @return void
      */
     public function __construct(
-        public Comment $comment)
+        public Comment $comment
+    )
     {
     }
 

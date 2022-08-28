@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
         Storage::makeDirectory('public/images');
         Storage::makeDirectory('private/images');
 
-
         $this->call([
             RoleSeeder::class,
             UserSeeder::class,

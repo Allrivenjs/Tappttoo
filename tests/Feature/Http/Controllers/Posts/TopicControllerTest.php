@@ -2,22 +2,19 @@
 
 namespace Http\Controllers\Posts;
 
-use App\Http\Controllers\Posts\TopicController;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-
 class TopicControllerTest extends TestCase
 {
-
     public function testStore()
     {
         $this->withoutExceptionHandling();
 
-        $this->actingAs(User::factory()->makeOne())->post(route('topics.store',[
+        $this->actingAs(User::factory()->makeOne())->post(route('topics.store', [
             'name' => 'test',
         ]))->assertStatus(Response::HTTP_CREATED);
         Topic::query()->where('name', 'test')->first()?->delete();
@@ -29,8 +26,7 @@ class TopicControllerTest extends TestCase
         $topic = Topic::factory()->create();
         $response = $this->actingAs(User::factory()->makeOne())->get("api/topics/{$topic->id}")
             ->assertStatus(Response::HTTP_OK);
-        $response->assertJson(fn (AssertableJson $json)=>
-            $json->where('name', $topic->name)->etc());
+        $response->assertJson(fn (AssertableJson $json) => $json->where('name', $topic->name)->etc());
         $topic->delete();
     }
 

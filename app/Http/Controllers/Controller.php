@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Traits\AuthTrait;
-
 use App\Traits\FileTrait;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -13,13 +12,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, AuthTrait, FileTrait;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
+    use AuthTrait;
+    use FileTrait;
 
     protected static function authorize(string $ability): void
     {
-        abort_if(($ability === 'private' && !(new Controller)->authApi()->check()), Response::HTTP_UNAUTHORIZED, 'Unauthorized', [
+        abort_if(($ability === 'private' && ! (new Controller())->authApi()->check()), Response::HTTP_UNAUTHORIZED, 'Unauthorized', [
             'Content-Type' => 'application/json',
         ]);
     }
-
 }

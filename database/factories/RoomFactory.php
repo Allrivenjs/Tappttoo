@@ -18,7 +18,7 @@ class RoomFactory extends Factory
     {
         return [
             'name' => $this->faker->uuid(),
-            'type' => $this->faker->randomElement([0,1]),
+            'type' => $this->faker->randomElement([0, 1]),
         ];
     }
 }

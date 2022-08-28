@@ -20,6 +20,7 @@ class MessageFactory extends Factory
     {
         $user = User::all();
         $room = Room::all();
+
         return [
             'message' => $this->faker->text(20),
             'user_id' => $user->random()->id,

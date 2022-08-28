@@ -3,15 +3,12 @@
 namespace Traits;
 
 use App\Models\User;
-use App\Traits\FileTrait;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-
 class FileTraitTest extends TestCase
 {
-
     public function testGetPublicImages()
     {
         $file = UploadedFile::fake()->image('test.jpg');

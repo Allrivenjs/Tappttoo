@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    use HasFactory, AsReadTrait;
+    use HasFactory;
+    use AsReadTrait;
 
     protected $casts = [
         'read_at' => 'datetime',

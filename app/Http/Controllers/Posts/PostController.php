@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Posts;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
-
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends Controller
@@ -23,7 +20,6 @@ class PostController extends Controller
             'user',
             'comments',
         ])->get());
-
     }
 
     /**
@@ -37,7 +33,7 @@ class PostController extends Controller
         $request->validate(self::rules());
         $post = Post::create([
             'body' => $request->input('body'),
-            'slug' => fake()->slug() . '-' . now(),
+            'slug' => fake()->slug().'-'.now(),
             'user_id' => $request->user()->id,
         ]);
         $post->topics()->attach($request->input('topics'));
@@ -65,13 +61,14 @@ class PostController extends Controller
      */
     public function update(Request $request, $id): \Illuminate\Http\Response
     {
-         $validate = $request->validate(self::rules());
-         $post = Post::query()->findOrFail($id);
-         $post->update([
-                'body' => $validate['body'],
-         ]);
-         $post->topics()->sync($request->input('topics'));
-         return response(null);
+        $validate = $request->validate(self::rules());
+        $post = Post::query()->findOrFail($id);
+        $post->update([
+            'body' => $validate['body'],
+        ]);
+        $post->topics()->sync($request->input('topics'));
+
+        return response(null);
     }
 
     /**
@@ -83,6 +80,7 @@ class PostController extends Controller
     public function destroy(Post $post): \Illuminate\Http\Response
     {
         $post->delete();
+
         return response(null);
     }
 

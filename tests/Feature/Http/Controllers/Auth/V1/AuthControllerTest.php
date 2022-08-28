@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class AuthControllerTest extends TestCase
 {
-
     private function login(): array
     {
         $user = User::factory()->create();
@@ -15,6 +14,7 @@ class AuthControllerTest extends TestCase
             'email' => $user->email,
             'password' => 'password',
         ]);
+
         return compact('user', 'response');
     }
 
@@ -30,7 +30,7 @@ class AuthControllerTest extends TestCase
         $data = $this->login();
         $response2 = $this->get(route('logout'), [
             'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $data['response']->json('access_token'),
+            'Authorization' => 'Bearer '.$data['response']->json('access_token'),
         ]);
 
         $data['user']->delete();
@@ -44,6 +44,5 @@ class AuthControllerTest extends TestCase
         $response = $this->post(route('register'), $data);
         User::query()->where('email', $data['email'])->first()?->delete();
         $response->assertOk();
-
     }
 }

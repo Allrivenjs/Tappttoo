@@ -39,6 +39,7 @@ class TopicController extends Controller
         Topic::create([
             'name' => $request->input('name'),
         ]);
+
         return response(null)->setStatusCode(Response::HTTP_CREATED);
     }
 
@@ -68,6 +69,7 @@ class TopicController extends Controller
         $topic->update([
             'name' => $request->input('name'),
         ]);
+
         return response(null);
     }
 
@@ -80,6 +82,7 @@ class TopicController extends Controller
     public function destroy(Topic $topic): \Illuminate\Http\Response
     {
         $topic->delete();
+
         return response(null);
     }
 }

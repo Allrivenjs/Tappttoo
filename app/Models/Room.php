@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     use HasFactory;
+
     protected $fillable = ['name', 'type'];
 
     public function messages(): \Illuminate\Database\Eloquent\Relations\HasMany

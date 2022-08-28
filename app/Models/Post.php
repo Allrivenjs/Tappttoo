@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
-    protected $fillable = ['slug', 'body','user_id'];
+
+    protected $fillable = ['slug', 'body', 'user_id'];
 
     public function getCreatedAtAttribute($value): string
     {

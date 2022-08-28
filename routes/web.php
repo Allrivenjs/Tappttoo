@@ -20,4 +20,3 @@ Route::get('/', function () {
 
 Route::get('/{type}/{path}', [Controller::class, 'getImages'])
     ->name('getAnyImage')->whereIn('type', ['public', 'private']);
-

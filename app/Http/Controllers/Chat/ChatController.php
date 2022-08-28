@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Notification;
 
 class ChatController extends Controller
 {
-    public function __construct(private RoomInterface $room){}
+    public function __construct(private RoomInterface $room)
+    {
+    }
 
     public function getRooms(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
@@ -35,7 +37,7 @@ class ChatController extends Controller
         $receiver_id = $request->query('receiver_id');
         throw_if(is_null($receiver_id), 'Receiver id is required for query param');
         throw_if((int) $receiver_id == (int) $userId, 'You can not chat with yourself');
-        $match = $this->room->matchUser((int)$receiver_id, (int)$userId);
+        $match = $this->room->matchUser((int) $receiver_id, (int) $userId);
         $response = $match ?: $this->createChatRoom($receiver_id);
 
         return response($response);
@@ -69,7 +71,7 @@ class ChatController extends Controller
         ]);
         $message = Message::query()->find($request->query('message'))->markAsReadTo();
 //        Notification::send(
-////            $message->room()->users()->where('id', '!=', $message->user_id)->get(),
+        ////            $message->room()->users()->where('id', '!=', $message->user_id)->get(),
 //        );
         return Response(null);
     }
