@@ -16,13 +16,13 @@ return new class () extends Migration {
             $table->id();
             $table->string('slug');
             $table->text('body');
-            $table->foreignIdFor(\App\Models\User::class)->constrained();
+            $table->foreignIdFor(\App\Models\User::class)->constrained()->onDelete('cascade');
             $table->timestamps();
         });
         Schema::create('post_topic', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Topic::class)->constrained();
-            $table->foreignIdFor(\App\Models\Post::class)->constrained();
+            $table->foreignIdFor(\App\Models\Topic::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Post::class)->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
