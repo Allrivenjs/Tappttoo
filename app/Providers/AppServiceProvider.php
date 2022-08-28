@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Chat\Chat;
+use App\Interfaces\Chat\RoomInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Model::preventLazyLoading(! app()->isProduction());
         Schema::defaultStringLength(125);
+        $this->app->singleton(RoomInterface::class, Chat::class);
     }
 }

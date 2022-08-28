@@ -48,7 +48,6 @@ class AuthController extends Controller
     {
         $validatedData = $request->validate($this->rules());
         $validatedData['password'] = Hash::make($request->password);
-        $validatedData['birthday'] = Carbon::make($request->birthday);
         try {
             $user = User::create($validatedData);
         } catch (QueryException $e) {
@@ -73,7 +72,6 @@ class AuthController extends Controller
             'lastname' => 'required|string',
             'email' => 'required|email|unique:users',
             'phone' => 'required',
-            'place' => 'required',
             'password' => ['required', Rules\Password::defaults()],
         ];
     }
@@ -84,7 +82,6 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
-
         return response()->json([
             'message' => 'Successfully logged out',
         ]);

@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\V1\AuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Chat\ChatController;
+use App\Http\Controllers\Comment\CommentController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Posts\TopicController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,3 +22,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('register', [AuthController::class, 'register'])->name('register');
+
+Route::apiResource('posts', \App\Http\Controllers\Posts\PostController::class);
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::post('comment-reply', [CommentController::class, 'reply'])->name('comment.reply');
+    Route::post('comment', [CommentController::class, 'comment'])->name('comment');
+    Route::delete('comment/{comment}', [CommentController::class, 'delete'])->name('comment.delete');
+
+    Route::get('get-my-rooms', [ChatController::class, 'getRooms'])->name('chat.get-my-rooms');
+    Route::get('chat/message/{room_id}', [ChatController::class, 'getMessages'])->name('chat.getMessages');
+    Route::get('chat/exist-room-or-create', [ChatController::class, 'getExistRoom'])->name('chat.getExistRoom');
+    Route::get('chat/markAsRead', [ChatController::class, 'markAsRead'])->name('chat.markAsRead');
+    Route::post('chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.send-message');
+});
+Route::apiResource('topics', TopicController::class)->names('topics');
+
+Route::post('upload-file', [Controller::class, 'httpResponse'])->name('upload-file');
+Route::get('getComments', [CommentController::class, 'getComments'])->name('comment.get');

@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Http\Controllers\Comment;
+
+use App\Http\Controllers\Controller;
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\task;
+use App\Models\User;
+use App\Notifications\CommentReplyNotification;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class CommentController extends Controller
+{
+    public function comment(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        $request->validate([
+            'body' => 'required|string',
+            'own_id' => 'required|exists:users,id',
+            'post_id' => 'required|exists:posts,id',
+        ]);
+
+        Post::query()->find($request->post_id)->comments()->create([
+            'body' => $request->body,
+            'own_id' => $request->own_id,
+        ]);
+
+        return response(null)->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    public function reply(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        $request->validate([
+            'body' => 'required',
+            'parent_id' => 'required|exists:comments,id',
+            'own_id' => 'required|exists:users,id',
+            'post_id' => 'required|exists:posts,id',
+        ]);
+
+        $comment = Post::query()->find($request->post_id)->comments()->create([
+            'body' => $request->body,
+            'own_id' => $request->own_id,
+            'parent_id' => $request->parent_id,
+        ]);
+
+//        User::query()->whereHas('comments', fn ($q) => $q->where('comments.id', $request->parent_id))
+//            ->get()->each(fn ($user) => $user->notify(new CommentReplyNotification($comment)));
+
+        return response(null)->setStatusCode(Response::HTTP_OK);
+    }
+
+    public function getComments(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        $request->validate([
+            'post_id' => 'required|exists:posts,id',
+        ]);
+
+        return response(Comment::query()->with(['replies', 'owner'])->whereHas('commentable',
+            fn ($query) => $query->where('posts.id', $request->query('post_id'))
+        )->get());
+    }
+
+    public function delete($id): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        Comment::query()->findOrFail($id)->delete();
+
+        return response(null)->setStatusCode(Response::HTTP_OK);
+    }
+}
