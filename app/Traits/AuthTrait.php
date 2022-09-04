@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
@@ -145,7 +144,7 @@ trait AuthTrait
     {
         return [
             'user' => $user,
-            'role' => $user->getRoleNames(),
+            'roles' => $user->role,
             'access_token' => $token->accessToken,
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse($token->token->expires_at)->toDateTimeString(),
@@ -177,10 +176,7 @@ trait AuthTrait
     protected function rulesRegister(): array
     {
         return [
-            'name' => 'required|max:255',
-            'lastname' => 'required|string',
             'email' => 'required|email|unique:users',
-            'phone' => 'required',
             'password' => ['required', Rules\Password::defaults()],
         ];
     }

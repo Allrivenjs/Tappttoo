@@ -22,6 +22,14 @@ class PostController extends Controller
         ])->get());
     }
 
+    public function getPostsByUser($user): \Illuminate\Http\Response
+    {
+        return response(Post::with([
+            'user',
+            'comments',
+        ])->where('user_id', $user)->paginate(10));
+    }
+
     /**
      * Store a newly created resource in storage.
      *

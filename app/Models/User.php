@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\{Factories\HasFactory, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Overtrue\LaravelFollow\Traits\{Followable, Follower};
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -18,6 +18,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use SoftDeletes;
     use HasRoles;
+    use Follower;
+    use Followable;
 
     /**
      * The attributes that are mass assignable.
@@ -53,6 +55,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+
+
     public function getCreatedAtAttribute($value): string
     {
         return Carbon::parse($value)->diffForHumans();
@@ -76,6 +80,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return Carbon::parse($value)->diffForHumans();
     }
 
+    public function getRoleAttribute(): \Illuminate\Support\Collection
+    {
+        return $this->roles()->pluck('name');
+    }
+
     public function messages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Message::class);
@@ -95,4 +104,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(SocialProfile::class);
     }
+
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
+
 }
