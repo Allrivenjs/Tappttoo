@@ -48,7 +48,7 @@ class UserController extends Controller
                 'socialAccounts',
                 'followers',
                 'followings'=> ['user'],
-            ])->find($user)))->response();
+            ])->findOrFail($user)))->response();
     }
 
     /**
