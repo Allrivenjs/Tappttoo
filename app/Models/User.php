@@ -29,11 +29,17 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'lastname',
+        'locate_maps',
+        'city_id',
+        'address',
+        'biography',
+        'name_company',
+        'is_company',
+        'enabled',
         'phone',
         'email',
         'profile_photo_path',
         'password',
-        'locate_maps',
     ];
 
     /**
@@ -110,5 +116,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Post::class);
     }
 
+    public function city(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
 
 }

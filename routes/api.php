@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\V1\AuthController;
 use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\GeoLocation\CountryController;
+use App\Http\Controllers\GeoLocation\StateController;
 use App\Http\Controllers\Posts\PostController;
 use App\Http\Controllers\Posts\TopicController;
 use App\Http\Controllers\User\FollowController;
@@ -45,3 +47,5 @@ Route::apiResource('user', UserController::class)->names('user')->only(['show'])
 Route::get('posts-by-user/{user}', [PostController::class, 'getPostsByUser'])->name('posts-by-user');
 Route::post('upload-file', [Controller::class, 'httpResponse'])->name('upload-file');
 Route::get('getComments', [CommentController::class, 'getComments'])->name('comment.get');
+Route::apiResource('country', CountryController::class)->names('country')->only(['index', 'store', 'show']);
+Route::apiResource('state', StateController::class)->names('state')->only(['index', 'store', 'show']);

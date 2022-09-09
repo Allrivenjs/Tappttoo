@@ -72,6 +72,11 @@ class UserController extends Controller
             'lastname' => 'required|string',
             'phone' => 'required|string',
             'locate_maps' => 'required|string',
+            'city_id' => 'required|integer',
+            'address' => 'required|string',
+            'biography' => 'required|string',
+            'name_company' => 'string',
+            'is_company' => 'required|boolean',
         ];
     }
 
