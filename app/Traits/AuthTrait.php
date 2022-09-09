@@ -112,10 +112,10 @@ trait AuthTrait
         $request->validate($this->rulesLogin());
         abort_unless($this->authWeb()->attempt($request->only('email', 'password')),
             Response::HTTP_FORBIDDEN,'Invalid credentials');
-        $tokenResult = $this->authApi()->user()->createToken('authToken');
+        $tokenResult = $this->authWeb()->user()->createToken('authToken');
         $token = $tokenResult->token;
         $this->remember_me($token, $request);
-        return $this->returnDataUser($this->authApi()->user(),$tokenResult);
+        return $this->returnDataUser($this->authWeb()->user(),$tokenResult);
     }
 
     public function handleRegisterMethod(Request $request): array
