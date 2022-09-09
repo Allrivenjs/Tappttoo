@@ -110,7 +110,7 @@ trait AuthTrait
     public function handleLoginMethod(Request $request): array
     {
         $request->validate($this->rulesLogin());
-        abort_unless($this->authApi()->attempt($request->only('email', 'password')),
+        abort_unless($this->authWeb()->attempt($request->only('email', 'password')),
             Response::HTTP_FORBIDDEN,'Invalid credentials');
         $tokenResult = $this->authApi()->user()->createToken('authToken');
         $token = $tokenResult->token;
