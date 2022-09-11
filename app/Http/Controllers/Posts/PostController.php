@@ -39,6 +39,7 @@ class PostController extends Controller
     public function store(Request $request): \Illuminate\Http\Response
     {
         $request->validate(self::rules());
+        dd($this->authWeb()->user(), $this->authApiaa()->user());
         $post = Post::create([
             'body' => $request->input('body'),
             'slug' => fake()->slug().'-'.now(),
