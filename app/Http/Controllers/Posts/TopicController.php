@@ -34,7 +34,7 @@ class TopicController extends Controller
     public function store(Request $request): \Illuminate\Http\Response
     {
         $request->validate([
-            'name',
+            'name'=>'required',
         ]);
         Topic::create([
             'name' => $request->input('name'),
@@ -64,7 +64,7 @@ class TopicController extends Controller
     public function update(Request $request, Topic $topic): \Illuminate\Http\Response
     {
         $request->validate([
-            'name',
+            'name'=>'required',
         ]);
         $topic->update([
             'name' => $request->input('name'),
