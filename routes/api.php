@@ -41,9 +41,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('chat/markAsRead', [ChatController::class, 'markAsRead'])->name('chat.markAsRead');
     Route::post('chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.send-message');
     Route::get('follow/{user}', [FollowController::class, 'toggleFollow'])->name('user.toggleFollow');
+    Route::apiResource('user', UserController::class)->names('user')->only(['update']);
 });
 Route::apiResource('topics', TopicController::class)->names('topics');
-Route::apiResource('user', UserController::class)->names('user')->only(['show','update']);
+Route::apiResource('user', UserController::class)->names('user')->only(['show']);
 Route::get('posts-by-user/{user}', [PostController::class, 'getPostsByUser'])->name('posts-by-user');
 Route::post('upload-file', [Controller::class, 'httpResponse'])->name('upload-file');
 Route::get('getComments', [CommentController::class, 'getComments'])->name('comment.get');
