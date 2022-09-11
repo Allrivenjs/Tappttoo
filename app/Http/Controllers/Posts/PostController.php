@@ -42,7 +42,7 @@ class PostController extends Controller
         $post = Post::create([
             'body' => $request->input('body'),
             'slug' => fake()->slug().'-'.now(),
-            'user_id' => $request->user()->id,
+            'user_id' => $this->authWeb()->user()->id,
         ]);
         $post->topics()->attach($request->input('topics'));
 

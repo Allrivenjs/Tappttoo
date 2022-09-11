@@ -43,7 +43,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('follow/{user}', [FollowController::class, 'toggleFollow'])->name('user.toggleFollow');
 });
 Route::apiResource('topics', TopicController::class)->names('topics');
-Route::apiResource('user', UserController::class)->names('user')->only(['show']);
+Route::apiResource('user', UserController::class)->names('user')->only(['show','update']);
 Route::get('posts-by-user/{user}', [PostController::class, 'getPostsByUser'])->name('posts-by-user');
 Route::post('upload-file', [Controller::class, 'httpResponse'])->name('upload-file');
 Route::get('getComments', [CommentController::class, 'getComments'])->name('comment.get');

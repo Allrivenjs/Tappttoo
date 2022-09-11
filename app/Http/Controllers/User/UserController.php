@@ -62,7 +62,7 @@ class UserController extends Controller
     {
         $validate = $request->validate($this->rules());
         $user->update($validate);
-        return response()->setStatusCode(Response::HTTP_ACCEPTED);
+        return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
     }
 
     protected function rules(): array
