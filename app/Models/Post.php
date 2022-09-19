@@ -34,7 +34,7 @@ class Post extends Model
 
     public function comments_lasted(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
-        return $this->comments()->orderBy('created_at', 'desc');
+        return $this->comments()->orderBy('created_at', 'desc')->take(3);
     }
 
     public function topics(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

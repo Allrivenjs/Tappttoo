@@ -17,6 +17,7 @@ use Illuminate\Validation\Rules;
 
 trait AuthTrait
 {
+    private String $token;
     protected function authWeb(): \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
     {
         return auth()->guard('web');
@@ -32,15 +33,33 @@ trait AuthTrait
         return Socialite::driver($driver)->redirect();
     }
 
-    public function redirectToCallbackSocialProvider($driver)
+    public function redirectToCallbackSocialProvider($driver, $other = false, $token = null)
     {
         abort_unless(array_key_exists($driver, Config::get('services')),Response::HTTP_NOT_FOUND,'Driver not found');
-        $method = 'handle'.ucfirst($driver).'Callback';
+        $method = 'handle'.ucfirst($driver);
+        $other ? $method .= 'OtherCallback' : $method .= 'Callback';
+        $this->token = $token;
         if (!method_exists($this, $method)) {
             $this->handleMissingCallbackMethod();
         }
         return $this->{$method}();
     }
+
+    private function handleFacebookOtherCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        return response($this->handleSocialiteMethodLogin('facebook'));
+    }
+
+    private function handleGoogleOtherCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        return response($this->handleSocialiteMethodLogin('google'));
+    }
+
+    private function handleTwitterOtherCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        return response($this->handleSocialiteMethodLogin('twitter'));
+    }
+
 
     private function handleFacebookCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
@@ -57,9 +76,10 @@ trait AuthTrait
         return response($this->handleSocialiteMethodLogin('twitter'));
     }
 
-    private function handleSocialiteMethodLogin($provider): array
+    private function handleSocialiteMethodLogin($provider, $other = false): array
     {
-        $socialUser = Socialite::driver($provider)->stateless()->user();
+        $socialite = Socialite::driver($provider);
+        $socialUser = $other ?  $socialite->stateless()->user() : $socialite->userFromToken($this->token)  ;
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
     }

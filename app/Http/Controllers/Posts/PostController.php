@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Posts;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,12 +53,17 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     * @return PostResource
      */
-    public function show(Post $post): \Illuminate\Http\Response
+    public function show(Post $post): PostResource
     {
-        return response($post);
+        return (new PostResource($post->load([
+            'comments_lasted' => ['owner'],
+            'likes' => ['user_take_five'],
+            'user',
+            'topics',
+        ])));
     }
 
     /**

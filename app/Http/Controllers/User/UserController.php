@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PostResource;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -44,11 +45,23 @@ class UserController extends Controller
         return (new UserResource(User::query()
             ->with([
                 'roles',
-                'posts',
                 'socialAccounts',
                 'followers',
                 'followings'=> ['user'],
             ])->findOrFail($user)))->response();
+    }
+
+
+    public function mePosts(): \Illuminate\Http\JsonResponse
+    {
+        return (new PostResource(User::query()
+            ->with([
+                'posts'=> [
+                    'comments' => ['user'],
+                    'likes' => ['user'],
+                ],
+            ])
+            ->findOrFail(auth()->user()->id)))->response();
     }
 
     /**
