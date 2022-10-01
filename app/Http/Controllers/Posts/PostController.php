@@ -60,7 +60,7 @@ class PostController extends Controller
     {
         return (new PostResource($post->load([
             'comments_lasted' => ['owner'],
-            'likes' => ['user_take_five'],
+          //  'likes' => ['user_take_five'],
             'user',
             'topics',
         ])));

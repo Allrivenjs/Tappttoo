@@ -40,28 +40,27 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($user): \Illuminate\Http\JsonResponse
+    public function show(User $user): \Illuminate\Http\JsonResponse
     {
-        return (new UserResource(User::query()
-            ->with([
-                'roles',
-                'socialAccounts',
-                'followers',
-                'followings'=> ['user'],
-            ])->findOrFail($user)))->response();
+        return (new UserResource($user->load([
+            'roles',
+            'socialAccounts',
+            'followers',
+            'followings'=> ['user'],
+        ])))->response();
     }
 
 
     public function mePosts(): \Illuminate\Http\JsonResponse
     {
-        return (new PostResource(User::query()
-            ->with([
+        return (new PostResource(auth()->user()->with(
+            [
                 'posts'=> [
                     'comments' => ['user'],
                     'likes' => ['user'],
                 ],
-            ])
-            ->findOrFail(auth()->user()->id)))->response();
+            ]
+        )))->response();
     }
 
     /**

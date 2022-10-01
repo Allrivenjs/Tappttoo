@@ -16,14 +16,14 @@ class CountriesSeeder extends Seeder
      */
     public function run(): void
     {
-        $datos =json_decode( Http::get('https://www.datos.gov.co/resource/xdk5-pm3f.json')
+        $data =json_decode( Http::get('https://www.datos.gov.co/resource/xdk5-pm3f.json')
             ->body(), JSON_UNESCAPED_UNICODE);
-        $colombia = Country::query()->make([
+        $colombia = Country::create([
             'name' => 'Colombia',
         ]);
         $states = [];
         $aux = '';
-        collect($datos)->each(function ($item,$key) use (&$states, &$aux) {
+        collect($data)->each(function ($item,$key) use (&$states, &$aux) {
 //           echo json_encode($item, JSON_UNESCAPED_UNICODE) . $key + 1 . PHP_EOL;
            if($aux != $item['departamento'] && !array_key_exists($item['departamento'], $states)){
                $states[$item['departamento']] = [
@@ -50,24 +50,27 @@ class CountriesSeeder extends Seeder
            }
            $aux = $item['departamento'];
         });
-        echo 'Inserting ' . count($states) . ' states...' . PHP_EOL;
+        //echo 'Inserting ' . count($states) . ' states...' . PHP_EOL;
         $states = collect($states);
-        echo 'Inserting ' . $states->sum(function ($item) {
-            return count($item['cities']);
-        }) . ' cities...' . PHP_EOL;
-        sleep(1);
+        //echo 'Inserting ' . $states->sum(function ($item) {
+        //    return count($item['cities']);
+        //}) . ' cities...' . PHP_EOL;
+        //sleep(1);
 
         $states->each(function ($item) use ($colombia) {
-            echo 'For each state ' . $item['name'] . ' with ' . count($item['cities']) . ' cities' . PHP_EOL;
-            $city = $colombia->states()->make($item);
+            //echo 'For each state ' . $item['name'] . ' with ' . count($item['cities']) . ' cities' . PHP_EOL;
+            $city = $colombia->states()->create([
+                'name' => $item['name']
+            ]);
             collect($item['cities'])->each(function ($item) use ($city) {
-
-                echo 'For each city ' . $item['name'] . PHP_EOL;
-                $city->cities()->make($item);
+              //  echo 'For each city ' . $item['name'] . PHP_EOL;
+                $city->cities()->create($item);
             });
-            echo 'State ' . $item['name'] . ' with ' . count($item['cities']) . ' cities inserted in the database' . PHP_EOL;
+            //echo 'State ' . $item['name'] . ' with ' . count($item['cities']) . ' cities inserted in the database' . PHP_EOL;
         });
-        echo 'All states inserted in the database' . PHP_EOL;
+
+
+//        echo 'All states inserted in the database' . PHP_EOL;
 
     }
 }
