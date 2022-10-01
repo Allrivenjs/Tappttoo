@@ -48,7 +48,9 @@ Route::apiResource('user', UserController::class)->names('user')->only(['show'])
 Route::get('posts-by-user/{user}', [PostController::class, 'getPostsByUser'])->name('posts-by-user');
 Route::post('upload-file', [Controller::class, 'httpResponse'])->name('upload-file');
 Route::get('getComments', [CommentController::class, 'getComments'])->name('comment.get');
+
 Route::apiResource('country', CountryController::class)->names('country')->only(['index', 'store', 'show']);
 Route::apiResource('state', StateController::class)->names('state')->only(['index', 'store', 'show']);
+
 Route::get('/auth/{driver}/{other}/{token}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
     ->name('redirectToCallbackSocialProvider');

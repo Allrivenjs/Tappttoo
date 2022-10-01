@@ -22,13 +22,14 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Storage::makeDirectory('public/images');
-        Storage::makeDirectory('private/images');
-
-        $this->call([
-            RoleSeeder::class,
-            UserSeeder::class,
-            PostSeeder::class,
-        ]);
+//        Storage::makeDirectory('public/images');
+//        Storage::makeDirectory('private/images');
+//
+//        $this->call([
+//            RoleSeeder::class,
+//            UserSeeder::class,
+//            PostSeeder::class,
+//        ]);
+        $this->call(CountriesSeeder::class);
     }
 }
