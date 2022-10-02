@@ -26,7 +26,7 @@ class PostControllerTest extends TestCase
         $post = Post::factory()->create();
         $response = $this->actingAs(User::factory()->makeOne())->get("api/posts/{$post->id}")
             ->assertStatus(Response::HTTP_OK);
-        $response->assertJson(fn (AssertableJson $json) => $json->where('slug', $post->slug)->etc());
+        $response->assertJson(fn (AssertableJson $json) => $json->where("data.slug", $post->slug)->etc());
         $post->delete();
     }
 
