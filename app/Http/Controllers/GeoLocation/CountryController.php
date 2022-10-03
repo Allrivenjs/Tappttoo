@@ -43,7 +43,7 @@ class CountryController extends Controller
      */
     public function show(Country $country): \Illuminate\Http\Response
     {
-        $country->load(['states'=>'cities']);
+        $country->load(['states']);
         return response($country);
     }
 
