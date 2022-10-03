@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\GeoLocation;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use App\Models\State;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,12 +40,12 @@ class StateController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\State  $state
+     * @param  \App\Models\Country  $state
      * @return \Illuminate\Http\Response
      */
-    public function show(StateController $state): \Illuminate\Http\Response
+    public function show(State $state): \Illuminate\Http\Response
     {
-        $state->load(['cities','country']);
+        $state->load(['cities']);
         return response($state);
     }
 

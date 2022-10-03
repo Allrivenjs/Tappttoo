@@ -4,6 +4,7 @@ namespace App\Http\Controllers\GeoLocation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Country;
+use App\Models\State;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,7 +41,7 @@ class CountryController extends Controller
      * @param  \App\Models\Country  $country
      * @return \Illuminate\Http\Response
      */
-    public function show(CountryController $country): \Illuminate\Http\Response
+    public function show(Country $country): \Illuminate\Http\Response
     {
         $country->load(['states'=>'cities']);
         return response($country);

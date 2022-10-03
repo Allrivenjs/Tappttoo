@@ -41,9 +41,9 @@ class CityController extends Controller
      * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function show(CityController $city): \Illuminate\Http\Response
+    public function show(City $city): \Illuminate\Http\Response
     {
-        return response($city->load(['state','country']));
+        return response($city);
     }
 
     /**
