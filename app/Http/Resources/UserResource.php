@@ -30,9 +30,9 @@ class UserResource extends JsonResource
                 'count'=>$this->followings->count()
             ],
             'city' => [
-                'id'=>$this->city->id,
-                'name'=>$this->city->name,
-                'state'=>$this->city->state
+                'id'=>$this->city->id??null,
+                'name'=>$this->city->name??null,
+                'state'=>$this->city->state??null
             ]
         ]);
     }
