@@ -29,6 +29,11 @@ class UserResource extends JsonResource
                 'data'=>$this->followings->pluck('user'),
                 'count'=>$this->followings->count()
             ],
+            'city' => [
+                'id'=>$this->city->id,
+                'name'=>$this->city->name,
+                'state'=>$this->city->state
+            ]
         ]);
     }
 }
