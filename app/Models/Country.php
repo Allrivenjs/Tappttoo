@@ -12,6 +12,10 @@ class Country extends Model
     protected $fillable = [
         'name',
     ];
+    protected $visible = [
+        'name',
+        'id'
+    ];
     public function states(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(State::class);

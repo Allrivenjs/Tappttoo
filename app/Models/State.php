@@ -12,6 +12,10 @@ class State extends Model
         'name',
         'country_id',
     ];
+    protected $visible = [
+        'name',
+        'id'
+    ];
     public function country(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Country::class);

@@ -45,6 +45,7 @@ class UserController extends Controller
         return (new UserResource($user->load([
             'roles',
             'socialAccounts',
+            "city" => ['state'],
             'followers',
             'followings'=> ['user'],
         ])))->response();

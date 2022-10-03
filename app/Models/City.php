@@ -12,6 +12,12 @@ class City extends Model
         'name',
         'state_id',
     ];
+
+    protected $visible = [
+        'name',
+        'id'
+    ];
+
     public function state(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(State::class);
