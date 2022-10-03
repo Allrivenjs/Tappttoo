@@ -196,7 +196,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         PrettyRoutes\ServiceProvider::class,
-        Laravel\Socialite\SocialiteServiceProvider::class
+        Laravel\Socialite\SocialiteServiceProvider::class,
+        Recca0120\Terminal\TerminalServiceProvider::class,
     ],
 
     /*

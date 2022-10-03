@@ -14,7 +14,9 @@ class State extends Model
     ];
     protected $visible = [
         'name',
-        'id'
+        'id',
+        'country',
+        'cities',
     ];
     public function country(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

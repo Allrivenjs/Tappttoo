@@ -15,7 +15,8 @@ class City extends Model
 
     protected $visible = [
         'name',
-        'id'
+        'id',
+        'state'
     ];
 
     public function state(): \Illuminate\Database\Eloquent\Relations\BelongsTo

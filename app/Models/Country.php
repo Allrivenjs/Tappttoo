@@ -14,7 +14,8 @@ class Country extends Model
     ];
     protected $visible = [
         'name',
-        'id'
+        'id',
+        'states'
     ];
     public function states(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
