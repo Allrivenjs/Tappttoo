@@ -17,7 +17,7 @@ class CountryController extends Controller
      */
     public function index(): \Illuminate\Http\Response
     {
-        return response(Country::with(['states'=>'cities'])->get());
+        return response(Country::with(['states'])->get());
     }
 
     /**
