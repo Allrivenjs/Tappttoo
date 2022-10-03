@@ -87,7 +87,7 @@ class UserController extends Controller
             'locate_maps' => 'required|string',
             'city_id' => 'required|integer',
             'address' => 'required|string',
-            'biography' => 'required|string',
+            'biography' => 'required|string|max:150',
             'name_company' => 'string',
             'is_company' => 'required|boolean',
         ];
