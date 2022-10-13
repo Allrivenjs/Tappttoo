@@ -20,6 +20,7 @@ class PostController extends Controller
         return response(Post::with([
             'user',
             'comments',
+            'likeCounter',
         ])->get());
     }
 
@@ -28,6 +29,7 @@ class PostController extends Controller
         return response(Post::with([
             'user',
             'comments',
+            'likeCounter',
         ])->where('user_id', $user)->paginate(10));
     }
 
@@ -63,6 +65,7 @@ class PostController extends Controller
           //  'likes' => ['user_take_five'],
             'user',
             'topics',
+            'likeCounter',
         ])));
     }
 

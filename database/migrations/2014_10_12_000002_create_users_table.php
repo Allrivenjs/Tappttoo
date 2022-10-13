@@ -22,6 +22,9 @@ return new class () extends Migration {
             $table->text('biography')->nullable();
             $table->string('name_company')->nullable();
             $table->boolean('is_company')->default(false);
+            $table->string('base_price')->nullable()->default(null);
+            $table->string('price_per_hour')->nullable()->default(null);
+            $table->string('instagram')->nullable();
             $table->boolean('enabled')->default(true);
             $table->string('phone')->nullable();
             $table->string('email')->unique();

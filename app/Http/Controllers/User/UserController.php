@@ -8,6 +8,7 @@ use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\ValidatedInput;
 use Illuminate\Validation\Rules;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,6 +46,7 @@ class UserController extends Controller
         return (new UserResource($user->load([
             'roles',
             'socialAccounts',
+            'topics',
             "city" => ['state'],
             'followers',
             'followings'=> ['user'],
@@ -58,6 +60,7 @@ class UserController extends Controller
             [
                 'posts'=> [
                     'comments' => ['user'],
+                    'topics',
                     'likes' => ['user'],
                 ],
             ]
@@ -89,7 +92,33 @@ class UserController extends Controller
             'address' => 'required|string',
             'biography' => 'required|string|max:150',
             'name_company' => 'string',
-            'is_company' => 'required|boolean',
+            'is_company'=> 'required|boolean',
+            'instagram' => 'string',
+        ];
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    public function updatePrice(Request $request): \Illuminate\Http\Response
+    {
+        throw_if(!auth()->user()->is_company, \Exception::class, 'You are not a company');
+        $validate = $request->validate($this->rulesPrice($request));
+        $this->authApi()->user()->update($validate);
+        return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
+    }
+
+    protected function rulesPrice($request): array
+    {
+        return  [
+            'price_per_hour'=> [
+                'numeric',
+                new Rules\RequiredIf($request->user()->is_company),
+            ],
+            'base_price'=>[
+                'numeric',
+                new Rules\RequiredIf($request->user()->is_company),
+            ],
         ];
     }
 

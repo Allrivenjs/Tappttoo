@@ -40,6 +40,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'profile_photo_path',
         'password',
+        'base_price',
+        'price_per_hour',
+        'instagram',
     ];
 
     /**

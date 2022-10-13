@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Conner\Likeable\Likeable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, Likeable;
+
 
     protected $fillable = ['slug', 'body', 'user_id'];
 
@@ -41,4 +43,5 @@ class Post extends Model
     {
         return $this->belongsToMany(Topic::class);
     }
+
 }
