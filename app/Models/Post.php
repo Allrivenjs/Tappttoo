@@ -39,9 +39,9 @@ class Post extends Model
         return $this->comments()->orderBy('created_at', 'desc')->take(3);
     }
 
-    public function topics(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function topics(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->belongsToMany(Topic::class);
+        return $this->morphToMany(Topic::class, 'topicables');
     }
 
 }

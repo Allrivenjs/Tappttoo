@@ -4,12 +4,9 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
-use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\ValidatedInput;
-use Illuminate\Validation\Rules;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -46,9 +43,10 @@ class UserController extends Controller
         return (new UserResource($user->load([
             'roles',
             'socialAccounts',
-            'topics',
+            'preferences',
             "city" => ['state'],
             'followers',
+            'tattoo_artist',
             'followings'=> ['user'],
         ])))->response();
     }
@@ -63,6 +61,7 @@ class UserController extends Controller
                     'topics',
                     'likes' => ['user'],
                 ],
+                'tattoo_artist',
             ]
         )))->response();
     }
@@ -91,36 +90,23 @@ class UserController extends Controller
             'city_id' => 'required|integer',
             'address' => 'required|string',
             'biography' => 'required|string|max:150',
-            'name_company' => 'string',
-            'is_company'=> 'required|boolean',
-            'instagram' => 'string',
         ];
     }
 
-    /**
-     * @throws \Throwable
-     */
-    public function updatePrice(Request $request): \Illuminate\Http\Response
+    protected function ruleByBiography(): array
     {
-        throw_if(!auth()->user()->is_company, \Exception::class, 'You are not a company');
-        $validate = $request->validate($this->rulesPrice($request));
-        $this->authApi()->user()->update($validate);
+        return  [
+            'biography' => 'required|string|max:150',
+        ];
+    }
+
+    public function updateBiography(Request $request, User $user): \Illuminate\Http\Response
+    {
+        $validate = $request->validate($this->ruleByBiography());
+        $user->update($validate);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
     }
 
-    protected function rulesPrice($request): array
-    {
-        return  [
-            'price_per_hour'=> [
-                'numeric',
-                new Rules\RequiredIf($request->user()->is_company),
-            ],
-            'base_price'=>[
-                'numeric',
-                new Rules\RequiredIf($request->user()->is_company),
-            ],
-        ];
-    }
 
     /**
      * Remove the specified resource from storage.

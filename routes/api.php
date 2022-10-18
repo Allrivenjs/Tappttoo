@@ -10,6 +10,7 @@ use App\Http\Controllers\Posts\LikeablePostController;
 use App\Http\Controllers\Posts\PostController;
 use App\Http\Controllers\Posts\TopicController;
 use App\Http\Controllers\User\FollowController;
+use App\Http\Controllers\User\TattooArtistController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,10 +44,19 @@ Route::middleware('auth:api')->group(function () {
     Route::post('chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.send-message');
     Route::get('follow/{user}', [FollowController::class, 'toggleFollow'])->name('user.toggleFollow');
     Route::put('user', [UserController::class, 'update'])->name('userUpdate');
-    Route::put('user/price', [UserController::class, 'updatePrice'])->name('userUpdatePrice');
+
     Route::post('post/{post}/like', [LikeablePostController::class, 'like'])->name('post.like');
     Route::post('post/{post}/unlike', [LikeablePostController::class, 'unlike'])->name('post.unlike');
     Route::get('post/{post}/like-count', [LikeablePostController::class, 'countLikes'])->name('post.likeCount');
+
+    Route::group(['prefix' => 'tattoo-artist'], function () {
+        Route::put('price', [TattooArtistController::class, 'updatePrice'])->name('companyUpdatePrice');
+        Route::put('status', [TattooArtistController::class, 'updateStatus'])->name('companyUpdateStatus');
+        Route::put('instagram', [TattooArtistController::class, 'updateInstagram'])->name('companyUpdateInstagram');
+        Route::put('name-company', [TattooArtistController::class, 'updateNameCompany'])->name('companyUpdateNameCompany');
+    });
+
+
 });
 Route::apiResource('topics', TopicController::class)->names('topics');
 Route::apiResource('user', UserController::class)->names('user')->only(['show']);

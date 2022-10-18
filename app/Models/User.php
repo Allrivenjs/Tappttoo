@@ -33,16 +33,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'city_id',
         'address',
         'biography',
-        'name_company',
-        'is_company',
-        'enabled',
         'phone',
         'email',
         'profile_photo_path',
         'password',
-        'base_price',
-        'price_per_hour',
-        'instagram',
     ];
 
     /**
@@ -122,6 +116,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function city(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function tattoo_artist(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(tattoo_artist::class);
+    }
+
+    public function preferences(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphToMany(Topic::class, 'topicables');
     }
 
 }

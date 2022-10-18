@@ -23,8 +23,14 @@ class Topic extends Model
         'updated_at',
     ];
 
-    public function posts(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function posts(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->belongsToMany(Post::class);
+        return $this->morphedByMany(Post::class,'topicables');
     }
+
+    public function tattooArtists(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphedByMany(Tattoo_artist::class, 'topicables');
+    }
+
 }
