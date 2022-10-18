@@ -120,7 +120,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function tattoo_artist(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(tattoo_artist::class);
+        return $this->hasOne(Tattoo_artist::class);
     }
 
     public function preferences(): \Illuminate\Database\Eloquent\Relations\MorphToMany
