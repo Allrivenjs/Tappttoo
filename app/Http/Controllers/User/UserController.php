@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Tattoo_artist;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -74,8 +75,9 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user): \Illuminate\Http\Response
+    public function update(Request $request): \Illuminate\Http\Response
     {
+        $user = $this->authApi()->user();
         $validate = $request->validate($this->rules());
         $user->update($validate);
         $this->updateBiography($request, $user);
