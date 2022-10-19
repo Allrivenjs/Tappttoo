@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TattooArtistController extends Controller
 {
 
-    public function __construct()
+    public function validateUser()
     {
         throw_if(!auth()->user()->tattoo_artist()->exists(), \Exception::class, 'You are not a company');
     }
@@ -20,6 +20,7 @@ class TattooArtistController extends Controller
      */
     public function updatePrice(Request $request): \Illuminate\Http\Response
     {
+        $this->validateUser();
         $validate = $request->validate($this->rulesPrice());
         $this->authApi()->user()->update($validate);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
@@ -44,6 +45,7 @@ class TattooArtistController extends Controller
 
     public function updateStatus(Request $request): \Illuminate\Http\Response
     {
+        $this->validateUser();
         $validate = $request->validate($this->rulesStatus());
         $this->authApi()->user()->tattoo_artist()->update($validate);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
@@ -51,6 +53,7 @@ class TattooArtistController extends Controller
 
     public function updateInstagram(Request $request): \Illuminate\Http\Response
     {
+        $this->validateUser();
         $validate = $request->validate($this->rulesInstagram());
         $this->authApi()->user()->tattoo_artist()->update($validate);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
@@ -58,6 +61,7 @@ class TattooArtistController extends Controller
 
     public function updateNameCompany(Request $request): \Illuminate\Http\Response
     {
+        $this->validateUser();
         $validate = $request->validate($this->rulesNameCompany());
         $this->authApi()->user()->tattoo_artist()->update($validate);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
