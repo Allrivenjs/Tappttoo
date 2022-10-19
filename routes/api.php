@@ -44,6 +44,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.send-message');
     Route::get('follow/{user}', [FollowController::class, 'toggleFollow'])->name('user.toggleFollow');
     Route::put('user', [UserController::class, 'update'])->name('userUpdate');
+    Route::get('user', [UserController::class, 'mePosts'])->name('user.me');
 
     Route::post('post/{post}/like', [LikeablePostController::class, 'like'])->name('post.like');
     Route::post('post/{post}/unlike', [LikeablePostController::class, 'unlike'])->name('post.unlike');
