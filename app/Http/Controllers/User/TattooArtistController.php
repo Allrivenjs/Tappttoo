@@ -89,7 +89,7 @@ class TattooArtistController extends Controller
         ];
     }
 
-    private function rulesStatus()
+    #[ArrayShape(['status' => "array"])] private function rulesStatus(): array
     {
         return [
             'status'=> [
