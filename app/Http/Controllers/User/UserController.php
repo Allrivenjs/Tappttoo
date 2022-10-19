@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
+use App\Models\Tattoo_artist;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -104,7 +105,7 @@ class UserController extends Controller
 
     public function createTattooArtist(User $user, $data=[])
     {
-        $user->tattoo_artist()->create($data);
+        Tattoo_artist::query()->create(array_merge($data, ['user_id' => $user->id]));
     }
 
     public function updateBiography(Request $request, User $user): \Illuminate\Http\Response
