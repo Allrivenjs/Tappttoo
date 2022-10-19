@@ -14,7 +14,7 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-        $data = [];
+//        $data = [];
 //        for ($i = 0 ; $i <= 300 ; $i++ ){
 //            $data[] = [
 //                'slug' => 'slug-'.$i,

@@ -29,7 +29,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             PostSeeder::class,
-            CountriesSeeder::class
+            CountriesSeeder::class,
+            TopicsSeeder::class,
         ]);
 
     }

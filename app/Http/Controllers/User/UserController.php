@@ -77,6 +77,8 @@ class UserController extends Controller
     {
         $validate = $request->validate($this->rules());
         $user->update($validate);
+        $this->updateBiography($request, $user);
+        !$request->input('tattoo_artist_bool') ?: $this->createTattooArtist($user) ;
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
     }
 
@@ -89,7 +91,7 @@ class UserController extends Controller
             'locate_maps' => 'required|string',
             'city_id' => 'required|integer',
             'address' => 'required|string',
-            'biography' => 'required|string|max:150',
+            'tattoo_artist_bool' => 'required|boolean',
         ];
     }
 
@@ -98,6 +100,11 @@ class UserController extends Controller
         return  [
             'biography' => 'required|string|max:150',
         ];
+    }
+
+    public function createTattooArtist(User $user, $data=[])
+    {
+        $user->tattoo_artist()->create($data);
     }
 
     public function updateBiography(Request $request, User $user): \Illuminate\Http\Response
