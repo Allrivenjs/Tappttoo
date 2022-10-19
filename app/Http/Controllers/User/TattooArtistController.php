@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Enums\StatusArtist;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -83,6 +85,17 @@ class TattooArtistController extends Controller
             'instagram'=> [
                 'required',
                 'url',
+            ],
+        ];
+    }
+
+    private function rulesStatus()
+    {
+        return [
+            'status'=> [
+                'required',
+                'string',
+                Rule::in(StatusArtist::toArray()),
             ],
         ];
     }
