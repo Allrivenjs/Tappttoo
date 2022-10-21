@@ -71,8 +71,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request): \Illuminate\Http\Response
@@ -81,7 +80,7 @@ class UserController extends Controller
         $validate = $request->validate($this->rules());
         $user->update($validate);
         $this->updateBiography($request, $user);
-        !$request->input('tattoo_artist_bool') ?: $this->createTattooArtist($user) ;
+        !$request->input('tattoo_artist_bool') ?: $this->createTattooArtist($user);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
     }
 
@@ -105,12 +104,13 @@ class UserController extends Controller
         ];
     }
 
-    public function createTattooArtist(User $user, $data=[])
+    public function createTattooArtist(User|\Illuminate\Contracts\Auth\Authenticatable|null $user, $data=[])
     {
         Tattoo_artist::query()->create(array_merge($data, ['user_id' => $user->id]));
+        $user->assignRole('tattoo_artist');
     }
 
-    public function updateBiography(Request $request, User $user): \Illuminate\Http\Response
+    public function updateBiography(Request $request, User|\Illuminate\Contracts\Auth\Authenticatable|null $user): \Illuminate\Http\Response
     {
         $validate = $request->validate($this->ruleByBiography());
         $user->update($validate);
