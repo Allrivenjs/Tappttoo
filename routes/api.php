@@ -40,6 +40,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('chat/exist-room-or-create', [ChatController::class, 'getExistRoom'])->name('chat.getExistRoom');
     Route::get('chat/markAsRead', [ChatController::class, 'markAsRead'])->name('chat.markAsRead');
     Route::post('chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.send-message');
+
     Route::get('follow/{user}', [FollowController::class, 'toggleFollow'])->name('user.toggleFollow');
     Route::apiResource('user', UserController::class)->names('user')->only(['update']);
 });

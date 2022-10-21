@@ -18,6 +18,10 @@ class Controller extends BaseController
     use AuthTrait;
     use FileTrait;
 
+    /**
+     * @param string $ability
+     * @return void
+     */
     protected static function authorize(string $ability): void
     {
         abort_if(($ability === 'private' && ! (new Controller())->authApi()->check()), Response::HTTP_UNAUTHORIZED, 'Unauthorized', [
