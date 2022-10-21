@@ -20,6 +20,7 @@ class PostController extends Controller
         return response(Post::with([
             'user',
             'comments',
+            'likeCounter',
         ])->get());
     }
 
@@ -28,6 +29,7 @@ class PostController extends Controller
         return response(Post::with([
             'user',
             'comments',
+            'likeCounter',
         ])->where('user_id', $user)->paginate(10));
     }
 
@@ -40,7 +42,7 @@ class PostController extends Controller
     public function store(Request $request): \Illuminate\Http\Response
     {
         $request->validate(self::rules());
-        $post = Post::create([
+        $post = Post::query()->create([
             'body' => $request->input('body'),
             'slug' => fake()->slug().'-'.now(),
             'user_id' => $this->authApi()->user()->id,
@@ -60,9 +62,9 @@ class PostController extends Controller
     {
         return (new PostResource($post->load([
             'comments_lasted' => ['owner'],
-          //  'likes' => ['user_take_five'],
             'user',
             'topics',
+            'likeCounter',
         ])));
     }
 
@@ -73,15 +75,13 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id): \Illuminate\Http\Response
+    public function update(Request $request, Post $post): \Illuminate\Http\Response
     {
         $validate = $request->validate(self::rules());
-        $post = Post::query()->findOrFail($id);
         $post->update([
             'body' => $validate['body'],
         ]);
         $post->topics()->sync($request->input('topics'));
-
         return response(null);
     }
 

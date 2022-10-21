@@ -4,11 +4,11 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
-use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
+use App\Models\Tattoo_artist;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -45,8 +45,10 @@ class UserController extends Controller
         return (new UserResource($user->load([
             'roles',
             'socialAccounts',
+            'preferences',
             "city" => ['state'],
             'followers',
+            'tattoo_artist',
             'followings'=> ['user'],
         ])))->response();
     }
@@ -58,8 +60,10 @@ class UserController extends Controller
             [
                 'posts'=> [
                     'comments' => ['user'],
+                    'topics',
                     'likes' => ['user'],
                 ],
+                'tattoo_artist',
             ]
         )))->response();
     }
@@ -71,10 +75,13 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user): \Illuminate\Http\Response
+    public function update(Request $request): \Illuminate\Http\Response
     {
+        $user = $this->authApi()->user();
         $validate = $request->validate($this->rules());
         $user->update($validate);
+        $this->updateBiography($request, $user);
+        !$request->input('tattoo_artist_bool') ?: $this->createTattooArtist($user) ;
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
     }
 
@@ -87,11 +94,29 @@ class UserController extends Controller
             'locate_maps' => 'required|string',
             'city_id' => 'required|integer',
             'address' => 'required|string',
-            'biography' => 'required|string|max:150',
-            'name_company' => 'string',
-            'is_company' => 'required|boolean',
+            'tattoo_artist_bool' => 'required|boolean',
         ];
     }
+
+    protected function ruleByBiography(): array
+    {
+        return  [
+            'biography' => 'required|string|max:150',
+        ];
+    }
+
+    public function createTattooArtist(User $user, $data=[])
+    {
+        Tattoo_artist::query()->create(array_merge($data, ['user_id' => $user->id]));
+    }
+
+    public function updateBiography(Request $request, User $user): \Illuminate\Http\Response
+    {
+        $validate = $request->validate($this->ruleByBiography());
+        $user->update($validate);
+        return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
+    }
+
 
     /**
      * Remove the specified resource from storage.

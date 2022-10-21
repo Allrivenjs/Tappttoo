@@ -20,9 +20,6 @@ return new class () extends Migration {
             $table->foreignIdFor(\App\Models\City::class)->nullable()->constrained()->restrictOnDelete()->restrictOnUpdate();
             $table->string('address')->nullable();
             $table->text('biography')->nullable();
-            $table->string('name_company')->nullable();
-            $table->boolean('is_company')->default(false);
-            $table->boolean('enabled')->default(true);
             $table->string('phone')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

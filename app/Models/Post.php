@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Conner\Likeable\Likeable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, Likeable;
+
 
     protected $fillable = ['slug', 'body', 'user_id'];
 
@@ -37,8 +39,9 @@ class Post extends Model
         return $this->comments()->orderBy('created_at', 'desc')->take(3);
     }
 
-    public function topics(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function topics(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->belongsToMany(Topic::class);
+        return $this->morphToMany(Topic::class, 'topicables');
     }
+
 }
