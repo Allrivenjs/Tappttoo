@@ -27,7 +27,7 @@ class TopicsSeeder extends Seeder
         $data = [];
 
         foreach ($array as $item) {
-            $data = [
+            $data[] = [
                 'name' => $item,
             ];
         }
