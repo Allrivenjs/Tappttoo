@@ -6,10 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,11 +25,12 @@ class PostController extends Controller
      */
     public function index(): \Illuminate\Http\Response
     {
-        return response(Post::with([
-            'user',
-            'comments',
-            'likeCounter',
-        ])->get());
+//        return response(Post::with([
+//            'user',
+//            'comments',
+//            'likeCounter',
+//        ])->get());
+        return response(null);
     }
 
     public function getPostsByUser($user): \Illuminate\Http\Response
@@ -30,6 +39,8 @@ class PostController extends Controller
             'user',
             'comments',
             'likeCounter',
+            'images',
+            'taggableUsers',
         ])->where('user_id', $user)->paginate(10));
     }
 
@@ -41,15 +52,23 @@ class PostController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\Response
     {
+//        dd($request->all());
         $request->validate(self::rules());
         $post = Post::query()->create([
             'body' => $request->input('body'),
-            'slug' => fake()->slug().'-'.now(),
+            'slug' => Str::uuid() . Carbon::today()->toString(),
             'user_id' => $this->authApi()->user()->id,
         ]);
+        foreach ($request->file('images') as $image) {
+            $post->images()->create([
+                'url' => $this->uploadFile('public', $image, 'posts/'.$this->authApi()->user()->id.'/images'),
+                'type' => 'public',
+            ]);
+        }
         $post->topics()->attach($request->input('topics'));
+        $post->taggableUsers()->attach($request->input('taggableUsers'));
 
-        return response($post->load('topics'))->setStatusCode(Response::HTTP_CREATED);
+        return response($post->load(['topics','taggableUsers','images']))->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -102,7 +121,12 @@ class PostController extends Controller
     {
         return [
             'body' => 'required|string',
-            'topics' => 'array',
+            'topics' => 'array|required',
+            'topics.*' => 'integer|exists:topics,id|min:1|max:3',
+            'images' => 'array|required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|required',
+            'taggableUsers' => 'array',
+            'taggableUsers.*' => 'integer|exists:users,id',
         ];
     }
 }

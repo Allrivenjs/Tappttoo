@@ -19,8 +19,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/{type}/{path}', [Controller::class, 'getImages'])
-    ->name('getAnyImage')->whereIn('type', ['public', 'private']);
+Route::get('/', [Controller::class, 'getImages'])
+    ->name('getAnyImage');
 
 
 Route::get('/auth/{driver}/redirect', [Controller::class,'redirectToProvider'])

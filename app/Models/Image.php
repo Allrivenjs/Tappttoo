@@ -10,7 +10,7 @@ class Image extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['url'];
+    protected $fillable = ['url', 'type', 'imageable_id', 'imageable_type'];
 
     protected $hidden = ['imageable_id', 'imageable_type'];
 

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\{Factories\HasFactory, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 use Overtrue\LaravelFollow\Traits\{Followable, Follower};
 use Spatie\Permission\Traits\HasRoles;
@@ -81,6 +82,11 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return Carbon::parse($value)->diffForHumans();
+    }
+
+    public function getNameForDate(): string
+    {
+        return Str::uuid(). $this->name .'-'. $this->lastname . \Illuminate\Support\Carbon::today()->toString();
     }
 
     public function getRoleAttribute(): \Illuminate\Support\Collection
