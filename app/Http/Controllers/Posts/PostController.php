@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Posts;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -15,7 +17,7 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api')->except(['index', 'show']);
+        $this->middleware('auth:api')->except(['show']);
     }
 
     /**
@@ -25,12 +27,19 @@ class PostController extends Controller
      */
     public function index(): \Illuminate\Http\Response
     {
-//        return response(Post::with([
-//            'user',
-//            'comments',
-//            'likeCounter',
-//        ])->get());
-        return response(null);
+        return response(
+          Post::query()
+          ->with([
+              'user',
+              'comments_lasted'=> [ 'replies', 'owner' ],
+              'likeCounter',
+              'topics',
+              'images',
+              'taggableUsers',
+          ])->whereHas('topics', function (Builder $query) {
+              $query->whereIn('name', $this->authApi()->user()->preferences()->pluck('name'));
+          })->simplePaginate(10)
+        );
     }
 
     public function getPostsByUser($user): \Illuminate\Http\Response
