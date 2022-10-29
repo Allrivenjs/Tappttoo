@@ -130,8 +130,8 @@ class PostController extends Controller
     {
         return [
             'body' => 'required|string',
-            'topics' => 'array|required',
-            'topics.*' => 'integer|exists:topics,id|min:1|max:3',
+            'topics' => 'array|required|min:1|max:3',
+            'topics.*' => 'integer|exists:topics,id',
             'images' => 'array|required',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|required',
             'taggableUsers' => 'array',

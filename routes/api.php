@@ -74,4 +74,4 @@ Route::apiResource('state', StateController::class)->names('state')->only(['inde
 Route::get('/auth/{driver}/{other}/{token}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
     ->name('redirectToCallbackSocialProvider');
 
-Route::option()
+
