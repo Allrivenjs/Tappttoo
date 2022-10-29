@@ -60,10 +60,6 @@ class Comment extends Model
 
         return $this->belongsTo(User::class, 'own_id');
     }
-    public function owner_take_five(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(User::class, 'own_id');
-    }
 
     public function commentable(): \Illuminate\Database\Eloquent\Relations\MorphTo
     {

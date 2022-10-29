@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Enums\StatusArtist;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,11 @@ class TattooArtistController extends Controller
 
     public function validateUser()
     {
-        throw_if(!auth()->user()->tattoo_artist()->exists(), \Exception::class, 'You are not a company');
+        try {
+            throw_if(!auth()->user()->tattoo_artist()->exists(), \Exception::class, 'You are not a company');
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -24,7 +29,7 @@ class TattooArtistController extends Controller
     {
         $this->validateUser();
         $validate = $request->validate($this->rulesPrice());
-        $this->authApi()->user()->update($validate);
+        $this->authApi()->user()->tattoo_artist()->update($validate);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
     }
 

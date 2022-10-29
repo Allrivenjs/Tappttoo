@@ -117,6 +117,23 @@ class UserController extends Controller
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
     }
 
+    public function assignPreferences(Request $request): \Illuminate\Http\Response
+    {
+        $validate = $request->validate($this->rulesPreferences());
+        $user = $this->authApi()->user();
+        $user->preferences()->sync($validate['preferences']);
+        return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
+    }
+
+
+    private function rulesPreferences(): array
+    {
+        return [
+            'preferences' => 'required|array',
+            'preferences.*' => 'required|integer|exists:topics,id',
+        ];
+    }
+
 
     /**
      * Remove the specified resource from storage.

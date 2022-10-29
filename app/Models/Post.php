@@ -44,4 +44,14 @@ class Post extends Model
         return $this->morphToMany(Topic::class, 'topicables');
     }
 
+    public function images(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function taggableUsers(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphToMany(User::class, 'taggable');
+    }
+
 }
