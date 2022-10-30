@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 
+use App\Models\Topic;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,8 +39,10 @@ class PostController extends Controller
               'images',
               'taggableUsers',
           ])->whereHas('topics', function (Builder $query) {
-              $query->whereIn('name', $this->authApi()->user()->preferences()->pluck('name'));
-          })->simplePaginate(10)
+              $query->whereIn('name', array_merge($this->authApi()->user()->preferences()->pluck('name')->toArray(), Topic::all()->pluck('name')->random()->take(1)->toArray()));
+          })->orderByDesc('created_at')
+              ->groupBy('id')
+              ->simplePaginate(10)
         );
     }
 
@@ -49,6 +53,7 @@ class PostController extends Controller
             'comments',
             'likeCounter',
             'images',
+            'topics',
             'taggableUsers',
         ])->where('user_id', $user)->paginate(10));
     }
@@ -89,10 +94,12 @@ class PostController extends Controller
     public function show(Post $post): PostResource
     {
         return (new PostResource($post->load([
-            'comments_lasted' => ['owner'],
+            'comments' => ['owner'],
             'user',
             'topics',
             'likeCounter',
+            'images',
+            'taggableUsers',
         ])));
     }
 
@@ -121,8 +128,15 @@ class PostController extends Controller
      */
     public function destroy(Post $post): \Illuminate\Http\Response
     {
+        if ($post->images()->exists()) {
+            $post->images()->get()->each(function ($image) {
+                Storage::disk($image->type)->delete($image->url);
+                $image->delete();
+            });
+        }
+        $post->topics()->detach();
+        $post->taggableUsers()->detach();
         $post->delete();
-
         return response(null);
     }
 

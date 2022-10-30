@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('register', [AuthController::class, 'register'])->name('register');
 
-Route::apiResource('posts', PostController::class);
+Route::apiResource('posts', PostController::class)->except(['update']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
