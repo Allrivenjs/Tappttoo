@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
+use App\Models\Post;
 use App\Models\Tattoo_artist;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -54,20 +55,20 @@ class UserController extends Controller
     }
 
 
-    public function mePosts(): \Illuminate\Http\JsonResponse
+    public function mePosts(): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
     {
-        return (new PostResource(auth()->user()->with(
+        return response(Post::query()->with(
             [
-                'posts'=> [
-                    'comments' => ['user'],
-                    'topics',
-                    'likeCounter',
-                    'images',
-                    'taggableUsers',
-                ],
-                'tattoo_artist',
+                'comments' => ['user'],
+                'topics',
+                'likeCounter',
+                'images',
+                'taggableUsers',
+                'user' => ['tattoo_artist'],
             ]
-        )))->response();
+        )->whereHas('user', function ($query) {
+            $query->where('user_id', $this->authApi()->user()->getAuthIdentifier());
+        })->orderByDesc('created_at')->paginate(10));
     }
 
     /**
