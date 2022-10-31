@@ -61,7 +61,9 @@ class UserController extends Controller
                 'posts'=> [
                     'comments' => ['user'],
                     'topics',
-                    'likes' => ['user'],
+                    'likeCounter',
+                    'images',
+                    'taggableUsers',
                 ],
                 'tattoo_artist',
             ]

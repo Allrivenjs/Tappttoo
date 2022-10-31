@@ -38,11 +38,12 @@ class PostController extends Controller
               'topics',
               'images',
               'taggableUsers',
-          ])->whereHas('topics', function (Builder $query) {
-              $query->whereIn('name', array_merge($this->authApi()->user()->preferences()->pluck('name')->toArray(), Topic::all()->pluck('name')->random()->take(1)->toArray()));
+          ])->whereHas('topics', function (Builder $query)  {
+                  $mypreferences = $this->authApi()->user()->preferences()->pluck('name')->toArray();
+                  $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences)->random(2)->pluck('name')->toArray();
+              $query->whereIn('name', array_merge($mypreferences, $ramdomPreferens));
           })->orderByDesc('created_at')
-              ->groupBy('id')
-              ->simplePaginate(10)
+            ->simplePaginate(10)
         );
     }
 
@@ -66,7 +67,6 @@ class PostController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\Response
     {
-//        dd($request->all());
         $request->validate(self::rules());
         $post = Post::query()->create([
             'body' => $request->input('body'),
