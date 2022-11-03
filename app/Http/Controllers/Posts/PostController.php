@@ -8,7 +8,9 @@ use App\Models\Post;
 
 use App\Models\Topic;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,9 +27,9 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(): JsonResponse
     {
         return (PostResource::collection(
             Post::query()
@@ -46,7 +48,7 @@ class PostController extends Controller
         ))->response();
     }
 
-    public function getPostsByUser($user): \Illuminate\Http\JsonResponse
+    public function getPostsByUser($user): JsonResponse
     {
         return (PostResource::collection(
             Post::with([
@@ -57,16 +59,16 @@ class PostController extends Controller
                 'topics',
                 'taggableUsers',
             ])->where('user_id', $user)->paginate(10)
-        ))->response()->getData(true);
+        ))->response();
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request): \Illuminate\Http\Response
+    public function store(Request $request): JsonResponse
     {
         $request->validate(self::rules());
         $post = Post::query()->create([
@@ -83,16 +85,16 @@ class PostController extends Controller
         $post->topics()->attach($request->input('topics'));
         $post->taggableUsers()->attach($request->input('taggableUsers'));
 
-        return response($post->load(['topics','taggableUsers','images']))->setStatusCode(Response::HTTP_CREATED);
+        return (new PostResource($post->load(['topics','taggableUsers','images'])))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      *
      * @param Post $post
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
-    public function show(Post $post): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function show(Post $post): AnonymousResourceCollection
     {
         return (PostResource::collection($post->load([
             'comments' => [ 'replies', 'owner' ],
@@ -107,7 +109,7 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
