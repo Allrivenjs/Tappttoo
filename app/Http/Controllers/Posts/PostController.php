@@ -92,11 +92,11 @@ class PostController extends Controller
      * Display the specified resource.
      *
      * @param Post $post
-     * @return AnonymousResourceCollection
+     * @return PostResource
      */
-    public function show(Post $post): AnonymousResourceCollection
+    public function show(Post $post): PostResource
     {
-        return (PostResource::collection($post->load([
+        return (new PostResource($post->load([
             'comments' => [ 'replies', 'owner' ],
             'user',
             'topics',
