@@ -25,38 +25,39 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(): \Illuminate\Http\Response
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        return response(
-          Post::query()
-          ->with([
-              'user',
-              'comments_lasted'=> [ 'replies', 'owner' ],
-              'likeCounter',
-              'topics',
-              'images',
-              'taggableUsers',
-          ])->whereHas('topics', function (Builder $query)  {
-                  $mypreferences = $this->authApi()->user()->preferences()->pluck('name')->toArray();
-                  $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences)->random(2)->pluck('name')->toArray();
-              $query->whereIn('name', array_merge($mypreferences, $ramdomPreferens));
-          })->orderByDesc('created_at')
-            ->simplePaginate(10)
-        );
+        return (PostResource::collection(
+            Post::query()
+                ->with([
+                    'user',
+                    'comments_lasted'=> [ 'replies', 'owner' ],
+                    'likeCounter',
+                    'topics',
+                    'images',
+                    'taggableUsers',
+                ])->whereHas('topics', function (Builder $query)  {
+                    $mypreferences = $this->authApi()->user()?->preferences()->pluck('name')->toArray();
+                    $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences)->random(2)->pluck('name')->toArray();
+                    $query->whereIn('name', array_merge($mypreferences, $ramdomPreferens));
+                })->orderByDesc('created_at')->simplePaginate(10)
+        ))->response();
     }
 
-    public function getPostsByUser($user): \Illuminate\Http\Response
+    public function getPostsByUser($user): \Illuminate\Http\JsonResponse
     {
-        return response(Post::with([
-            'user',
-            'comments',
-            'likeCounter',
-            'images',
-            'topics',
-            'taggableUsers',
-        ])->where('user_id', $user)->paginate(10));
+        return (PostResource::collection(
+            Post::with([
+                'user',
+                'comments'=> [ 'replies', 'owner' ],
+                'likeCounter',
+                'images',
+                'topics',
+                'taggableUsers',
+            ])->where('user_id', $user)->paginate(10)
+        ))->response()->getData(true);
     }
 
     /**
@@ -89,12 +90,12 @@ class PostController extends Controller
      * Display the specified resource.
      *
      * @param Post $post
-     * @return PostResource
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function show(Post $post): PostResource
+    public function show(Post $post): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        return (new PostResource($post->load([
-            'comments' => ['owner'],
+        return (PostResource::collection($post->load([
+            'comments' => [ 'replies', 'owner' ],
             'user',
             'topics',
             'likeCounter',
