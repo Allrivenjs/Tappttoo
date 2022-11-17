@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FollowResourcer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,16 +20,18 @@ class FollowController extends Controller
         return response(null);
     }
 
-    public function followings(User $user): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function followings(User $user): \Illuminate\Http\JsonResponse
     {
-        $followings = $user->followings()->with('followable')->paginate(10);
-        return response($followings);
+        $followings = $user->followings()->paginate(100);
+        return FollowResourcer::collection($followings)->response();
     }
 
-    public function followers(User $user): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function followers(User $user): \Illuminate\Http\JsonResponse
     {
-        $followers = $user->followers()->paginate(10);
-        return response($followers);
+        $followers = $user->followers()->paginate(100);
+
+        return FollowResourcer::collection($followers)->response();
+
     }
 
 }
