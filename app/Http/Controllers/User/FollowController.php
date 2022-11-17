@@ -21,7 +21,7 @@ class FollowController extends Controller
 
     public function followings(User $user): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-        $followings = $user->followings()->paginate(10);
+        $followings = $user->followings()->with('user')->paginate(10);
         return response($followings);
     }
 

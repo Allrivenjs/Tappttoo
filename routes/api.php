@@ -67,6 +67,8 @@ Route::middleware('auth:api')->group(function () {
 
 Route::get('followings/{user}', [FollowController::class, 'followings'])->name('user.followings');
 Route::get('followers/{user}', [FollowController::class, 'followers'])->name('user.followers');
+
+
 Route::apiResource('topics', TopicController::class)->names('topics');
 Route::apiResource('user', UserController::class)->names('user')->only(['show']);
 Route::get('posts-by-user/{user}', [PostController::class, 'getPostsByUser'])->name('posts-by-user');
