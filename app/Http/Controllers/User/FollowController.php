@@ -19,4 +19,16 @@ class FollowController extends Controller
         return response(null);
     }
 
+    public function followings(User $user): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        $followings = $user->followings()->paginate(10);
+        return response($followings);
+    }
+
+    public function followers(User $user): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        $followers = $user->followers()->paginate(10);
+        return response($followers);
+    }
+
 }
