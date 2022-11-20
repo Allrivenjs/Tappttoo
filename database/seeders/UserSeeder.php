@@ -23,5 +23,14 @@ class UserSeeder extends Seeder
             'profile_photo_path' => 'https://www.w3schools.com/howto/img_avatar.png',
             'password' => '$2a$10$7oMxkBuQ0PpbVxpJl0ufNerj0TTuZmRxrD76LlyKCaMCh8bpZqVS2',   //admin
         ])->assignRole('admin')->assignRole('moderator')->assignRole('tattoo_artist');
+        User::factory(4000)
+            ->afterCreating(function (User $user) {
+                $user->assignRole('tattoo_artist');
+                $user->preferences()->attach([
+                    rand(1, 3),
+                    rand(4, 7),
+                ]);
+            })
+            ->create();
     }
 }

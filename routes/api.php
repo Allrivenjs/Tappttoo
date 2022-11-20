@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\V1\AuthController;
 use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FinderController;
 use App\Http\Controllers\GeoLocation\CountryController;
 use App\Http\Controllers\GeoLocation\StateController;
 use App\Http\Controllers\Posts\LikeablePostController;
@@ -27,7 +28,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('register', [AuthController::class, 'register'])->name('register');
-
+Route::get('finder', [FinderController::class, 'index'])
+    ->name('finder');
 Route::apiResource('posts', PostController::class)->except(['update']);
 
 Route::middleware('auth:api')->group(function () {
