@@ -17,7 +17,8 @@ return new class () extends Migration {
             $table->string('name')->nullable();
             $table->string('lastname')->nullable();
             $table->string('locate_maps')->nullable();
-            $table->foreignIdFor(\App\Models\City::class)->nullable()->constrained()->restrictOnDelete()->restrictOnUpdate();
+            $table->unsignedBigInteger('city_id')->nullable();
+//            $table->foreignIdFor(\App\Models\City::class)->nullable()->constrained()->cascadeOnUpdate()->cascadeOnUpdate();
             $table->string('address')->nullable();
             $table->text('biography')->nullable();
             $table->string('phone')->nullable();
@@ -25,6 +26,7 @@ return new class () extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
+            $table->foreign('city_id')->references('id')->on('cities');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

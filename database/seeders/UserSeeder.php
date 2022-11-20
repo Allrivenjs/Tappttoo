@@ -31,6 +31,8 @@ class UserSeeder extends Seeder
                     rand(4, 7),
                 ]);
             })
-            ->create();
+            ->create([
+                'city_id' => 495,
+            ]);
     }
 }

@@ -26,10 +26,10 @@ class DatabaseSeeder extends Seeder
         Storage::makeDirectory('private/images');
 
         $this->call([
+            CountriesSeeder::class,
             RoleSeeder::class,
             TopicsSeeder::class,
             UserSeeder::class,
-            CountriesSeeder::class,
             PostSeeder::class,
         ]);
 

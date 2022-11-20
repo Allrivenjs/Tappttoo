@@ -28,8 +28,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('register', [AuthController::class, 'register'])->name('register');
+
 Route::get('finder', [FinderController::class, 'index'])
     ->name('finder');
+
+Route::get('show-posts-by-type', [FinderController::class, 'showPostsByType'])
+    ->name('show-posts-by-type');
+
 Route::apiResource('posts', PostController::class)->except(['update']);
 
 Route::middleware('auth:api')->group(function () {

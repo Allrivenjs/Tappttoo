@@ -23,4 +23,9 @@ class City extends Model
     {
         return $this->belongsTo(State::class);
     }
+
+    public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(User::class);
+    }
 }

@@ -8,8 +8,10 @@ use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class FinderController extends Controller
 {
@@ -31,7 +33,7 @@ class FinderController extends Controller
             "model" => City::class,
             "fields"=> ["name"],
             "relations" => [
-                "country"
+                "state" => ["country"]
             ],
         ],
     ];
@@ -60,5 +62,87 @@ class FinderController extends Controller
             })->with($relations)->paginate(20);
         }
         return response($results);
+    }
+    const relationsDefault = [
+        "topics",
+        "images",
+        "taggableUsers"
+    ];
+    const propertiesShow = [
+        "cities" => [
+            "model" => [
+                "user" => "city",
+            ] ,
+            "relationByPost" => [
+                "user" => [
+                        "city" => [
+                                "state" => [
+                            "country"
+                        ]
+                    ]
+               ],
+                ...self::relationsDefault
+            ],
+        ],
+        "tattoo" => [
+            "model" => "topics",
+            "relationByPost" => [
+                "topics" => [
+                    "tattooArtists" => [
+                        "city" => [
+                            "state" => [
+                                "country"
+                            ]
+                        ]
+                    ]
+                ],
+                ...self::relationsDefault
+            ],
+        ],
+        "artist" => [
+            "model" => "user",
+            "relationByPost" => [
+                "user" => [
+                    "tattoo_artist" => [
+                        "city" => [
+                            "state" => [
+                                "country"
+                            ]
+                        ]
+                    ]
+                ],
+                ...self::relationsDefault
+            ],
+        ],
+    ];
+
+    public function showPostsByType(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        $type = $request->get("type");
+        $id = $request->get("id");
+        $properties = self::propertiesShow[$type];
+        $model = $properties["model"];
+        $posts = Post::query();
+        if (is_array($model)) {
+            $key = key($model);
+            $posts->whereHas($key, function (Builder $query) use ($model, $id, $key) {
+                $schema = Str::plural($model[$key]);
+                $query->join(
+                    $schema,
+                    $schema . ".id",
+                    "=",
+                    Str::plural($key) . "." . $model[$key] . "_id"
+                )->where($schema . ".id", $id);
+            });
+        } else {
+            $posts->whereHas($model, function($query) use ($id, $model){
+                $model = Str::plural($model);
+                $query->where("$model.id", $id);
+            });
+        }
+//        dd($posts->toSql());
+        $relationByPost = $properties["relationByPost"] ?? [];
+        $posts = $posts->with($relationByPost)->paginate(20);
+        return response($posts);
     }
 }
