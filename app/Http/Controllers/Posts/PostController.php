@@ -19,6 +19,13 @@ use Symfony\Component\HttpFoundation\Response;
 class PostController extends Controller
 {
 
+    const relations = [
+        'user',
+        'likeCounter',
+        'topics',
+        'images',
+        'taggableUsers',
+    ];
     public function __construct()
     {
         $this->middleware('auth:api')->except(['show','index']);
@@ -34,12 +41,8 @@ class PostController extends Controller
         return (PostResource::collection(
             Post::query()
                 ->with([
-                    'user',
-                    'comments_lasted'=> [ 'replies', 'owner' ],
-                    'likeCounter',
-                    'topics',
-                    'images',
-                    'taggableUsers',
+                    ...self::relations,
+                    'comments_lasted'=> [ 'replies', 'owner' ]
                 ])->whereHas('topics', function (Builder $query)  {
                     $mypreferences = $this->authApi()->user()?->preferences()->pluck('name')->toArray();
                     $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences)->random(2)->pluck('name')->toArray();
@@ -52,12 +55,8 @@ class PostController extends Controller
     {
         return (PostResource::collection(
             Post::with([
-                'user',
-                'comments'=> [ 'replies', 'owner' ],
-                'likeCounter',
-                'images',
-                'topics',
-                'taggableUsers',
+                ...self::relations,
+                'comments_lasted'=> [ 'replies', 'owner' ]
             ])->where('user_id', $user)->paginate(10)
         ))->response();
     }
@@ -97,12 +96,8 @@ class PostController extends Controller
     public function show(Post $post): PostResource
     {
         return (new PostResource($post->load([
+            ...self::relations,
             'comments' => [ 'replies', 'owner' ],
-            'user',
-            'topics',
-            'likeCounter',
-            'images',
-            'taggableUsers',
         ])));
     }
 

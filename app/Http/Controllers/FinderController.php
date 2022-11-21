@@ -77,10 +77,10 @@ class FinderController extends Controller
                 "user" => [
                         "city" => [
                                 "state" => [
-                            "country"
+                                        "country"
+                                ]
                         ]
-                    ]
-               ],
+                ],
                 ...self::relationsDefault
             ],
         ],
@@ -140,7 +140,6 @@ class FinderController extends Controller
                 $query->where("$model.id", $id);
             });
         }
-//        dd($posts->toSql());
         $relationByPost = $properties["relationByPost"] ?? [];
         $posts = $posts->with($relationByPost)->paginate(20);
         return response($posts);

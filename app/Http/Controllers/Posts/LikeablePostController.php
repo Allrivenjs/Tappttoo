@@ -21,13 +21,13 @@ class LikeablePostController extends Controller
     public function like(Request $request, Post $post): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
     {
         $post->like($this->authApi()->user()->getAuthIdentifier());
-        return response(null, 200);
+        return response($post->likeCount, 200);
     }
 
     public function unlike(Request $request, Post $post): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
     {
         $post->unlike($this->authApi()->user()->getAuthIdentifier());
-        return response(null, 200);
+        return response($post->likeCount, 200);
     }
 
     public function countLikes(Post $post): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
