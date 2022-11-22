@@ -11,8 +11,6 @@ use Illuminate\Http\Response;
 
 class LikeablePostController extends Controller
 {
-
-
     /**
      * @param Request $request
      * @param Post $post

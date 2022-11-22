@@ -5,13 +5,11 @@ namespace App\Http\Controllers\Auth\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-
 class AuthController extends Controller
 {
-
     public function login(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-      return response($this->handleLoginMethod($request));
+        return response($this->handleLoginMethod($request));
     }
 
     public function register(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory

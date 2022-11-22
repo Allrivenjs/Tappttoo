@@ -68,8 +68,6 @@ Route::middleware('auth:api')->group(function () {
         Route::put('instagram', [TattooArtistController::class, 'updateInstagram'])->name('companyUpdateInstagram');
         Route::put('name-company', [TattooArtistController::class, 'updateNameCompany'])->name('companyUpdateNameCompany');
     });
-
-
 });
 
 Route::get('followings/{user}', [FollowController::class, 'followings'])->name('user.followings');
@@ -87,5 +85,3 @@ Route::apiResource('state', StateController::class)->names('state')->only(['inde
 
 Route::get('/auth/{driver}/{other}/{token}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
     ->name('redirectToCallbackSocialProvider');
-
-

@@ -25,12 +25,11 @@ class Topic extends Model
 
     public function posts(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphedByMany(Post::class,'topicables');
+        return $this->morphedByMany(Post::class, 'topicables');
     }
 
     public function tattooArtists(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
         return $this->morphedByMany(Tattoo_artist::class, 'topicables');
     }
-
 }

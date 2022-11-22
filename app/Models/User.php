@@ -133,5 +133,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->morphToMany(Topic::class, 'topicables');
     }
-
 }

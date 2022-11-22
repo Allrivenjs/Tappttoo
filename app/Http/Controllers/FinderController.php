@@ -12,10 +12,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use Throwable;
 
 class FinderController extends Controller
 {
-    const searchables = [
+    public const searchables = [
         "tattoo" => [
             "model" => Topic::class,
             "fields"=> ["name"]
@@ -41,7 +42,7 @@ class FinderController extends Controller
     /**
      * @param Request $request
      * @return Response|Application|ResponseFactory
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function index(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
@@ -50,25 +51,25 @@ class FinderController extends Controller
         $type = $request->get("type");
         $results = [];
         throw_if(!isset($search) || !isset($type), "search and type are required");
-        if($search && $type){
+        if ($search && $type) {
             $searchable = $searchables[$type];
             $model = $searchable["model"];
             $fields = $searchable["fields"];
             $relations = $searchable["relations"] ?? [];
-            $results = $model::where(function($query) use ($fields, $search){
-                foreach($fields as $field){
+            $results = $model::where(function ($query) use ($fields, $search) {
+                foreach ($fields as $field) {
                     $query->orWhere($field, "like", "%$search%");
                 }
             })->with($relations)->paginate(20);
         }
         return response($results);
     }
-    const relationsDefault = [
+    public const relationsDefault = [
         "topics",
         "images",
         "taggableUsers"
     ];
-    const propertiesShow = [
+    public const propertiesShow = [
         "cities" => [
             "model" => [
                 "user" => "city",
@@ -116,10 +117,15 @@ class FinderController extends Controller
         ],
     ];
 
+    /**
+     * @throws Throwable
+     */
     public function showPostsByType(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         $type = $request->get("type");
         $id = $request->get("id");
+        throw_if(!isset($type) || !isset($id), "id and type are required");
+        throw_if(in_array($type,self::propertiesShow ), "type not found");
         $properties = self::propertiesShow[$type];
         $model = $properties["model"];
         $posts = Post::query();
@@ -135,7 +141,7 @@ class FinderController extends Controller
                 )->where($schema . ".id", $id);
             });
         } else {
-            $posts->whereHas($model, function($query) use ($id, $model){
+            $posts->whereHas($model, function ($query) use ($id, $model) {
                 $model = Str::plural($model);
                 $query->where("$model.id", $id);
             });

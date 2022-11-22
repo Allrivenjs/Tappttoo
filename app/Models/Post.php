@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    use HasFactory, Likeable;
+    use HasFactory;
+    use Likeable;
 
 
     protected $fillable = ['slug', 'body', 'user_id'];
@@ -53,5 +54,4 @@ class Post extends Model
     {
         return $this->morphToMany(User::class, 'taggable');
     }
-
 }

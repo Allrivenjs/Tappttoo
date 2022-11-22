@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-
 class Tattoo_artist extends Model
 {
     use HasFactory;
@@ -38,6 +37,3 @@ class Tattoo_artist extends Model
         return $this->morphToMany(Topic::class, 'topicables');
     }
 }
-
-
-

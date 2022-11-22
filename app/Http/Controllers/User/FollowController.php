@@ -10,12 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FollowController extends Controller
 {
-
-    public function toggleFollow(Request $request,$user): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function toggleFollow(Request $request, $user): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         $user1 = $this->authApi()->user();
         $user = User::query()->find($user);
-        abort_unless((bool)$user,Response::HTTP_NOT_FOUND, 'User not found');
+        abort_unless((bool)$user, Response::HTTP_NOT_FOUND, 'User not found');
         $user1->toggleFollow($user);
         return response(null);
     }
@@ -31,7 +30,5 @@ class FollowController extends Controller
         $followers = $user->followers()->paginate(100);
 
         return FollowResourcer::collection($followers)->response();
-
     }
-
 }

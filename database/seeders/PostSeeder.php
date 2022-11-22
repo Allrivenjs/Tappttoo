@@ -15,11 +15,9 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-
-
         Post::factory()->count(1000)
             ->has(Image::factory()->count(1))
-            ->afterCreating(fn (Post $post) => $post->topics()->attach([rand(1,2), rand(3,4), rand(5,6)]))
+            ->afterCreating(fn (Post $post) => $post->topics()->attach([rand(1, 2), rand(3, 4), rand(5, 6)]))
             ->create();
 
 //        $data = [];

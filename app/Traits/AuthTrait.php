@@ -35,7 +35,7 @@ trait AuthTrait
 
     public function redirectToCallbackSocialProvider($driver, $other = false, $token = null)
     {
-        abort_unless(array_key_exists($driver, Config::get('services')),Response::HTTP_NOT_FOUND,'Driver not found');
+        abort_unless(array_key_exists($driver, Config::get('services')), Response::HTTP_NOT_FOUND, 'Driver not found');
         $method = 'handle'.ucfirst($driver);
         $other ? $method .= 'OtherCallback' : $method .= 'Callback';
         $this->token = $token;
@@ -79,15 +79,16 @@ trait AuthTrait
     private function handleSocialiteMethodLogin($provider, $other = false): array
     {
         $socialite = Socialite::driver($provider);
-        $socialUser = $other ?  $socialite->stateless()->user() : $socialite->userFromToken($this->token)  ;
+        $socialUser = $other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token)  ;
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
     }
 
     public function findOrCreateUser($socialUser)
     {
-        return User::query()->whereHas('socialAccounts',
-            fn(Builder $q)=> $q->where('social_id', $socialUser->getId())
+        return User::query()->whereHas(
+            'socialAccounts',
+            fn (Builder $q) => $q->where('social_id', $socialUser->getId())
         )->orWhere('email', $socialUser->getEmail())
             ->firstOr(fn () => $this->createUser([
             'full_name' => $socialUser->getName(),
@@ -101,7 +102,7 @@ trait AuthTrait
             $user = $this->findOrCreateUser($socialUser),
             SocialProfile::query()->with('user')
                 ->where('social_id', $socialUser->getId())
-                ->firstOr(fn() => SocialProfile::query()->create([
+                ->firstOr(fn () => SocialProfile::query()->create([
                     'social_id' => $socialUser->getId(),
                     'nickname' => $socialUser->getName(),
                     'avatar' => $socialUser->getAvatar(),
@@ -124,18 +125,21 @@ trait AuthTrait
 
     private function handleMissingCallbackMethod(): void
     {
-        abort(Response::HTTP_NOT_FOUND,'Method not found');
+        abort(Response::HTTP_NOT_FOUND, 'Method not found');
     }
 
     public function handleLoginMethod(Request $request): array
     {
         $request->validate($this->rulesLogin());
-        abort_unless($this->authWeb()->attempt($request->only('email', 'password')),
-            Response::HTTP_FORBIDDEN,'Invalid credentials');
+        abort_unless(
+            $this->authWeb()->attempt($request->only('email', 'password')),
+            Response::HTTP_FORBIDDEN,
+            'Invalid credentials'
+        );
         $tokenResult = $this->authWeb()->user()->createToken('authToken');
         $token = $tokenResult->token;
         $this->remember_me($token, $request);
-        return $this->returnDataUser($this->authWeb()->user(),$tokenResult);
+        return $this->returnDataUser($this->authWeb()->user(), $tokenResult);
     }
 
     public function handleRegisterMethod(Request $request): array
@@ -157,7 +161,6 @@ trait AuthTrait
         $this->authWeb()->login($user);
         $token = $user->createToken('authToken');
         return $this->returnDataUser($user, $token);
-
     }
 
     private function returnDataUser($user, $token): array
@@ -200,5 +203,4 @@ trait AuthTrait
             'password' => ['required', Rules\Password::defaults()],
         ];
     }
-
 }

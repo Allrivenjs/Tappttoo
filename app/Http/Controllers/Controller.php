@@ -28,6 +28,4 @@ class Controller extends BaseController
             'Content-Type' => 'application/json',
         ]);
     }
-
-
 }

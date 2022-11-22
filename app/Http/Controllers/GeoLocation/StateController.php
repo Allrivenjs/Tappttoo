@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\GeoLocation;
 
 use App\Http\Controllers\Controller;
-use App\Models\Country;
 use App\Models\State;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +33,6 @@ class StateController extends Controller
         ]);
         $state = State::query()->create($validate);
         return response($state, Response::HTTP_CREATED);
-
     }
 
     /**

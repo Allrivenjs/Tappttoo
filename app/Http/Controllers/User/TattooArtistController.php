@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TattooArtistController extends Controller
 {
-
     public function validateUser()
     {
         try {
@@ -104,6 +103,4 @@ class TattooArtistController extends Controller
             ],
         ];
     }
-
-
 }

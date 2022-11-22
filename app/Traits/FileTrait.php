@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,14 +19,14 @@ trait FileTrait
      */
     public function getImages(Request $request): mixed
     {
-       list('type'=> $type,'path' => $path) = $request->validate([
-            'type' => 'required|string',
-            'path' => 'required|string',
-       ]);
-       match ($type) {
-          'public', 'private' => $this->getFile($type, $path),
-           default => abort(Response::HTTP_NOT_FOUND, 'File type is not supported'),
-       };
+        list('type'=> $type, 'path' => $path) = $request->validate([
+             'type' => 'required|string',
+             'path' => 'required|string',
+        ]);
+        match ($type) {
+            'public', 'private' => $this->getFile($type, $path),
+            default => abort(Response::HTTP_NOT_FOUND, 'File type is not supported'),
+        };
         return $this->file;
     }
 
@@ -64,7 +63,7 @@ trait FileTrait
 
         return response()->json([
             'message' => 'File uploaded successfully',
-            'file_name' => $this->uploadFile($request->input('type'), $request->file('file'),'posts/'.$this->authApi()->user()->id.'/images'),
+            'file_name' => $this->uploadFile($request->input('type'), $request->file('file'), 'posts/'.$this->authApi()->user()->id.'/images'),
             'type' => $request->input('type'),
         ]);
     }

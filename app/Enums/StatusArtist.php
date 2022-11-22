@@ -15,7 +15,7 @@ enum StatusArtist
     public static function toArray(): array
     {
         return array_map(
-            fn($value) => $value->name,
+            fn ($value) => $value->name,
             self::cases()
         );
     }

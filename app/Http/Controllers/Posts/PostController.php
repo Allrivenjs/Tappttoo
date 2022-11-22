@@ -10,7 +10,6 @@ use App\Models\Topic;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -18,8 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends Controller
 {
-
-    const relations = [
+    public const relations = [
         'user',
         'likeCounter',
         'topics',
@@ -43,7 +41,7 @@ class PostController extends Controller
                 ->with([
                     ...self::relations,
                     'comments_lasted'=> [ 'replies', 'owner' ]
-                ])->whereHas('topics', function (Builder $query)  {
+                ])->whereHas('topics', function (Builder $query) {
                     $mypreferences = $this->authApi()->user()?->preferences()->pluck('name')->toArray();
                     $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences)->random(2)->pluck('name')->toArray();
                     $query->whereIn('name', array_merge($mypreferences ?? [], $ramdomPreferens));

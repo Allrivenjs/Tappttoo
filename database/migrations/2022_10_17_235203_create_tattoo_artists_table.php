@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -20,11 +19,10 @@ return new class extends Migration
             $table->string('base_price')->nullable()->default(null);
             $table->string('price_per_hour')->nullable()->default(null);
             $table->string('instagram')->nullable();
-            $table->enum('status', \App\Enums\StatusArtist::toArray() )->default('available');
+            $table->enum('status', \App\Enums\StatusArtist::toArray())->default('available');
             $table->timestamps();
             $table->softDeletes();
         });
-
     }
 
     /**
