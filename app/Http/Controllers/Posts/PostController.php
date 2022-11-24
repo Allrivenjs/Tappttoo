@@ -108,11 +108,25 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post): \Illuminate\Http\Response
     {
-        $validate = $request->validate(self::rules());
+        $rules = self::rules();
+        $rules['images.*'] = 'image|mimes:jpeg,png,jpg,gif,svg|max:2048';
+        $validate = $request->validate($rules);
         $post->update([
             'body' => $validate['body'],
         ]);
+        if ($request->hasFile('images')) {
+            if ($post->images()->exists()) {
+                $post->images()->delete();
+            }
+            foreach ($request->file('images') as $image) {
+                $post->images()->create([
+                    'url' => $this->uploadFile('public', $image, 'posts/'.$this->authApi()->user()->id.'/images'),
+                    'type' => 'public',
+                ]);
+            }
+        }
         $post->topics()->sync($request->input('topics'));
+        $post->taggableUsers()->sync($request->input('taggableUsers'));
         return response(null);
     }
 

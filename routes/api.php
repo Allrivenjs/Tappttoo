@@ -36,6 +36,7 @@ Route::get('show-posts-by-type', [FinderController::class, 'showPostsByType'])
     ->name('show-posts-by-type');
 
 Route::apiResource('posts', PostController::class)->except(['update']);
+Route::post('posts/{post}/update', [PostController::class, 'update'])->name('posts.update');
 
 Route::middleware('auth:api')->group(function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
