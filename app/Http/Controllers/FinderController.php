@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
 use App\Models\City;
 use App\Models\Post;
 use App\Models\Topic;
@@ -92,11 +93,13 @@ class FinderController extends Controller
             "relationByPost" => [
                 "topics" => [
                     "tattooArtists" => [
-                        "city" => [
-                            "state" => [
-                                "country"
+                        "user"=> [
+                            "city" => [
+                                "state" => [
+                                    "country"
+                                ]
                             ]
-                        ]
+                        ],
                     ]
                 ],
                 ...self::relationsDefault
@@ -150,6 +153,6 @@ class FinderController extends Controller
         }
         $relationByPost = $properties["relationByPost"] ?? [];
         $posts = $posts->with($relationByPost)->paginate(20);
-        return response($posts);
+        return response(PostResource::collection($posts));
     }
 }
