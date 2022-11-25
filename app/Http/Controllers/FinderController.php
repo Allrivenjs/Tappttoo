@@ -67,7 +67,9 @@ class FinderController extends Controller
     public const relationsDefault = [
         "topics",
         "images",
-        "taggableUsers"
+        "taggableUsers",
+        'likeCounter',
+        'user',
     ];
     public const propertiesShow = [
         "cities" => [
