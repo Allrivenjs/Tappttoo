@@ -70,7 +70,6 @@ class FinderController extends Controller
         "images",
         "taggableUsers",
         'likeCounter',
-        'user',
     ];
     public const propertiesShow = [
         "cities" => [
