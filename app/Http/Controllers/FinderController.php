@@ -90,17 +90,7 @@ class FinderController extends Controller
         "tattoo" => [
             "model" => "topics",
             "relationByPost" => [
-                "topics" => [
-                    "tattooArtists" => [
-                        "user"=> [
-                            "city" => [
-                                "state" => [
-                                    "country"
-                                ]
-                            ]
-                        ],
-                    ]
-                ],
+                'user',
                 ...self::relationsDefault
             ],
         ],
