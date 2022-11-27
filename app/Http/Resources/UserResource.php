@@ -15,11 +15,11 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $auth = Auth::guard('api')->user();
+        $auth = Auth::guard('api')?->user();
         return array_merge(parent::toArray($request), [
             'roles' => $this->roles->pluck('name'),
             'posts' => route('posts-by-user', $this->id),
-            'isFollowing' => $auth ? $this->isFollowing($auth) : false,
+            'is_following' => $auth && $this->followers->find($auth->id),
             'followers'=>[
                 'data'=>$this->followers,
                 'count'=>$this->followers->count()
