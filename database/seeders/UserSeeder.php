@@ -24,7 +24,6 @@ class UserSeeder extends Seeder
         ])->assignRole('admin')->assignRole('moderator')->assignRole('tattoo_artist');
         User::factory(4000)
             ->afterCreating(function (User $user) {
-                $user->assignRole('tattoo_artist');
                 $user->preferences()->attach([
                     rand(1, 3),
                     rand(4, 7),
@@ -32,6 +31,6 @@ class UserSeeder extends Seeder
             })
             ->create([
                 'city_id' => 243,
-            ]);
+            ])->each(fn(User $user) => $user->assignRole('tattoo_artist') );
     }
 }
