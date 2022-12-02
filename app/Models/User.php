@@ -22,6 +22,12 @@ class User extends Authenticatable implements MustVerifyEmail
     use Follower;
     use Followable;
 
+
+    public function __invoke()
+    {
+        return $this->load('roles');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

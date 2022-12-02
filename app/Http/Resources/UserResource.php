@@ -17,7 +17,7 @@ class UserResource extends JsonResource
     {
         $auth = Auth::guard('api')?->user();
         return array_merge(parent::toArray($request), [
-            'roles' => $this->roles->pluck('name'),
+            'roles' => $this->getRoleNames(),
             'posts' => route('posts-by-user', $this->id),
             'is_following' => $auth && $this->followers->find($auth->id),
             'followers'=>[
