@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\User\UserController;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -31,6 +32,8 @@ class UserSeeder extends Seeder
             })
             ->create([
                 'city_id' => 243,
-            ])->each(fn(User $user) => $user->assignRole('tattoo_artist') );
+            ])->each(function (User $user){
+                (new UserController)->createTattooArtist($user);
+            } );
     }
 }
