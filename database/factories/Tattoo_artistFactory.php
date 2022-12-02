@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tattoo_artist>
  */
-class TattooartistFactory extends Factory
+class Tattoo_artistFactory extends Factory
 {
     /**
      * Define the model's default state.
