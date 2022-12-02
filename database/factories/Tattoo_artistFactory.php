@@ -21,7 +21,7 @@ class Tattoo_artistFactory extends Factory
             'base_price' => $this->faker->randomFloat(2, 0, 1000),
             'price_per_hour' => $this->faker->randomFloat(2, 0, 1000),
             'instagram' => $this->faker->url,
-            'status' => $this->faker->randomElement(['active', 'inactive']),
+            'status' => $this->faker->randomElement(['available', 'inactive', 'occupied']),
         ];
     }
 }
