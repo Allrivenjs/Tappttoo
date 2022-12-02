@@ -26,7 +26,7 @@ class FollowResourcer extends JsonResource
                 $data['is_following'] = $this?->isFollowing($user);
             }
         }
-        $data['roles'] = $this->getRoleNames();
+        $data['roles'] = $this->user->getRoleNames();
         return $data;
     }
 }
