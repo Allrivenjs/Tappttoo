@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Http\Controllers\User\UserController;
+use App\Models\Tattoo_artist;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -29,7 +30,7 @@ class UserSeeder extends Seeder
                     rand(1, 3),
                     rand(4, 7),
                 ]);
-                (new UserController)->createTattooArtist($user);
+                (new UserController)->createTattooArtist($user, Tattoo_artist::factory()->make()->toArray());
             })
             ->create([
                 'city_id' => 243,
