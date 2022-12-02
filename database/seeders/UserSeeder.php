@@ -29,11 +29,10 @@ class UserSeeder extends Seeder
                     rand(1, 3),
                     rand(4, 7),
                 ]);
+                (new UserController)->createTattooArtist($user);
             })
             ->create([
                 'city_id' => 243,
-            ])->each(function (User $user){
-                (new UserController)->createTattooArtist($user);
-            } );
+            ]);
     }
 }
