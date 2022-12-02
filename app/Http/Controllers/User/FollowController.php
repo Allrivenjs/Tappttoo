@@ -20,7 +20,7 @@ class FollowController extends Controller
 
     public function followings(User $user): \Illuminate\Http\JsonResponse
     {
-        $followings = $user->followings()->paginate(100);
+        $followings = $user->load('followable')->followings()->paginate(100);
         return FollowResourcer::collection($followings)->response();
     }
 
