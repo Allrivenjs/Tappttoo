@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\tattoo_artist>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tattoo_artist>
  */
-class TattooArtistFactory extends Factory
+class TattooartistFactory extends Factory
 {
     /**
      * Define the model's default state.
