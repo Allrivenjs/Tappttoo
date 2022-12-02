@@ -18,7 +18,6 @@ class Tattoo_artistFactory extends Factory
     {
         return [
             'name_company' => $this->faker->company,
-            'enabled' => $this->faker->boolean,
             'base_price' => $this->faker->randomFloat(2, 0, 1000),
             'price_per_hour' => $this->faker->randomFloat(2, 0, 1000),
             'instagram' => $this->faker->url,

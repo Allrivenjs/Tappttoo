@@ -11,7 +11,6 @@ class Tattoo_artist extends Model
     use HasFactory;
     protected $fillable = [
         'name_company',
-        'enabled',
         'base_price',
         'price_per_hour',
         'instagram',
