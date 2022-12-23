@@ -31,7 +31,6 @@ class MessageNotification implements ShouldBroadcast
     public function broadcastOn()
     {
         $room = (string) $this->response['room_id'];
-
         return new PrivateChannel("chat-channel.$room");
     }
 }

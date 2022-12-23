@@ -71,7 +71,7 @@ class ChatController extends Controller
         ]);
         $message = Message::query()->find($request->query('message'))->markAsReadTo();
 //        Notification::send(
-        ////            $message->room()->users()->where('id', '!=', $message->user_id)->get(),
+//            $message->room()->users()->where('id', '!=', $message->user_id)->get(),
 //        );
         return Response(null);
     }

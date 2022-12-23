@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MessageNotification;
 use App\Http\Controllers\Auth\V1\AuthController;
 use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Comment\CommentController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Posts\TopicController;
 use App\Http\Controllers\User\FollowController;
 use App\Http\Controllers\User\TattooArtistController;
 use App\Http\Controllers\User\UserController;
+use App\Notifications\AnymoreNotification;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -86,3 +88,7 @@ Route::apiResource('state', StateController::class)->names('state')->only(['inde
 
 Route::get('/auth/{driver}/{other}/{token}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
     ->name('redirectToCallbackSocialProvider');
+
+Route::post('send-event', function (){
+    \Illuminate\Support\Facades\Notification::send(\App\Models\User::query()->first(), new AnymoreNotification('This is our first broadcast message'));
+});

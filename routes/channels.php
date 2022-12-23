@@ -22,3 +22,4 @@ Broadcast::channel('chat-channel.{room_id}', ChatChannel::class);
 Broadcast::channel('channel-session', function ($user) {
     return $user;
 });
+
