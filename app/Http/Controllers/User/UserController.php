@@ -126,6 +126,14 @@ class UserController extends Controller
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
     }
 
+    public function updateAvatar(Request $request): \Illuminate\Http\Response
+    {
+        $validate = $request->validate($this->rulesAvatar());
+        $user = User::query()->find($this->authApi()->user()->getAuthIdentifier());
+        $user->update($validate);
+        return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
+    }
+
 
     private function rulesPreferences(): array
     {
@@ -145,5 +153,12 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    private function rulesAvatar(): array
+    {
+        return [
+            'profile_photo_path' => 'required|image',
+        ];
     }
 }

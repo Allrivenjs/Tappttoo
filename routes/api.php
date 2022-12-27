@@ -57,6 +57,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('user', [UserController::class, 'update'])->name('userUpdate');
 
+    Route::post('user/change-avatar', [UserController::class, 'updateAvatar'])->name('user.updateAvatar');
+
     Route::get('user/me', [UserController::class, 'mePosts'])->name('user.me');
 
     Route::post('user/preferences', [UserController::class, 'assignPreferences'])->name('user.preferences');
