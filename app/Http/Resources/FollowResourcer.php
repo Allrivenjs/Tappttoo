@@ -22,7 +22,7 @@ class FollowResourcer extends JsonResource
             if ($followable) {
                 $data['is_following'] = $user->isFollowing($followable);
                 $data['followable'] = $followable;
-                $data['roles'] = $this->followable->getRoleNames()->pluck('name');
+                $data['roles'] = $this->followable->getRoleNames();
             }
             if (!$followable) {
                 $data['is_following'] = $this?->isFollowing($user);
