@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FollowResourcer extends JsonResource
@@ -21,12 +22,13 @@ class FollowResourcer extends JsonResource
             if ($followable) {
                 $data['is_following'] = $user->isFollowing($followable);
                 $data['followable'] = $followable;
+                $data['roles'] = $this->followable->getRoleNames()->pluck('name');
             }
             if (!$followable) {
                 $data['is_following'] = $this?->isFollowing($user);
+                $data['roles'] = $this->getRoleNames();
             }
         }
-        $data['roles'] = $this->followable->getRoleNames();
         return $data;
     }
 }
