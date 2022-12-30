@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 //        Model::preventLazyLoading(! app()->isProduction() );
-        Model::preventLazyLoading();
+        Model::preventLazyLoading(false);
         Schema::defaultStringLength(125);
         $this->app->singleton(RoomInterface::class, Chat::class);
     }
