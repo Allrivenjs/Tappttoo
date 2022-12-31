@@ -18,16 +18,14 @@ class FollowResourcer extends JsonResource
         $user = auth()->guard('api')?->user();
         $followable = $this->followable;
         $data = parent::toArray($request);
-        if ($user) {
-            if ($followable) {
-                $data['is_following'] = $user->isFollowing($followable);
-                $data['followable'] = $followable;
-                $data['roles'] = $this->followable->getRoleNames();
-            }
-            if (!$followable) {
-                $data['is_following'] = $this?->isFollowing($user);
-                $data['roles'] = $this->getRoleNames();
-            }
+        if ($followable) {
+            if ($user) $data['is_following'] = $user->isFollowing($followable);
+            $data['followable'] = $followable;
+            $data['roles'] = $this->followable->getRoleNames();
+        }
+        if (!$followable) {
+            if ($user) $data['is_following'] = $this?->isFollowing($user);
+            $data['roles'] = $this->getRoleNames();
         }
         return $data;
     }

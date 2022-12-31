@@ -1,4 +1,4 @@
-POST http://127.0.0.1:8001/api/login
+POST {{ip_deploy}}/api/login
 Content-Disposition: form-data; name="data"; filename="data.json"
 Content-Type: application/json
 
@@ -10,15 +10,15 @@ Content-Type: application/json
 > {% client.global.set("auth_token", response.body.access_token); %}
 
 ###
-GET http://127.0.0.1:8001/api/follow/2
+GET {{ip_deploy}}/api/follow/2
 Authorization: Bearer {{auth_token}}
 
 ###
-GET http://127.0.0.1:8001/api/followings/1
+GET {{ip_deploy}}/api/followings/1
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 ###
-GET http://127.0.0.1:8001/api/followers/2
+GET {{ip_deploy}}/api/followers/2
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
