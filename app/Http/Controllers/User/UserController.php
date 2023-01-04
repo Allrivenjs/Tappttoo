@@ -128,9 +128,10 @@ class UserController extends Controller
 
     public function updateAvatar(Request $request): \Illuminate\Http\Response
     {
-        $validate = $request->validate($this->rulesAvatar());
+        $request->validate($this->rulesAvatar());
+        $ruta = $this->uploadFile('public', $request->file('profile_photo_path'), 'avatar');
         $user = User::query()->find($this->authApi()->user()->getAuthIdentifier());
-        $user->update($validate);
+        $user->update(['profile_photo_path' => $ruta]);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
     }
 
