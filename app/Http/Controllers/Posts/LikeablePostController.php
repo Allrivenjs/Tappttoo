@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Posts;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -33,10 +34,10 @@ class LikeablePostController extends Controller
         return response($post->likeCount);
     }
 
-    public function getMyLovelyPosts(Request $request): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+    public function getMyLovelyPosts(Request $request): \Illuminate\Http\JsonResponse
     {
-        return response(Post::whereLikedBy($this->authApi()->user()->getAuthIdentifier()) // find only articles where user liked them
-        ->with('likeCounter') // highly suggested to allow eager load
-        ->get());
+        return (new PostResource((Post::whereLikedBy($this->authApi()->user()->getAuthIdentifier()) // find only articles where user liked them
+        ->with(['likeCounter','topics','taggableUsers','images']) // highly suggested to allow eager load
+        ->get())))->response();
     }
 }
