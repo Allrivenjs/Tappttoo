@@ -36,8 +36,8 @@ class LikeablePostController extends Controller
 
     public function getMyLovelyPosts(Request $request): \Illuminate\Http\JsonResponse
     {
-        return (new PostResource((Post::whereLikedBy($this->authApi()->user()->getAuthIdentifier()) // find only articles where user liked them
-        ->with(['likeCounter','topics','taggableUsers','images']) // highly suggested to allow eager load
+        return (PostResource::collection((Post::whereLikedBy($this->authApi()->user()->getAuthIdentifier()) // find only articles where user liked them
+        ->with([...PostController::relations,'comments_lasted'=> [ 'replies', 'owner' ]]) // highly suggested to allow eager load
         ->get())))->response();
     }
 }
