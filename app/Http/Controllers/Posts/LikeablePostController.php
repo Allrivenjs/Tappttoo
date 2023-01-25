@@ -32,4 +32,11 @@ class LikeablePostController extends Controller
     {
         return response($post->likeCount);
     }
+
+    public function getMyLovelyPosts(Request $request): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+    {
+        return response(Post::whereLikedBy($this->authApi()->user()->getAuthIdentifier()) // find only articles where user liked them
+        ->with('likeCounter') // highly suggested to allow eager load
+        ->get());
+    }
 }
