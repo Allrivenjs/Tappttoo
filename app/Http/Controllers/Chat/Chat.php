@@ -70,12 +70,12 @@ class Chat implements ChatInterface
 //        return
 
         $data = Room::query()->whereHas('users', function (Builder $query) {
-            $query->where('id', Auth::guard('api')->user()->getAuthIdentifier());
+            $query->where('users.id', Auth::guard('api')->user()->getAuthIdentifier());
         })->with([
             'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
             'lastMessage',
         ])->get();
-        
+
         dd($data);
     }
 
