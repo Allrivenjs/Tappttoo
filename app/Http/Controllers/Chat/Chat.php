@@ -52,16 +52,14 @@ class Chat implements ChatInterface
         broadcast(new MessageNotification($data))->toOthers();
     }
 
-    public function getRooms(): \Illuminate\Http\JsonResponse
+    public function getRooms()
     {
-
         return User::query()->with([
             'rooms'=> [
                 'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
                 'lastMessage',
             ]
-        ])
-            ->find(Auth::guard('api')->user()->getAuthIdentifier())->only('rooms');
+        ])->find(Auth::guard('api')->user()->getAuthIdentifier())->only('rooms');
     }
 
     public function getMessages($roomId)
