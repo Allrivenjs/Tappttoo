@@ -55,7 +55,7 @@ class Chat implements ChatInterface
     public function getRooms(): \Illuminate\Http\JsonResponse
     {
 
-        return (new RoomsResource((User::query()->with([
+        return (new RoomsCollection((User::query()->with([
             'rooms'=> [
                 'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
                 'lastMessage',
