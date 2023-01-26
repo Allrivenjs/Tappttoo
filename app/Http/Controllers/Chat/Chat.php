@@ -67,9 +67,7 @@ class Chat implements ChatInterface
         $rooms = Room::query()
             ->with('users')
             ->joinSub(
-                Message::query()
-                    ->select(DB::raw('MAX(created_at) as created_at, room_id'))
-                    ->groupBy('room_id'),
+                Message::query()->latest()->groupBy('room_id'),
                 'last_messages',
                 'rooms.id',
                 'last_messages.room_id'
