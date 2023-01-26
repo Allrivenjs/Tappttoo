@@ -11,6 +11,7 @@ use App\Models\Room;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Chat implements ChatInterface
@@ -69,14 +70,13 @@ class Chat implements ChatInterface
 
 //        return
 
-        $data = Room::query()->whereHas('users', function (Builder $query) {
-            $query->where('users.id', Auth::guard('api')->user()->getAuthIdentifier());
-        })->with([
-            'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-            'lastMessage' => fn ($q) => $q->take(1),
-        ])->get();
+        $rooms = Room::with(['users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier())])
+            ->join(DB::raw("(SELECT room_id, created_at FROM messages GROUP BY room_id ORDER BY created_at LIMIT 1) as first_messages"),
+                'rooms.id', '=', 'first_messages.room_id')
+            ->select('rooms.*', 'first_messages.*')
+            ->get();
 
-        dd($data->toArray());
+        dd($rooms);
     }
 
     public function getMessages($roomId)
