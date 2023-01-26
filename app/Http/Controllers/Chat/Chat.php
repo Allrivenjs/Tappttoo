@@ -55,13 +55,13 @@ class Chat implements ChatInterface
     public function getRooms(): \Illuminate\Http\JsonResponse
     {
 
-        return (new RoomsCollection(Room::query()->with([
-            'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-            'lastMessage',
-        ])->whereHas('users', fn ($q) => $q->where('users.id', Auth::guard('api')->user()->getAuthIdentifier()))->get()))->response();
-
-//        return User::query()->with()
-//            ->find(Auth::guard('api')->user()->getAuthIdentifier())->only('rooms');
+        return (new RoomsCollection(User::query()->with([
+            'room'=> [
+                'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
+                'lastMessage',
+            ]
+        ])
+            ->find(Auth::guard('api')->user()->getAuthIdentifier())->only('rooms')))->response();
     }
 
     public function getMessages($roomId)
