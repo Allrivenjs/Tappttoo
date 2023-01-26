@@ -67,7 +67,7 @@ class Chat implements ChatInterface
         $rooms = Room::select('rooms.*', 'first_messages.created_at', 'users.*')
             ->join(DB::raw("(SELECT * FROM messages  ORDER BY created_at DESC LIMIT 1) as first_messages"),
                 'rooms.id', '=', 'first_messages.room_id')
-            ->join('users', 'rooms.id', '=', 'users.room_id')
+            ->join('users', 'rooms.user_id', '=', 'users.id')
             ->get();
         return $rooms;
     }
