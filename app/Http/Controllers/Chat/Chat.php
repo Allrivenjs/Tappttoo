@@ -62,7 +62,8 @@ class Chat implements ChatInterface
             ]
         ])->find(Auth::guard('api')->user()->getAuthIdentifier())
             ->only('rooms'))->map(
-                function ($room) {
+                function (Room $room) {
+                    dd($room->id);
                     return $room['lastMessage'] = Message::query()->where('room_id', $room['id'])->orderByDesc('created_at')->take(1)->get();
                 }
             );
