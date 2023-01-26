@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Chat;
 
 use App\Events\MessageNotification;
+use App\Http\Resources\RoomsResource;
 use App\Interfaces\Chat\ChatInterface;
 use App\Models\Message;
 use App\Models\Room;
@@ -50,13 +51,13 @@ class Chat implements ChatInterface
         broadcast(new MessageNotification($data))->toOthers();
     }
 
-    public function getRooms(): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Builder|array|null
+    public function getRooms(): \Illuminate\Http\JsonResponse
     {
 
-        return Room::query()->with([
-                'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-                'lastMessage',
-            ])->whereHas('users', fn ($q) => $q->where('users.id', Auth::guard('api')->user()->getAuthIdentifier()))->get();
+        return (RoomsResource::collection(Room::query()->with([
+            'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
+            'lastMessage',
+        ])->whereHas('users', fn ($q) => $q->where('users.id', Auth::guard('api')->user()->getAuthIdentifier()))->get()))->response();
 
 //        return User::query()->with()
 //            ->find(Auth::guard('api')->user()->getAuthIdentifier())->only('rooms');
