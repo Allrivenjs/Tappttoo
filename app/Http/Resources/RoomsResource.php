@@ -14,10 +14,10 @@ class RoomsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $data = parent::toArray($request);
+        $data = parent::toArray($request)->toArray();
 
         $data = array_map(function ($room) {
-            dd($room->lastMessage);
+            dd($room);
             return $room;
         }, $data);
         dd($data);
