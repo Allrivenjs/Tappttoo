@@ -19,7 +19,7 @@ class RoomsResource extends JsonResource
         $data = array_map(function ($room) {
             dd($room);
             return $room;
-        }, $this->resource->toArray());
+        }, $this->resource);
         dd($data);
 
         return ;
