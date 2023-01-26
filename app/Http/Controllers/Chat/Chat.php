@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Chat;
 
 use App\Events\MessageNotification;
+use App\Http\Resources\RoomsCollection;
 use App\Http\Resources\RoomsResource;
 use App\Interfaces\Chat\ChatInterface;
 use App\Models\Message;
@@ -54,7 +55,7 @@ class Chat implements ChatInterface
     public function getRooms(): \Illuminate\Http\JsonResponse
     {
 
-        return (RoomsResource::collection(Room::query()->with([
+        return (RoomsCollection::collection(Room::query()->with([
             'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
             'lastMessage',
         ])->whereHas('users', fn ($q) => $q->where('users.id', Auth::guard('api')->user()->getAuthIdentifier()))->get()))->response();
