@@ -9,6 +9,7 @@ use App\Interfaces\Chat\ChatInterface;
 use App\Models\Message;
 use App\Models\Room;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -57,7 +58,7 @@ class Chat implements ChatInterface
         return User::query()->with([
             'rooms'=> [
                 'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-                'lastMessage',
+                'lastMessage' => fn (Builder $q) => $q->get(1),
             ]
         ])->find(Auth::guard('api')->user()->getAuthIdentifier())->only('rooms');
     }
