@@ -15,7 +15,7 @@ class RoomsResource extends JsonResource
     public function toArray($request)
     {
         $data = parent::toArray($request);
-        dd($data);
+        dd($data->jsonSerialize()->last_message);
         return ;
     }
 }
