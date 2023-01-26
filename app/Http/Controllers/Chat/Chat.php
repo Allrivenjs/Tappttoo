@@ -65,7 +65,7 @@ class Chat implements ChatInterface
         return array_map(function ($room) {
             return [
                 ...$room,
-                'last_message' => $room['last_message'][0]['message'] ?? null,
+                'last_message' => $room['last_message'][0] ?? null,
             ];
         }, $rooms);
 
