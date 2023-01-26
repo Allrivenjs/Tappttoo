@@ -73,7 +73,7 @@ class Chat implements ChatInterface
             $query->where('users.id', Auth::guard('api')->user()->getAuthIdentifier());
         })->with([
             'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-            'lastMessage',
+            'lastMessage' => fn ($q) => $q->take(1),
         ])->get();
 
         dd($data->toArray());
