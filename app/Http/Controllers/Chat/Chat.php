@@ -65,14 +65,13 @@ class Chat implements ChatInterface
 //        ])->find(Auth::guard('api')->user()->getAuthIdentifier())
 //            ->only('rooms');
         $rooms = Room::query()
-            ->with('users')
             ->joinSub(
                 Message::query()->latest()->groupBy('room_id'),
                 'last_messages',
                 'rooms.id',
                 'last_messages.room_id'
             )
-            ->whereHas('users', function (Builder $query) {
+            ->withWhereHas('users', function (Builder $query) {
                 $query->where('user_id', Auth::guard('api')->user()->getAuthIdentifier());
             })->get();
 
