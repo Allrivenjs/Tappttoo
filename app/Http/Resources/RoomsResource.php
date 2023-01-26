@@ -14,7 +14,7 @@ class RoomsResource extends JsonResource
      */
     public function toArray($request)
     {
-        $data = parent::toArray($request);
+//        $data = parent::toArray($request);
 //        dd($this->resource);
 //        $data = array_map(function ($room) {
 //            dd(array_keys($room));
@@ -22,6 +22,6 @@ class RoomsResource extends JsonResource
 //        }, $this);
 //        dd($data);
 
-        return $data;
+        return parent::toArray($request);
     }
 }
