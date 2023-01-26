@@ -62,7 +62,7 @@ class Chat implements ChatInterface
                 'lastMessage',
             ]
         ])->find(Auth::guard('api')->user()->getAuthIdentifier())->get();
-        foreach ($rooms['rooms'] as $key => $room) {
+        foreach ($rooms->rooms as $key => $room) {
             $room['lastMessage'] = $room->lastMessage->first();
         }
         return $rooms;
