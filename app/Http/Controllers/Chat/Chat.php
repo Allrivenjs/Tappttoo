@@ -57,7 +57,9 @@ class Chat implements ChatInterface
     public function getRooms()
     {
         $rooms = User::query()->with([
-            'rooms'=> fn ($q) => $q->join(DB::raw("(SELECT * FROM messages ORDER BY created_at LIMIT 1) as first_messages"), 'rooms.id', '=', 'first_messages.room_id')->select('rooms.*', 'first_messages.*')->get()
+            'rooms'=> function (Builder $query) {
+                $query->with('lastMessage');
+            },
         ])->find(Auth::guard('api')->user()->getAuthIdentifier())
             ->only('rooms');
 
