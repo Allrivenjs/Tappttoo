@@ -64,10 +64,17 @@ class Chat implements ChatInterface
 //            },
 //        ])->find(Auth::guard('api')->user()->getAuthIdentifier())
 //            ->only('rooms');
-        $rooms = Room::select('*')
-            ->join(DB::raw("(SELECT * FROM messages  ORDER BY created_at DESC LIMIT 1) as first_messages"),
-                'rooms.id', '=', 'first_messages.room_id')
-            ->with('users')->whereHas('users', function (Builder $query) {
+        $rooms = Room::query()
+            ->with('users')
+            ->joinSub(
+                Message::query()
+                    ->select(DB::raw('MAX(created_at) as created_at, room_id'))
+                    ->groupBy('room_id'),
+                'last_messages',
+                'rooms.id',
+                'last_messages.room_id'
+            )
+            ->whereHas('users', function (Builder $query) {
                 $query->where('user_id', Auth::guard('api')->user()->getAuthIdentifier());
             })->get();
 
