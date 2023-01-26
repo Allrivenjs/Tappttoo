@@ -76,7 +76,7 @@ class Chat implements ChatInterface
             'lastMessage',
         ])->get();
 
-        dd($data);
+        dd($data->toArray());
     }
 
     public function getMessages($roomId)
