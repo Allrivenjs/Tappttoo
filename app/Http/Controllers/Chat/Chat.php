@@ -60,7 +60,7 @@ class Chat implements ChatInterface
             'rooms'=> function (Builder $query) {
                 $query->join('room_user', 'rooms.id', '=', 'room_user.room_id')
                 ->join(DB::raw("(SELECT * FROM messages ORDER BY created_at DESC LIMIT 1) as first_messages"),
-                    'rooms.id', '=', 'first_messages.room_id');
+                    'rooms.id', '=', 'first_messages.room_id')->get();
             },
         ])->find(Auth::guard('api')->user()->getAuthIdentifier())
             ->only('rooms');
