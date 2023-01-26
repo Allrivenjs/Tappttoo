@@ -14,7 +14,7 @@ class RoomsCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        dd(parent::toArray($request), $this->collection, $this->resource);
+//        dd(parent::toArray($request), $this->collection, $this->resource);
         return parent::toArray($request);
     }
 }
