@@ -56,24 +56,23 @@ class Chat implements ChatInterface
 
     public function getRooms()
     {
-//        $data = collect(User::query()->with([
-//            'rooms'=> [
-//                'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-//                'lastMessage',
-//            ]
-//        ])->find(Auth::guard('api')->user()->getAuthIdentifier())
-//            ->only('rooms'))->map(
-//                function ($room) {
-//                    dd($room);
-//                }
-//            );
+        $rooms = collect(User::query()->with([
+            'rooms'=> [
+                'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
+                'lastMessage' => fn ($q) => $q->select(DB::raw("(SELECT * FROM messages ORDER BY created_at LIMIT 1) as first_messages")),
+            ]
+        ])->find(Auth::guard('api')->user()->getAuthIdentifier())
+            ->only('rooms'))->map(
+                function ($room) {
+                    dd($room);
+                }
+            );
 
-//        return
 
-        $rooms = Room::with(['users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier())])
-            ->join(DB::raw("(SELECT * FROM messages ORDER BY created_at LIMIT 1) as first_messages"),
-                'rooms.id', '=', 'first_messages.room_id')->select('rooms.*', 'first_messages.*')
-            ->whereHas('users', fn (Builder $q) => $q->where('users.id', Auth::guard('api')->user()->getAuthIdentifier()))->get();
+//        $rooms = Room::with(['users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier())])
+//            ->join(,
+//                'rooms.id', '=', 'first_messages.room_id')->select('rooms.*', 'first_messages.*')
+//            ->whereHas('users', fn (Builder $q) => $q->where('users.id', Auth::guard('api')->user()->getAuthIdentifier()))->get();
 
         dd($rooms->toArray());
     }
