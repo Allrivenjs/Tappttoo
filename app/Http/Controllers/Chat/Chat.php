@@ -66,7 +66,7 @@ class Chat implements ChatInterface
 //            ->only('rooms');
         $rooms = Room::query()
             ->joinSub(
-                Message::query()->latest(),
+                Message::query()->orderByDesc('created_at'),
                 'last_messages',
                 'rooms.id',
                 'last_messages.room_id'
