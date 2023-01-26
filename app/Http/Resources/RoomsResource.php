@@ -15,7 +15,7 @@ class RoomsResource extends JsonResource
     public function toArray($request)
     {
         $data = parent::toArray($request);
-        dd($this->jsonSerialize());
+        dd($this);
         $data = array_map(function ($room) {
             dd(array_keys($room));
             return $room;
