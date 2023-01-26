@@ -60,7 +60,7 @@ class Chat implements ChatInterface
             'rooms'=> [
                 'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
             ]
-        ])->find(Auth::guard('api')->user()->getAuthIdentifier())->select('rooms.*');
+        ])->find(Auth::guard('api')->user()->getAuthIdentifier())->select('rooms');
         return $rooms;
     }
 
