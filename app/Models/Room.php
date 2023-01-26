@@ -18,7 +18,7 @@ class Room extends Model
 
     public function lastMessage(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->messages()->orderBy('created_at', 'desc')->limit(1);
+        return $this->messages()->orderBy('created_at', 'desc');
     }
 
     public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
