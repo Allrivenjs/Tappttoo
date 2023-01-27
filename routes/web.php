@@ -23,4 +23,4 @@ Route::get('/auth/{driver}/redirect', [Controller::class,'redirectToProvider'])
 Route::get('/auth/{driver}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
     ->name('redirectToCallbackSocialProvider');
 
-
+require __DIR__.'/auth.php';
