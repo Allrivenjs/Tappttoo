@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 //                ->middleware('guest')
 //                ->name('login');
 
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
 //                ->middleware('guest')
 //                ->name('password.email');
 
