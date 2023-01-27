@@ -136,10 +136,14 @@ trait AuthTrait
             Response::HTTP_FORBIDDEN,
             'Invalid credentials'
         );
-        $tokenResult = $this->authWeb()->user()->createToken('authToken');
-        $token = $tokenResult->token;
-        $this->remember_me($token, $request);
+        $tokenResult = $this->getTokenJWT(new User($this->authWeb()->user()->getAttributes()));
+        
         return $this->returnDataUser($this->authWeb()->user(), $tokenResult);
+    }
+
+    public function getTokenJWT(User $user): string
+    {
+        return $user->createToken($user->email)->plainTextToken;
     }
 
     public function handleRegisterMethod(Request $request): array

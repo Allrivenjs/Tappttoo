@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\{Factories\HasFactory, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
-use Laravel\Passport\HasApiTokens;
 use Overtrue\LaravelFollow\Traits\{Followable, Follower};
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
