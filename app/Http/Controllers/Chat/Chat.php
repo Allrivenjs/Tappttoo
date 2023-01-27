@@ -56,7 +56,7 @@ class Chat implements ChatInterface
 
     public function getRooms()
     {
-        $rooms = User::query()->with([
+        return User::query()->with([
             'rooms'=> [
                 'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
             ]
@@ -64,9 +64,9 @@ class Chat implements ChatInterface
             return [
                 ...$room->toArray(),
                 'last_message' => $room->lastMessage->first(),
+                'quotation' => $room->lastQuotation->first(),
             ];
         });
-        return $rooms;
     }
 
     public function getMessages($roomId)

@@ -13,10 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('quotations', function (Blueprint $table) {
             $table->id();
+            $table->string('body_part');
+            $table->float('width');
+            $table->float('height');
+            $table->enum('option', ['black_and_white', 'color']);
+            $table->enum('status', ['pending', 'accepted', 'rejected']);
             $table->foreignIdFor(\App\Models\User::class)->constrained();
-
+            $table->foreignIdFor(\App\Models\Room::class)->constrained();
+            $table->float('price')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('quotations');
     }
 };

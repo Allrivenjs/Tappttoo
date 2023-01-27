@@ -25,4 +25,18 @@ class Room extends Model
     {
         return $this->belongsToMany(User::class, 'participants');
     }
+    public function quotations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Quotation::class);
+    }
+
+    public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function lastQuotation(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->quotations()->orderByDesc('created_at');
+    }
 }

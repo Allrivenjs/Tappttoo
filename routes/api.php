@@ -11,6 +11,7 @@ use App\Http\Controllers\GeoLocation\StateController;
 use App\Http\Controllers\Posts\LikeablePostController;
 use App\Http\Controllers\Posts\PostController;
 use App\Http\Controllers\Posts\TopicController;
+use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\User\FollowController;
 use App\Http\Controllers\User\TattooArtistController;
 use App\Http\Controllers\User\UserController;
@@ -52,6 +53,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('chat/exist-room-or-create', [ChatController::class, 'getExistRoom'])->name('chat.getExistRoom');
     Route::get('chat/markAsRead', [ChatController::class, 'markAsRead'])->name('chat.markAsRead');
     Route::post('chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.send-message');
+
+    Route::apiResource('quotation', QuotationController::class)->only('store', 'show')->names('quotation');
 
     Route::get('follow/{user}', [FollowController::class, 'toggleFollow'])->name('user.toggleFollow');
 
