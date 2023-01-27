@@ -99,3 +99,5 @@ Route::get('/auth/{driver}/{other}/{token}/callback', [Controller::class,'redire
 Route::post('send-event', function (){
     \Illuminate\Support\Facades\Notification::send(\App\Models\User::query()->first(), new AnymoreNotification('This is our first broadcast message'));
 });
+
+require __DIR__.'/auth.php';
