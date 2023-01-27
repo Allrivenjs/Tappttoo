@@ -41,7 +41,7 @@ Route::get('show-posts-by-type', [FinderController::class, 'showPostsByType'])
 Route::apiResource('posts', PostController::class)->except(['update']);
 Route::post('posts/{post}/update', [PostController::class, 'update'])->name('posts.update');
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::post('comment-reply', [CommentController::class, 'reply'])->name('comment.reply');

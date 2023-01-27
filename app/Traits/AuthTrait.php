@@ -137,7 +137,7 @@ trait AuthTrait
             'Invalid credentials'
         );
         $tokenResult = $this->getTokenJWT(new User($this->authWeb()->user()->getAttributes()));
-        
+
         return $this->returnDataUser($this->authWeb()->user(), $tokenResult);
     }
 
