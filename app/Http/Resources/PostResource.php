@@ -14,7 +14,7 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
-        $userAuth = auth()->guard('api')?->user();
+        $userAuth = auth()->guard('web')?->user();
         return array_merge(parent::toArray($request), [
             'likedByMe'=> $userAuth ? $this->liked($userAuth->getAuthIdentifier()) : false,
             'roles'=> $this->user->getRoleNames(),

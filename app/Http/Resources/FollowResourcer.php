@@ -15,7 +15,7 @@ class FollowResourcer extends JsonResource
      */
     public function toArray($request)
     {
-        $user = auth()->guard('api')?->user();
+        $user = auth()->guard('web')?->user();
         $followable = $this->followable;
         $data = parent::toArray($request);
         if ($followable) {

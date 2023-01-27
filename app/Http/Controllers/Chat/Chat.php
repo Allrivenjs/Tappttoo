@@ -43,7 +43,7 @@ class Chat implements ChatInterface
 
     public function sendMessage($roomIdId, $message): void
     {
-        $user = Auth::guard('api')->user()->getAuthIdentifier();
+        $user = Auth::guard('web')->user()->getAuthIdentifier();
         $data = [
             'message' => $message,
             'user_id' => $user,
@@ -58,9 +58,9 @@ class Chat implements ChatInterface
     {
         return User::query()->with([
             'rooms'=> [
-                'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
+                'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('web')->user()->getAuthIdentifier()),
             ]
-        ])->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms->map(function ($room) {
+        ])->find(Auth::guard('web')->user()->getAuthIdentifier())->rooms->map(function ($room) {
             return [
                 ...$room->toArray(),
                 'last_message' => $room->lastMessage->first(),

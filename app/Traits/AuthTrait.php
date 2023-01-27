@@ -25,7 +25,7 @@ trait AuthTrait
 
     protected function authApi(): \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
     {
-        return auth()->guard('api');
+        return auth()->guard('web');
     }
 
     public function redirectToProvider($driver): \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse

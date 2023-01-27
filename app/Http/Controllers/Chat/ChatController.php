@@ -33,7 +33,7 @@ class ChatController extends Controller
         $request->validate([
             'receiver_id' => 'required|integer|exists:users,id',
         ]);
-        $userId = Auth::guard('api')?->user()?->getAuthIdentifier();
+        $userId = Auth::guard('web')?->user()?->getAuthIdentifier();
         $receiver_id = $request->query('receiver_id');
         throw_if(is_null($receiver_id), 'Receiver id is required for query param');
         throw_if((int) $receiver_id == (int) $userId, 'You can not chat with yourself');
@@ -46,7 +46,7 @@ class ChatController extends Controller
     public function createChatRoom($receiver_id): \App\Models\Room
     {
         $room = $this->room->createRoom(0);
-        $userId = Auth::guard('api')?->user()?->getAuthIdentifier();
+        $userId = Auth::guard('web')?->user()?->getAuthIdentifier();
         $this->room->addUser($room->id, $receiver_id);
         $this->room->addUser($room->id, $userId);
 
