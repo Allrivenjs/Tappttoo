@@ -95,6 +95,7 @@ class UserController extends Controller
             'city_id' => 'required|integer',
             'address' => 'required|string',
             'tattoo_artist_bool' => 'required|boolean',
+            'nickname' => 'required|string',
         ];
     }
 

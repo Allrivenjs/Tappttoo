@@ -27,6 +27,7 @@ return new class () extends Migration {
             $table->string('password')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->foreign('city_id')->references('id')->on('cities');
+            $table->string('nickname')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
