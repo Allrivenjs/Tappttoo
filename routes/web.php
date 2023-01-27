@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,17 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/a', function () {
-    return view('welcome');
+Route::get('/', function () {
+    return ['Laravel' => app()->version()];
 });
 
-Route::get('/', [Controller::class, 'getImages'])
-    ->name('getAnyImage');
-
-
-Route::get('/auth/{driver}/redirect', [Controller::class,'redirectToProvider'])
-    ->name('social.auth');
-
-Route::get('/auth/{driver}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
-    ->name('redirectToCallbackSocialProvider');
-
+require __DIR__.'/auth.php';
