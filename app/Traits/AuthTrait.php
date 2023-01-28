@@ -25,7 +25,7 @@ trait AuthTrait
 
     protected function authApi(): \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
     {
-        return auth()->guard('web');
+        return auth()->guard('api');
     }
 
     public function redirectToProvider($driver): \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
@@ -136,14 +136,10 @@ trait AuthTrait
             Response::HTTP_FORBIDDEN,
             'Invalid credentials'
         );
-        $tokenResult = $this->getTokenJWT(new User($this->authWeb()->user()->getAttributes()));
-
+        $tokenResult = $this->authWeb()->user()->createToken('authToken');
+        $token = $tokenResult->token;
+        $this->remember_me($token, $request);
         return $this->returnDataUser($this->authWeb()->user(), $tokenResult);
-    }
-
-    public function getTokenJWT(User $user): string
-    {
-        return $user->createToken($user->email)->plainTextToken;
     }
 
     public function handleRegisterMethod(Request $request): array
