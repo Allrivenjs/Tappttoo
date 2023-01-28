@@ -15,7 +15,7 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $auth = Auth::guard('web')?->user();
+        $auth = Auth::guard('api')?->user();
         return array_merge(parent::toArray($request), [
             'roles' => $this->getRoleNames(),
             'posts' => route('posts-by-user', $this->id),

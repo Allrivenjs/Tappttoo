@@ -20,6 +20,14 @@ class RoleSeeder extends Seeder
         $role3 = Role::create(['name' => 'tattoo_artist']);
         $role4 = Role::create(['name' => 'Normal']);
 
+
+        Permission::create([
+            'guard_name' => 'api',
+            'name' => 'ADMIN',
+            'description' => 'super user', ])->syncRoles([$role1]);
+
+
+
         //Roles
         Permission::create([
             'guard_name' => 'api',

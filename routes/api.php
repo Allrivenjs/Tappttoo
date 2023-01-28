@@ -77,6 +77,14 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('update-password', [AuthController::class, 'updatePassword'])->name('user.updatePassword');
 
+
+    Route::middleware('can:ADMIN')->group(function () {
+        Route::post('user/delete/{user}', [UserController::class, 'delete'])->name('user.delete');
+        Route::post('post/delete/{post}', [PostController::class, 'delete'])->name('post.delete');
+
+    });
+
+
     Route::group(['prefix' => 'tattoo-artist'], function () {
         Route::put('price', [TattooArtistController::class, 'updatePrice'])->name('companyUpdatePrice');
         Route::put('status', [TattooArtistController::class, 'updateStatus'])->name('companyUpdateStatus');
