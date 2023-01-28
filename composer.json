@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "bancolombia-dev/wompi-php": "^1.0",
         "beyondcode/laravel-websockets": "^1.13",
         "garygreen/pretty-routes": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
