@@ -1,7 +1,6 @@
 <?php
 
-
-use Illuminate\Support\Facades\Route;
+use App\Events\MessageNotification;
 use App\Http\Controllers\Auth\V1\AuthController;
 use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Comment\CommentController;
@@ -17,6 +16,8 @@ use App\Http\Controllers\User\FollowController;
 use App\Http\Controllers\User\TattooArtistController;
 use App\Http\Controllers\User\UserController;
 use App\Notifications\AnymoreNotification;
+use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +42,9 @@ Route::get('show-posts-by-type', [FinderController::class, 'showPostsByType'])
 Route::apiResource('posts', PostController::class)->except(['update']);
 Route::post('posts/{post}/update', [PostController::class, 'update'])->name('posts.update');
 
-Route::middleware('auth')->group(function () {
+
+Route::middleware('auth:api')->group(function () {
+
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::post('comment-reply', [CommentController::class, 'reply'])->name('comment.reply');
@@ -99,3 +102,4 @@ Route::get('/auth/{driver}/{other}/{token}/callback', [Controller::class,'redire
 Route::post('send-event', function (){
     \Illuminate\Support\Facades\Notification::send(\App\Models\User::query()->first(), new AnymoreNotification('This is our first broadcast message'));
 });
+

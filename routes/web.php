@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +14,11 @@ use App\Http\Controllers\Controller;
 |
 */
 
+
+Route::get('/a', function () {
+    return view('welcome');
+});
+
 Route::get('/', [Controller::class, 'getImages'])
     ->name('getAnyImage');
 
@@ -23,4 +29,3 @@ Route::get('/auth/{driver}/redirect', [Controller::class,'redirectToProvider'])
 Route::get('/auth/{driver}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
     ->name('redirectToCallbackSocialProvider');
 
-require __DIR__.'/auth.php';
