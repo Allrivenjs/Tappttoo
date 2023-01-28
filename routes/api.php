@@ -75,6 +75,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('post/like-by-me', [LikeablePostController::class,'getMyLovelyPosts'])->name('post.likeByMe');
 
+    Route::post('update-password', [AuthController::class, 'updatePassword'])->name('user.updatePassword');
+
     Route::group(['prefix' => 'tattoo-artist'], function () {
         Route::put('price', [TattooArtistController::class, 'updatePrice'])->name('companyUpdatePrice');
         Route::put('status', [TattooArtistController::class, 'updateStatus'])->name('companyUpdateStatus');

@@ -36,7 +36,10 @@ class AuthController extends Controller
         return response($this->handleResetPasswordMethod($request));
     }
 
-
+    public function updatePassword(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        return response($this->handleUpdatePasswordMethod($request));
+    }
 
 
 

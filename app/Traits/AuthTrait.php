@@ -246,4 +246,17 @@ trait AuthTrait
             'email' => 'required|email|exists:users,email',
         ];
     }
+
+    public function handleUpdatePasswordMethod(Request $request): string
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => ['required', Rules\Password::defaults()],
+        ]);
+        $user = $request->user();
+        abort_unless(Hash::check($request->input('current_password'), $user->password), Response::HTTP_FORBIDDEN, 'Invalid credentials');
+        $user->password = Hash::make($request->input('password'));
+        $user->save();
+        return 'Password updated successfully';
+    }
 }
