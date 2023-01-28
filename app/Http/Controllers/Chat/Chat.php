@@ -43,7 +43,7 @@ class Chat implements ChatInterface
 
     public function sendMessage($roomIdId, $message): void
     {
-        $user = Auth::guard('web')->user()->getAuthIdentifier();
+        $user = Auth::guard('api')->user()->getAuthIdentifier();
         $data = [
             'message' => $message,
             'user_id' => $user,
