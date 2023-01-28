@@ -103,3 +103,9 @@ Route::post('send-event', function (){
     \Illuminate\Support\Facades\Notification::send(\App\Models\User::query()->first(), new AnymoreNotification('This is our first broadcast message'));
 });
 
+Route::post('send-email-to-reset-password', [AuthController::class, 'sendEmailToResetPassword'])
+    ->middleware('guest')
+    ->name('send-email-to-reset-password');
+
+Route::post('reset-password', [AuthController::class, 'resetPassword'])
+    ->middleware('guest')->name('reset-password');

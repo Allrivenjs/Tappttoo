@@ -24,4 +24,21 @@ class AuthController extends Controller
     {
         return response($this->handleLogoutMethod($request));
     }
+
+
+    public function sendEmailToResetPassword(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        return response($this->handleSendEmailToResetPasswordMethod($request));
+    }
+
+    public function resetPassword(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        return response($this->handleResetPasswordMethod($request));
+    }
+
+
+
+
+
+
 }

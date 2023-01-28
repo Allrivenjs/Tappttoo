@@ -5,12 +5,15 @@ namespace App\Traits;
 use App\Models\SocialProfile;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\Rules;
@@ -201,6 +204,44 @@ trait AuthTrait
         return [
             'email' => 'required|email|unique:users',
             'password' => ['required', Rules\Password::defaults()],
+        ];
+    }
+
+    protected function handleSendEmailToResetPasswordMethod(Request $request): array
+    {
+        $request->validate($this->rulesResetPassword());
+        $status = Password::sendResetLink($request->only('email'));
+        return $status === Password::RESET_LINK_SENT
+            ? ['status' => __($status)]
+            : ['email' => __($status)];
+    }
+
+    protected function handleResetPasswordMethod(Request $request): array
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+        return $status === Password::PASSWORD_RESET ? ['status' => __($status)] : ['email' => [__($status)]];
+    }
+    public function rulesResetPassword(): array
+    {
+        return [
+            'email' => 'required|email|exists:users,email',
         ];
     }
 }
