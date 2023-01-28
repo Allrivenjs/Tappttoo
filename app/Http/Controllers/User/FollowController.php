@@ -40,6 +40,8 @@ class FollowController extends Controller
             'followers',
             'tattoo_artist',
             'followings'=> ['user'],
-        ])->where('role', 'artist')->inRandomOrder()->take(10)->get());
+        ])->whereHas('roles', function ($q){
+            $q->where('name', 'tattoo_artist');
+        })->inRandomOrder()->take(10)->get());
     }
 }
