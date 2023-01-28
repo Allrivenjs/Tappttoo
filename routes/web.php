@@ -29,3 +29,6 @@ Route::get('/auth/{driver}/redirect', [Controller::class,'redirectToProvider'])
 Route::get('/auth/{driver}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
     ->name('redirectToCallbackSocialProvider');
 
+Route::get('/reset-password/{token}', function ($token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
