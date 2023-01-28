@@ -95,7 +95,7 @@ Route::middleware('auth:api')->group(function () {
 
 Route::get('followings/{user}', [FollowController::class, 'followings'])->name('user.followings');
 Route::get('followers/{user}', [FollowController::class, 'followers'])->name('user.followers');
-
+Route::get('random-users', [FollowController::class, 'randomArtist'])->name('user.randomArtist');
 
 Route::apiResource('topics', TopicController::class)->names('topics');
 Route::apiResource('user', UserController::class)->names('user')->only(['show']);

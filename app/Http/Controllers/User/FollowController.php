@@ -29,4 +29,17 @@ class FollowController extends Controller
         $followers = $user->followers()->paginate(100);
         return FollowResourcer::collection($followers)->response();
     }
+
+    public function randomArtist(): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+    {
+        return response(User::query()->with([
+            'roles',
+            'socialAccounts',
+            'preferences',
+            "city" => ['state'],
+            'followers',
+            'tattoo_artist',
+            'followings'=> ['user'],
+        ])->where('role', 'artist')->inRandomOrder()->take(10)->get());
+    }
 }
