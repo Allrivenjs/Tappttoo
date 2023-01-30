@@ -45,8 +45,8 @@ class MessageNotification extends Notification implements ShouldBroadcast
         ];
     }
 
-    public function broadcastType()
+    public function broadcastAs(): string
     {
-        return 'broadcast.message';
+        return 'MessageNotification';
     }
 }
