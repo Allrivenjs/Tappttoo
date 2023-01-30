@@ -44,4 +44,9 @@ class MessageNotification extends Notification implements ShouldBroadcast
             'room' => $this->room,
         ];
     }
+
+    public function broadcastType()
+    {
+        return 'broadcast.message';
+    }
 }
