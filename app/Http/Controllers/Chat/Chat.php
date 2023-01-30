@@ -51,7 +51,12 @@ class Chat implements ChatInterface
         ];
         $message = new Message($data);
         $message->save();
+        $user2 = Room::query()->find($roomIdId)->users()->where('user_id', '!=', $user)->first();
         broadcast(new MessageNotification($data))->toOthers();
+        // enviar notificacion al usuario resecptor
+        $user2->notify(new \App\Notifications\MessageNotification($message, $user, $roomIdId));
+
+
     }
 
     public function getRooms()
