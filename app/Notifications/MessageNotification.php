@@ -43,6 +43,11 @@ class MessageNotification extends Notification implements ShouldBroadcast
         ];
     }
 
+    public function broadcastAs(): string
+    {
+        return 'MessageNotification';
+    }
+
     public function broadcastOn()
     {
         return new PrivateChannel("App.Models.User.{$this->user->id}");
