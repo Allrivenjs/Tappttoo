@@ -4,10 +4,8 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
+use Illuminate\Broadcasting\PrivateChannel;
 class MessageNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
@@ -48,5 +46,10 @@ class MessageNotification extends Notification implements ShouldBroadcast
     public function broadcastAs(): string
     {
         return 'MessageNotification';
+    }
+
+    public function broadcastOn()
+    {
+        return new PrivateChannel("App.Models.User.{$this->user->id}");
     }
 }
