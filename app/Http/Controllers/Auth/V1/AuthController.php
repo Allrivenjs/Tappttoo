@@ -42,6 +42,10 @@ class AuthController extends Controller
     }
 
 
+    public function checkAuth(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        return response($request->user());
+    }
 
 
 }

@@ -47,6 +47,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
+    Route::get('check-auth', [AuthController::class, 'checkAuth'])->name('checkAuth');
+
     Route::post('comment-reply', [CommentController::class, 'reply'])->name('comment.reply');
     Route::post('comment', [CommentController::class, 'comment'])->name('comment');
     Route::delete('comment/{comment}', [CommentController::class, 'delete'])->name('comment.delete');
