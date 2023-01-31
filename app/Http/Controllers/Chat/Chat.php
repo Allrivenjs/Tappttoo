@@ -80,7 +80,7 @@ class Chat implements ChatInterface
     public function getMessages($roomId)
     {
         $room = Room::query()->with([
-            'messages' => fn ($q) => $q->orderByDesc('created_at'),
+//            'messages' => fn ($q) => $q->orderByDesc('created_at'),
             'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
         ])->find($roomId);
         return $room->messages;
