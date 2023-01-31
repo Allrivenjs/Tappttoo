@@ -39,7 +39,6 @@ class ChatController extends Controller
         throw_if((int) $receiver_id == (int) $userId, 'You can not chat with yourself');
         $match = $this->room->matchUser((int) $receiver_id, (int) $userId);
         $response = $match ?: $this->createChatRoom($receiver_id);
-
         return response($response);
     }
 
