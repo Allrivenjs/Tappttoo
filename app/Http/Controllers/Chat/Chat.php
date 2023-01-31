@@ -71,7 +71,7 @@ class Chat implements ChatInterface
             ->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms->map(function ($room) {
             return [
                 ...$room->toArray(),
-                'lastMessage' => $room->lastMessage->first(),
+                'last_message' => $room->lastMessage->first(),
                 'quotation' => $room->lastQuotation->first(),
             ];
         });
