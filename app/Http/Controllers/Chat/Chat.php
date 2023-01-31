@@ -80,7 +80,7 @@ class Chat implements ChatInterface
     public function getMessages($roomId)
     {
         $room = Room::query()->with('messages.user')->find($roomId);
-        return $room->messages;
+        return $room->lastMessage;
     }
 
     public function matchUser($receiverId, $userId): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model| bool
