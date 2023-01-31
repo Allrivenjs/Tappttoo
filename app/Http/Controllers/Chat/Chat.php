@@ -55,7 +55,7 @@ class Chat implements ChatInterface
         $user2 = Room::query()->find($roomIdId)->users()->where('user_id', '!=', $user)->first();
         broadcast(new MessageNotification($data))->toOthers();
         // enviar notificacion al usuario resecptor
-        broadcast(new \App\Notifications\MessageNotification($message, $user2, $roomIdId));
+        broadcast(new \App\Notifications\MessageNotification($message, $user2, $roomIdId))->toOthers();
 
 
     }
@@ -65,11 +65,13 @@ class Chat implements ChatInterface
         return User::query()->with([
             'rooms'=> [
                 'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
+                'lastMessage'=> fn ($q) => $q->orderByDesc('created_at'),
             ]
-        ])->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms->map(function ($room) {
+        ])
+            ->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms->map(function ($room) {
             return [
                 ...$room->toArray(),
-                'last_message' => $room->lastMessage->first(),
+                'lastMessage' => $room->lastMessage->first(),
                 'quotation' => $room->lastQuotation->first(),
             ];
         });
