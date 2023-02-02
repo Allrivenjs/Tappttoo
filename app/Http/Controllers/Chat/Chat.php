@@ -90,7 +90,7 @@ class Chat implements ChatInterface
 //            'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
 //        ])->find($roomId);
 //
-        return Message::query()->with('user')->withWhereHas('room', fn (Builder $q) => $q->where('id', $roomId))->get();
+        return Message::query()->with('room.users')->withWhereHas('room', fn (Builder $q) => $q->where('id', $roomId))->get();
     }
 
     public function matchUser($receiverId, $userId): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model| bool
