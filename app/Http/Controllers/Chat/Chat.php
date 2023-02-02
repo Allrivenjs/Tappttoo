@@ -67,8 +67,8 @@ class Chat implements ChatInterface
                 'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
                 'lastMessage'=> fn ($q) => $q->orderByDesc('created_at'),
             ]
-        ])->join('participants', 'user.id', '=', 'participants.user_id')
-            ->join('rooms', 'participants.room_id', '=', 'rooms.id')
+        ])->join('participants', 'participants.user_id', '=', 'users.id')
+            ->join('rooms', 'rooms.id', '=', 'participants.room_id')
             ->join('messages', 'rooms.id', '=', 'messages.room_id')
             ->orderByDesc('message.created_at')
             ->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms->map(function ($room) {
