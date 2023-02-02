@@ -68,7 +68,7 @@ class Chat implements ChatInterface
                 'lastMessage'
             ]
         ])->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms)->sortByDesc(function ($room) {
-            dd($room);
+            dd($room['lastMessage']);
         })->map(function ($room) {
             return [
                 ...$room->toArray(),
