@@ -37,13 +37,15 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'host' => env('APP_URL'),
-                'port' => env('PUSHER_PORT', 6001),
+                'port' => 6001,
                 'scheme' => env('PUSHER_SCHEME', 'http'),
                 'encrypted' => true,
                 'useTLS' => env('PUSHER_SCHEME', 'http') === 'https',
             ],
             'client_options' => [
                 // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => 0,
             ],
         ],
 
