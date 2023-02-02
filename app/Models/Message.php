@@ -15,30 +15,7 @@ class Message extends Model
     protected $casts = [
         'read_at' => 'datetime',
     ];
-
-
-    public function getCreatedAtAttribute($value): string
-    {
-        return Carbon::parse($value)->diffForHumans();
-    }
-
-    public function getUpdatedAtAttribute($value)
-    {
-        if ($value == null) {
-            return;
-        }
-
-        return Carbon::parse($value)->diffForHumans();
-    }
-
-    public function getDeletedAtAttribute($value)
-    {
-        if ($value == null) {
-            return;
-        }
-
-        return Carbon::parse($value)->diffForHumans();
-    }
+    
     protected $fillable = ['message', 'user_id', 'room_id'];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
