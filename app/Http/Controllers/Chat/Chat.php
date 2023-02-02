@@ -80,7 +80,7 @@ class Chat implements ChatInterface
                 ],
                 'quotation' => $room->lastQuotation->first(),
             ];
-        }));
+        })->toArray());
     }
 
     public function getMessages($roomId)
