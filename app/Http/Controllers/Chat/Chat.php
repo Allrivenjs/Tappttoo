@@ -71,13 +71,7 @@ class Chat implements ChatInterface
             ->join('rooms', 'rooms.id', '=', 'participants.room_id')
             ->join('messages', 'messages.room_id', '=', 'rooms.id')
             ->orderByDesc('messages.created_at')
-            ->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms->map(function ($room) {
-            return [
-                ...$room->toArray(),
-                'last_message' => $room->lastMessage->first(),
-                'quotation' => $room->lastQuotation->first(),
-            ];
-        });
+            ->find(Auth::guard('api')->user()->getAuthIdentifier())->toSql();
     }
 
     public function getMessages($roomId)
