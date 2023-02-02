@@ -63,25 +63,28 @@ class Chat implements ChatInterface
 
     public function getRooms()
     {
+
+        $reponse = [];
+        collect(User::query()->with([
+            'rooms'=> [
+                'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
+                'lastMessage'
+            ]
+        ])->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms)->sortByDesc(function ($room) {
+            return Carbon::parse($room->lastMessage->first()->created_at)->format('Y-m-d H:i:s');
+        })->map(function ($room) use (&$reponse) {
+            $lastMessage = $room->lastMessage->first();
+            $reponse[] = [
+                ...$room->toArray(),
+                'last_message' => [
+                    ...$lastMessage->toArray(),
+                    'created_at' => Carbon::parse($lastMessage->created_at)->diffForHumans(['parts' => 1, 'join'=>true]),
+                ],
+                'quotation' => $room->lastQuotation->first(),
+            ];
+        })->toArray();
         dd(
-            collect(User::query()->with([
-                'rooms'=> [
-                    'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-                    'lastMessage'
-                ]
-            ])->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms)->sortByDesc(function ($room) {
-                return Carbon::parse($room->lastMessage->first()->created_at)->format('Y-m-d H:i:s');
-            })->map(function ($room) {
-                $lastMessage = $room->lastMessage->first();
-                return [
-                    ...$room->toArray(),
-                    'last_message' => [
-                        ...$lastMessage->toArray(),
-                        'created_at' => Carbon::parse($lastMessage->created_at)->diffForHumans(['parts' => 1, 'join'=>true]),
-                    ],
-                    'quotation' => $room->lastQuotation->first(),
-                ];
-            })->toArray()
+            $reponse
         );
         return collect(User::query()->with([
             'rooms'=> [
