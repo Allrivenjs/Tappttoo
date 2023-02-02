@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,29 @@ class State extends Model
         'country',
         'cities',
     ];
+
+    public function getCreatedAtAttribute($value): string
+    {
+        return Carbon::parse($value)->diffForHumans();
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        if ($value == null) {
+            return;
+        }
+
+        return Carbon::parse($value)->diffForHumans();
+    }
+
+    public function getDeletedAtAttribute($value)
+    {
+        if ($value == null) {
+            return;
+        }
+
+        return Carbon::parse($value)->diffForHumans();
+    }
     public function country(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Country::class);
