@@ -31,5 +31,6 @@ class AppServiceProvider extends ServiceProvider
         Model::preventLazyLoading(false);
         Schema::defaultStringLength(125);
         $this->app->singleton(RoomInterface::class, Chat::class);
+        date_default_timezone_set('America/Bogota');
     }
 }
