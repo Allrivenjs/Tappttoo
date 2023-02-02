@@ -91,7 +91,7 @@ class Chat implements ChatInterface
 //        ])->find($roomId);
 //
         return Message::query()->with([
-            'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier())
+            'user'
         ])->withWhereHas('room', fn (Builder $q) => $q->where('id', $roomId))->get();
     }
 
