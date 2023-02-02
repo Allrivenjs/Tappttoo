@@ -61,9 +61,9 @@ class Chat implements ChatInterface
 
     }
 
-    public function getRooms()
+    public function getRooms(): array
     {
-        return array_filter(collect(User::query()->with([
+        return array_values(collect(User::query()->with([
             'rooms'=> [
                 'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
                 'lastMessage'
@@ -80,7 +80,7 @@ class Chat implements ChatInterface
                 ],
                 'quotation' => $room->lastQuotation->first(),
             ];
-        }), fn ($key) => !is_numeric($key), ARRAY_FILTER_USE_KEY);
+        }));
     }
 
     public function getMessages($roomId)
