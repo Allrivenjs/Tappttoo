@@ -80,7 +80,7 @@ class Chat implements ChatInterface
                     ...$lastMessage->toArray(),
                     'created_at' => Carbon::parse($lastMessage->created_at)->diffForHumans(['parts' => 1, 'join'=>true]),
                 ],
-                'quotation' => $room->lastQuotation->first(),
+                'quotation' => $room->lastQuotation->first()->toArray(),
             ];
         })->toArray();
         dd(
