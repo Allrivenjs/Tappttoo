@@ -64,7 +64,7 @@ class Chat implements ChatInterface
     public function getRooms()
     {
         dd(
-            collect(collect(User::query()->with([
+            collect(User::query()->with([
                 'rooms'=> [
                     'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
                     'lastMessage'
@@ -73,6 +73,7 @@ class Chat implements ChatInterface
                 return Carbon::parse($room->lastMessage->first()->created_at)->format('Y-m-d H:i:s');
             })->map(function ($room) {
                 $lastMessage = $room->lastMessage->first();
+                dd($room->toArray());
                 return [
                     ...$room->toArray(),
                     'last_message' => [
@@ -81,7 +82,7 @@ class Chat implements ChatInterface
                     ],
                     'quotation' => $room->lastQuotation->first(),
                 ];
-            }))->collapse()
+            })
         );
         return collect(User::query()->with([
             'rooms'=> [
