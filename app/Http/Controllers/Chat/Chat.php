@@ -81,7 +81,7 @@ class Chat implements ChatInterface
                     ],
                     'quotation' => $room->lastQuotation->first(),
                 ];
-            }))->toArray()
+            }))->collapse()
         );
         return collect(User::query()->with([
             'rooms'=> [
