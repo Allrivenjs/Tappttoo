@@ -65,10 +65,10 @@ class Chat implements ChatInterface
         return collect(User::query()->with([
             'rooms'=> [
                 'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-                'lastMessage'=> fn ($q) => $q->orderByDesc('created_at'),
+                'lastMessage'
             ]
         ])->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms)->sortByDesc(function ($room) {
-            dd($room['last_message']);
+            dd($room);
         })->map(function ($room) {
             return [
                 ...$room->toArray(),
