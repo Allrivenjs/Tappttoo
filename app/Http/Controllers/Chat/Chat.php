@@ -83,7 +83,7 @@ class Chat implements ChatInterface
         })->toArray());
     }
 
-    public function getMessages($roomId): \Illuminate\Database\Eloquent\Collection|array
+    public function getMessages($roomId)
     {
         return Room::query()->with([
             'messages' => fn ($q) => $q->orderByDesc('created_at'),
