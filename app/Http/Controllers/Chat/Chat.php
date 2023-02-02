@@ -62,19 +62,18 @@ class Chat implements ChatInterface
 
     public function getRooms()
     {
-        return User::query()->with([
+        return collect(User::query()->with([
             'rooms'=> [
                 'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
                 'lastMessage'=> fn ($q) => $q->orderByDesc('created_at'),
             ]
-        ])->orderByDesc('messages.created_at')
-            ->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms->map(function ($room) {
+        ])->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms->map(function ($room) {
             return [
                 ...$room->toArray(),
                 'last_message' => $room->lastMessage->first(),
                 'quotation' => $room->lastQuotation->first(),
             ];
-        });
+        }))->sortByDesc('last_message.created_at');
     }
 
     public function getMessages($roomId)
