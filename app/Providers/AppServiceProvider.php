@@ -32,8 +32,5 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(125);
         $this->app->singleton(RoomInterface::class, Chat::class);
         date_default_timezone_set('America/Bogota');
-        if( app()->isProduction()) {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
-        }
     }
 }
