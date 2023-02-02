@@ -9,6 +9,7 @@ use App\Interfaces\Chat\ChatInterface;
 use App\Models\Message;
 use App\Models\Room;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -68,7 +69,7 @@ class Chat implements ChatInterface
                 'lastMessage'
             ]
         ])->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms)->sortByDesc(function ($room) {
-            dd($room['lastMessage']->first()->created_at);
+            dd(Carbon::make($room->lastMessage->first()->created_at)->format('Y-m-d H:i:s'));
         })->map(function ($room) {
             return [
                 ...$room->toArray(),
