@@ -73,7 +73,9 @@ class Chat implements ChatInterface
                 'last_message' => $room->lastMessage->first(),
                 'quotation' => $room->lastQuotation->first(),
             ];
-        }))->sortByDesc('last_message.created_at');
+        }))->sortByDesc(function ($room) {
+            return $room['last_message']['created_at'];
+        });
     }
 
     public function getMessages($roomId)
