@@ -15,7 +15,7 @@ class Message extends Model
     protected $casts = [
         'read_at' => 'datetime',
     ];
-    
+
     protected $fillable = ['message', 'user_id', 'room_id'];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
