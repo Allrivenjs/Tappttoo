@@ -71,17 +71,6 @@ class Chat implements ChatInterface
                 ]
             ])->find(Auth::guard('api')->user()->getAuthIdentifier())->rooms)->sortByDesc(function ($room) {
                 return Carbon::parse($room->lastMessage->first()->created_at)->format('Y-m-d H:i:s');
-            })->map(function ($room) {
-                $lastMessage = $room->lastMessage->first();
-                dd($room->toArray());
-                return [
-                    ...$room->toArray(),
-                    'last_message' => [
-                        ...$lastMessage->toArray(),
-                        'created_at' => Carbon::parse($lastMessage->created_at)->diffForHumans(['parts' => 1, 'join'=>true]),
-                    ],
-                    'quotation' => $room->lastQuotation->first(),
-                ];
             })
         );
         return collect(User::query()->with([
