@@ -74,7 +74,7 @@ class Chat implements ChatInterface
                 'quotation' => $room->lastQuotation->first(),
             ];
         }))->sortByDesc(function ($room) {
-           dd($room);
+           dd($room['last_message']['created_at']);
         });
     }
 
