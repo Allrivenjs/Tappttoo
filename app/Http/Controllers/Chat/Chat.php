@@ -86,9 +86,9 @@ class Chat implements ChatInterface
     public function getMessages($roomId)
     {
         return Room::query()->with([
-            'messages' => fn ($q) => $q->orderByDesc('created_at'),
+            'messages' => fn ($q) => $q->with('user')->orderByDesc('created_at'),
             'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-        ])->find($roomId);
+        ])->find($roomId)->messages;
     }
 
     public function matchUser($receiverId, $userId): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model| bool
