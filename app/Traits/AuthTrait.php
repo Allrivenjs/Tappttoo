@@ -20,7 +20,7 @@ use Illuminate\Validation\Rules;
 
 trait AuthTrait
 {
-    private String $token;
+    private $token;
     protected function authWeb(): \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
     {
         return auth()->guard('web');
