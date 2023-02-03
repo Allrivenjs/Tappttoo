@@ -50,17 +50,17 @@ trait AuthTrait
 
     private function handleFacebookOtherCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-        return response($this->handleSocialiteMethodLogin('facebook'));
+        return response($this->handleSocialiteMethodLogin('facebook', true));
     }
 
     private function handleGoogleOtherCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-        return response($this->handleSocialiteMethodLogin('google'));
+        return response($this->handleSocialiteMethodLogin('google', true));
     }
 
     private function handleTwitterOtherCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
-        return response($this->handleSocialiteMethodLogin('twitter'));
+        return response($this->handleSocialiteMethodLogin('twitter', true));
     }
 
 
@@ -82,8 +82,7 @@ trait AuthTrait
     private function handleSocialiteMethodLogin($provider, $other = false): array
     {
         $socialite = Socialite::driver($provider);
-        dd($socialite->stateless()->user());
-        $socialUser = $other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token)  ;
+        $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token)  ;
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
     }
