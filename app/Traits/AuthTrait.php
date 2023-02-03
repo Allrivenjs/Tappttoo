@@ -82,6 +82,7 @@ trait AuthTrait
     private function handleSocialiteMethodLogin($provider, $other = false): array
     {
         $socialite = Socialite::driver($provider);
+        dd($socialite->stateless()->user(), $socialite->userFromToken($this->token));
         $socialUser = $other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token)  ;
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
