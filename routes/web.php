@@ -32,3 +32,11 @@ Route::get('/auth/{driver}/callback', [Controller::class,'redirectToCallbackSoci
 Route::get('/reset-password/{token}', function ($token) {
     return view('auth.reset-password', ['token' => $token]);
 })->middleware('guest')->name('password.reset');
+
+Route::get('policy', function () {
+    return view('politicas');
+})->name('policy');
+
+Route::get('terms', function () {
+    return view('terminos');
+})->name('terms');
