@@ -94,7 +94,7 @@ class UserController extends Controller
             'lastname' => 'required|string',
             'phone' => 'required|string',
             'locate_maps' => 'required|string',
-            'city_id' => 'required|integer',
+            'city_id' => 'required|integer|exists:cities,id',
             'address' => 'required|string',
             'tattoo_artist_bool' => 'required|boolean',
             'nickname' => 'required|string',
