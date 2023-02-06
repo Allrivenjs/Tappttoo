@@ -16,14 +16,17 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        $user= User::create([
             'name' => 'Admin',
             'lastname' => 'Ruiz',
             'phone' => '0007',
             'email' => 'admin@gmail.com',
             'profile_photo_path' => 'https://www.w3schools.com/howto/img_avatar.png',
             'password' => '$2a$10$7oMxkBuQ0PpbVxpJl0ufNerj0TTuZmRxrD76LlyKCaMCh8bpZqVS2',   //admin
-        ])->assignRole('admin')->assignRole('moderator')->assignRole('tattoo_artist');
+        ]);
+        (new UserController)->createTattooArtist($user, Tattoo_artist::factory()->make()->toArray());
+        $user->assignRole('admin')->assignRole('moderator')->assignRole('tattoo_artist');
+
         User::factory(4)
             ->afterCreating(function (User $user) {
                 $user->preferences()->attach([
