@@ -15,7 +15,7 @@ return new class () extends Migration {
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index();
-            $table->foreignIdFor(\App\Models\State::class)->constrained()->restrictOnDelete()->restrictOnUpdate();
+            $table->foreignIdFor(\App\Models\State::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

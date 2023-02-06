@@ -7,6 +7,8 @@ use App\Http\Resources\UserResource;
 use App\Models\Post;
 use App\Models\Tattoo_artist;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -106,7 +108,7 @@ class UserController extends Controller
         ];
     }
 
-    public function createTattooArtist(User|\Illuminate\Contracts\Auth\Authenticatable|null $user, $data=[])
+    public function createTattooArtist(Builder|Model|User|\Illuminate\Contracts\Auth\Authenticatable|null $user, $data=[])
     {
         Tattoo_artist::query()->create(array_merge($data, ['user_id' => $user->id]));
         $user->assignRole('tattoo_artist');
