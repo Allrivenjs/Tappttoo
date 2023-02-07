@@ -36,18 +36,16 @@ class PostController extends Controller
      */
     public function index(): JsonResponse
     {
-        $post = Post::query()
-            ->with([
-                ...self::relations,
-                'comments_lasted'=> [ 'replies', 'owner' ]
-            ])->whereHas('topics', function (Builder $query) {
-                $mypreferences = $this->authApi()->user()?->preferences()->pluck('name')->toArray();
-                $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences )->random(2)->pluck('name')->toArray();
-                $query->whereIn('name', array_merge($mypreferences, $ramdomPreferens));
-                dd($query);
-            })->orderByDesc('created_at')->simplePaginate(10);
         return (PostResource::collection(
-            $post
+            Post::query()
+                ->with([
+                    ...self::relations,
+                    'comments_lasted'=> [ 'replies', 'owner' ]
+                ])->whereHas('topics', function (Builder $query) {
+                    $mypreferences = $this->authApi()->user()?->preferences()->pluck('name')->toArray();
+                    $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences )->random(2)->pluck('name')->toArray();
+                    $query->whereIn('name', array_merge($mypreferences, $ramdomPreferens));
+                })->orderByDesc('created_at')->simplePaginate(10)
         ))->response();
     }
 
