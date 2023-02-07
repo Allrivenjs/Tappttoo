@@ -42,9 +42,9 @@ class PostController extends Controller
                 'comments_lasted'=> [ 'replies', 'owner' ]
             ])->whereHas('topics', function (Builder $query) {
                 $mypreferences = $this->authApi()->user()?->preferences()->pluck('name')->toArray();
-                dd($mypreferences ?? ['a']);
-                $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences ?? [] )->random(2)->pluck('name')->toArray();
-                $query->whereIn('name', array_merge($mypreferences ?? [], $ramdomPreferens));
+                $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences )->random(2)->pluck('name')->toArray();
+                dd($ramdomPreferens);
+                $query->whereIn('name', array_merge($mypreferences, $ramdomPreferens));
             })->orderByDesc('created_at')->simplePaginate(10);
         return (PostResource::collection(
             $post
