@@ -45,6 +45,9 @@ class PostController extends Controller
                 $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences ?? [] )->random(2)->pluck('name')->toArray();
                 $query->whereIn('name', array_merge($mypreferences ?? [], $ramdomPreferens));
             })->orderByDesc('created_at')->simplePaginate(10);
+
+        dd($post);
+        
         return (PostResource::collection(
             $post
         ))->response();
