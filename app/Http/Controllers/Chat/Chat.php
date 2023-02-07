@@ -72,6 +72,7 @@ class Chat implements ChatInterface
             return Carbon::parse($room->lastMessage->first()->created_at ?? Carbon::now())->format('Y-m-d H:i:s');
         })->map(function ($room) {
             $lastMessage = $room->lastMessage->first();
+            dd($lastMessage);
             return [
                 ...$room->toArray(),
                 'last_message' => [
