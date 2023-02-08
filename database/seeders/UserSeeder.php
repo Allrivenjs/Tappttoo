@@ -48,16 +48,16 @@ class UserSeeder extends Seeder
         $user3->assignRole('admin')->assignRole('moderator');
 
 
-//        User::factory(4)
-//            ->afterCreating(function (User $user) {
-//                $user->preferences()->attach([
-//                    rand(1, 3),
-//                    rand(4, 7),
-//                ]);
-//                (new UserController)->createTattooArtist($user, Tattoo_artist::factory()->make()->toArray());
-//            })
-//            ->create([
-//                'city_id' => 243,
-//            ]);
+        User::factory(4)
+            ->afterCreating(function (User $user) {
+                $user->preferences()->attach([
+                    rand(1, 3),
+                    rand(4, 7),
+                ]);
+                (new UserController)->createTattooArtist($user, Tattoo_artist::factory()->make()->toArray());
+            })
+            ->create([
+                'city_id' => 243,
+            ]);
     }
 }
