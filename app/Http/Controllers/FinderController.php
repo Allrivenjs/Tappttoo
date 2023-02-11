@@ -114,7 +114,7 @@ class FinderController extends Controller
     /**
      * @throws Throwable
      */
-    public function showPostsByType(Request $request): \Illuminate\Http\JsonResponse
+    public function showPostsByType(Request $request): Application|ResponseFactory|Response
     {
         $type = $request->get("type");
         $id = $request->get("id");
@@ -143,6 +143,6 @@ class FinderController extends Controller
         $relationByPost = $properties["relationByPost"] ?? [];
         $posts = $posts->with($relationByPost)->paginate(20);
         PostResource::withoutWrapping();
-        return (PostResource::collection($posts))->response()->sendContent();
+        return response(PostResource::collection($posts))->sendContent();
     }
 }
