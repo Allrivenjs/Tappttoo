@@ -169,9 +169,8 @@ class UserController extends Controller
             'password' => ['required','confirmed'],
         ]);
         $user = User::query()->find($this->authApi()->user()->getAuthIdentifier());
-        dd($user->password, $this->authWeb()->attempt(['email' => $user->email, 'password' => $request->password]));
         try {
-            throw_if($user->password !== Hash::make($request->password), new \Exception('La contraseña no coincide'));
+            throw_if(!$this->authWeb()->attempt(['email' => $user->email, 'password' => $request->password]), new \Exception('La contraseña no coincide'));
         } catch (\Throwable $e) {
             return response(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
