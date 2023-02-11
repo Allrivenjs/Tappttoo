@@ -169,7 +169,7 @@ class UserController extends Controller
         ]);
         $user = User::query()->find($this->authApi()->user()->getAuthIdentifier());
         try {
-            throw_if($user->getAuthPassword() !== Hash::make($request->password), new \Exception('La contraseña no coincide'));
+            throw_if($user->password !== Hash::make($request->password), new \Exception('La contraseña no coincide'));
         } catch (\Throwable $e) {
             return response(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
