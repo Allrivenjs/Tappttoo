@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\Rules\Password;
@@ -168,8 +169,7 @@ class UserController extends Controller
             'password' => ['required','confirmed'],
         ]);
         $user = User::query()->find($this->authApi()->user()->getAuthIdentifier());
-        $passordHash =encrypt($request->password);
-        dd($user->password, $passordHash, $user->password !== $passordHash);
+        dd($user->password, Auth::attempt(['email' => $user->email, 'password' => $request->password]));
         try {
             throw_if($user->password !== Hash::make($request->password), new \Exception('La contraseña no coincide'));
         } catch (\Throwable $e) {
