@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             TopicsSeeder::class,
             UserSeeder::class,
-            PostSeeder::class,
+//            PostSeeder::class,
         ]);
     }
 }

@@ -168,6 +168,7 @@ class UserController extends Controller
             'password' => ['required','confirmed'],
         ]);
         $user = User::query()->find($this->authApi()->user()->getAuthIdentifier());
+        dd($user->password, Hash::make($request->password), $user->password !== Hash::make($request->password));
         try {
             throw_if($user->password !== Hash::make($request->password), new \Exception('La contraseña no coincide'));
         } catch (\Throwable $e) {
