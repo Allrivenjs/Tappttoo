@@ -3,8 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class PostResource extends JsonResource
+class PostResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +16,10 @@ class PostResource extends JsonResource
     public function toArray($request)
     {
         $userAuth = auth()->guard('api')?->user();
-        return [array_merge(parent::toArray($request), [
+//        parent::toArray($request)
+        return array_merge( $this->collection, [
             'likedByMe'=> $userAuth ? $this->liked($userAuth->getAuthIdentifier()) : false,
             'roles'=> $this->user->getRoleNames(),
-        ]),
-            $this->links()];
+        ]);
     }
 }
