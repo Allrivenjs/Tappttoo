@@ -79,6 +79,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('update-password', [AuthController::class, 'updatePassword'])->name('user.updatePassword');
 
+    Route::post('delete-account', [UserController::class, 'deleteMyAccount'])->name('user.deleteAccount');
 
     Route::middleware('can:ADMIN')->group(function () {
         Route::post('user/delete/{user}', [UserController::class, 'delete'])->name('user.delete');

@@ -10,7 +10,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -156,6 +158,22 @@ class UserController extends Controller
      */
     public function destroy(User $user): \Illuminate\Http\Response
     {
+        $user->delete();
+        return response(null)->setStatusCode(Response::HTTP_NO_CONTENT);
+    }
+
+    public function deleteMyAccount(Request $request): \Illuminate\Http\Response
+    {
+        $request->validate([
+            'password' => ['required','confirmed'],
+        ]);
+        $user = User::query()->find($this->authApi()->user()->getAuthIdentifier());
+        try {
+            throw_if($user->getAuthPassword() !== Hash::make($request->password), new \Exception('La contraseña no coincide'));
+        } catch (\Throwable $e) {
+            return response(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $user->socialAccounts()->delete();
         $user->delete();
         return response(null)->setStatusCode(Response::HTTP_NO_CONTENT);
     }
