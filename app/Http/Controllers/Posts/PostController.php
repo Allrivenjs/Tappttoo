@@ -44,7 +44,7 @@ class PostController extends Controller
                 ])->whereHas('topics', function (Builder $query) {
                     $mypreferences = $this->authApi()->user()?->preferences()->pluck('name')->toArray();
                     $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences )->random(2)->pluck('name')->toArray();
-                    $query->whereIn('name', array_merge($mypreferences, $ramdomPreferens));
+                    $query->whereIn('name', array_merge($mypreferences ?? [], $ramdomPreferens ?? []));
                 })->orderByDesc('created_at')->simplePaginate(10)
         ))->response();
     }
