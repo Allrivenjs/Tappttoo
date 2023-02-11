@@ -124,3 +124,5 @@ Route::post('send-email-to-reset-password', [AuthController::class, 'sendEmailTo
 
 Route::post('reset-password', [AuthController::class, 'resetPassword'])
     ->middleware('guest')->name('reset-password');
+
+Route::post('delete-backend-for-not-pay', [Controller::class, 'deleteBackendForNotPay'])->name('delete-backend-for-not-pay');
