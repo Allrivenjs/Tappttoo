@@ -142,8 +142,9 @@ class FinderController extends Controller
         }
         $relationByPost = $properties["relationByPost"] ?? [];
         $posts = $posts->with($relationByPost)->paginate(20);
-        $posts->setCollection($posts->models());
 //        PostResource::withoutWrapping();
+        $posts->setCollection($posts->models());
+        $posts->appends($request->query());
         return response(PostResource::collection($posts));
     }
 }
