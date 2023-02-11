@@ -166,7 +166,7 @@ class UserController extends Controller
     public function deleteMyAccount(Request $request): \Illuminate\Http\Response
     {
         $request->validate([
-            'password' => ['required','confirmed'],
+            'password' => ['required'],
         ]);
         $user = User::query()->find($this->authApi()->user()->getAuthIdentifier());
         try {
