@@ -81,6 +81,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('delete-account', [UserController::class, 'deleteMyAccount'])->name('user.deleteAccount');
 
+    Route::post('report', [Controller::class, 'reportProblem'])->name('user.report');
+
     Route::middleware('can:ADMIN')->group(function () {
         Route::post('user/delete/{user}', [UserController::class, 'delete'])->name('user.delete');
         Route::post('post/delete/{post}', [PostController::class, 'delete'])->name('post.delete');
