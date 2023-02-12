@@ -25,7 +25,7 @@ class Controller extends BaseController
      * @param string $ability
      * @return void
      */
-    protected static function authorieze(string $ability): void
+    protected static function authorize(string $ability): void
     {
         abort_if(($ability === 'private' && ! (new Controller())->authApi()->check()), Response::HTTP_UNAUTHORIZED, 'Unauthorized', [
             'Content-Type' => 'application/json',
