@@ -82,7 +82,7 @@ trait AuthTrait
     private function handleSocialiteMethodLogin($provider, $other = false): array
     {
         $socialite = Socialite::driver($provider);
-        dd(
+        if ($provider === 'facebook') dd(
             $socialite->userFromToken($this->token)
         );
         $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
