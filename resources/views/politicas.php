@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <meta name="facebook-domain-verification" content="okddszzoazvk30suviiz42fh1eku3b"/>
     <title>Privacy Policy</title>
     <style>
       body {
