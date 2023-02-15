@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/a', function () {
+Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/', [Controller::class, 'getImages'])
+Route::get('/image', [Controller::class, 'getImages'])
     ->name('getAnyImage');
 
 
