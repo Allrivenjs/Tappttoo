@@ -28,6 +28,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->load('roles');
     }
 
+    //create observer
+    protected static function boot()
+    {
+        parent::boot();
+        static::created(function ($user) {
+            $user->assignRole('Normal');
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *
