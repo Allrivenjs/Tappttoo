@@ -8,6 +8,7 @@
         "php": "^8.1",
         "bancolombia-dev/wompi-php": "^1.0",
         "beyondcode/laravel-websockets": "^1.13",
+        "doctrine/dbal": "^3.6",
         "garygreen/pretty-routes": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "larapack/dd": "^1.1",

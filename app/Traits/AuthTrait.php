@@ -111,7 +111,7 @@ trait AuthTrait
                     'avatar' => $socialUser->getAvatar(),
                     'driver' => $provider,
                     'data' => json_encode($socialUser),
-                    'user_id' => $user->id  
+                    'user_id' => $user->id
                 ])),
         ];
     }
