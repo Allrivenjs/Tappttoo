@@ -32,21 +32,22 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function index(): JsonResponse
+    public function index(): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
     {
-        return (PostResource::collection(
-            Post::query()
-                ->with([
-                    ...self::relations,
-                    'comments_lasted'=> [ 'replies', 'owner' ]
-                ])->whereHas('topics', function (Builder $query) {
-                    $mypreferences = $this->authApi()->user()?->preferences()->pluck('name')->toArray();
-                    $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences )->random(2)->pluck('name')->toArray();
-                    $query->whereIn('name', array_merge($mypreferences ?? [], $ramdomPreferens ?? []));
-                })->orderByDesc('created_at')->simplePaginate(10)
-        ))->response();
+        $posts = Post::query()
+            ->with([
+                ...self::relations,
+                'comments_lasted'=> [ 'replies', 'owner' ]
+            ])->whereHas('topics', function (Builder $query) {
+                $mypreferences = $this->authApi()->user()?->preferences()->pluck('name')->toArray();
+                $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences )->random(2)->pluck('name')->toArray();
+                $query->whereIn('name', array_merge($mypreferences ?? [], $ramdomPreferens ?? []));
+            })->orderByDesc('created_at')->simplePaginate(10);
+        dd($posts);
+        $posts->map(fn ($post) => new PostResource($post));
+        return response($posts);
     }
 
     public function getPostsByUser($user): JsonResponse
