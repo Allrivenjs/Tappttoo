@@ -46,7 +46,7 @@ class PostController extends Controller
                 $query->whereIn('name', array_merge($mypreferences ?? [], $ramdomPreferens ?? []));
             })->orderByDesc('created_at')->simplePaginate(10);
 
-        return $posts->setCollection(PostResource::collection($posts->getCollection())->collection);
+        return response($posts->setCollection(PostResource::collection($posts->getCollection())->collection));
     }
 
     public function getPostsByUser($user): JsonResponse
