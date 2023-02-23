@@ -84,6 +84,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('report', [ReportProblem::class, 'reportProblem'])->name('user.report');
     Route::get('mark-resolved/{report}', [ReportProblem::class, 'markAsResolved'])->name('user.markAsResolved');
+    Route::get('get-reports', [ReportProblem::class, 'getReportedProblems'])->name('user.getReportedProblems');
 
     Route::get('hidden-posts/{post}', [PostController::class, 'hiddenPost'])->name('post.hiddenPosts');
     Route::get('unhidden-posts/{post}', [PostController::class, 'unhiddenPost'])->name('post.unhiddenPosts');

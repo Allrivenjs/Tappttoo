@@ -10,10 +10,11 @@ class ReportProblem extends \App\Http\Controllers\Controller
 
     public function reportProblem(Request $request): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
     {
-        return response( implode(',', ReportProblemModel::TYPES));
         $request->validate([
             'message' => 'required|string',
             'type' => 'required|in:' . implode(',', ReportProblemModel::TYPES),
+            'post_id' => 'exists:posts,id',
+            'user_id' => 'exists:users,id',
         ]);
         $payload = $request->toArray();
         $payload['user_id'] = $this->authApi()->id();
@@ -31,6 +32,17 @@ class ReportProblem extends \App\Http\Controllers\Controller
         ]);
         return response([
             'message' => 'Marked as resolved',
+        ]);
+    }
+
+    public function getReportedProblems(): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+    {
+        $reportedProblems = ReportProblemModel::query()
+            ->with(['user', 'post'])
+            ->where('resolved_at', '=', null)
+            ->get();
+        return response([
+            'reportedProblems' => $reportedProblems,
         ]);
     }
 }

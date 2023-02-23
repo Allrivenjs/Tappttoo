@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('message');
             $table->longText('payload');
             $table->enum('type', \App\Models\ReportProblem::TYPES);
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('post_id')->nullable();
             $table->timestamp('resolved_at')->nullable();
             $table->timestamps();
         });
