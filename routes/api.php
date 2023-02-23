@@ -12,6 +12,7 @@ use App\Http\Controllers\Posts\LikeablePostController;
 use App\Http\Controllers\Posts\PostController;
 use App\Http\Controllers\Posts\TopicController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\Report\ReportProblem;
 use App\Http\Controllers\User\FollowController;
 use App\Http\Controllers\User\TattooArtistController;
 use App\Http\Controllers\User\UserController;
@@ -81,7 +82,12 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('delete-account', [UserController::class, 'deleteMyAccount'])->name('user.deleteAccount');
 
-    Route::post('report', [Controller::class, 'reportProblem'])->name('user.report');
+    Route::post('report', [ReportProblem::class, 'reportProblem'])->name('user.report');
+    Route::get('mark-resolved/{report}', [ReportProblem::class, 'markAsResolved'])->name('user.markAsResolved');
+
+    Route::get('hidden-posts/{post}', [PostController::class, 'hiddenPost'])->name('post.hiddenPosts');
+    Route::get('unhidden-posts/{post}', [PostController::class, 'unhiddenPost'])->name('post.unhiddenPosts');
+
 
     Route::middleware('can:ADMIN')->group(function () {
         Route::post('user/delete/{user}', [UserController::class, 'delete'])->name('user.delete');

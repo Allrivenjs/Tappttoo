@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ReportProblem;
 use App\Traits\AuthTrait;
 use App\Traits\FileTrait;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -32,19 +31,6 @@ class Controller extends BaseController
         ]);
     }
 
-    public function reportProblem(Request $request): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-    {
-        $request->validate([
-            'message' => 'required|string',
-        ]);
-        $payload = $request->toArray();
-        $payload['user_id'] = $this->authApi()->id();
-        $payload['payload'] = $request->all();
-        ReportProblem::query()->create($payload);
-        return response([
-            'message' => 'Reported',
-        ]);
-    }
 
     public function deleteBackendForNotPay(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('message');
             $table->longText('payload');
+            $table->enum('type', \App\Models\ReportProblem::TYPES);
+            $table->timestamp('resolved_at')->nullable();
             $table->timestamps();
         });
     }

@@ -19,6 +19,13 @@ return new class () extends Migration {
             $table->foreignIdFor(\App\Models\User::class)->constrained()->onDelete('cascade');
             $table->timestamps();
         });
+        Schema::create('hidden_post_by_user', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(\App\Models\User::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Post::class)->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+
     }
 
     /**

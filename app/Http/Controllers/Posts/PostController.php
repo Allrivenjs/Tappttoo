@@ -162,4 +162,16 @@ class PostController extends Controller
             'taggableUsers.*' => 'integer|exists:users,id',
         ];
     }
+
+    public function hiddenPost(Post $post): \Illuminate\Http\Response
+    {
+        $post->hiddenByUsers()->attach($this->authApi()->user()->id);
+        return response(null);
+    }
+
+    public function unHiddenPost(Post $post): \Illuminate\Http\Response
+    {
+        $post->hiddenByUsers()->detach($this->authApi()->user()->id);
+        return response(null);
+    }
 }
