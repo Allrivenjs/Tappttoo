@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Report;
 
+use App\Http\Controllers\Controller;
 use App\Models\ReportProblem as ReportProblemModel;
 use Illuminate\Http\Request;
 
-class ReportProblem extends \App\Http\Controllers\Controller
+class ReportProblem extends Controller
 {
 
     public function reportProblem(Request $request): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
