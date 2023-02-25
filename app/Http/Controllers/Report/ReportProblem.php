@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
 use App\Models\ReportProblem as ReportProblemModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReportProblem extends Controller
@@ -29,7 +30,7 @@ class ReportProblem extends Controller
     public function markAsResolved(ReportProblemModel $reportProblem): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
     {
         $reportProblem->update([
-            'resolved_at' => now(),
+            'resolved_at' => Carbon::now(),
         ]);
         return response([
             'message' => 'Marked as resolved',

@@ -14,6 +14,8 @@ class ReportProblem extends Model
         'payload',
         'type',
         'resolved_at',
+        'user_id',
+        'post_id',
     ];
 
     const BUG = 'bug';
