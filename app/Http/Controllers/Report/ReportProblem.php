@@ -27,8 +27,14 @@ class ReportProblem extends Controller
         ]);
     }
 
-    public function markAsResolved(ReportProblemModel $reportProblem): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+    public function markAsResolved($reportProblem): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
     {
+        $reportProblem = ReportProblemModel::query()->findOrFail($reportProblem);
+        if ($reportProblem->resolved_at) {
+            return response([
+                'message' => 'Already marked as resolved',
+            ]);
+        }
         $reportProblem->update([
             'resolved_at' => Carbon::now(),
         ]);

@@ -11,6 +11,9 @@ class PaymentController extends Controller
 
     public function webhook(Request $request)
     {
+        $request->validate([
+
+        ]);
 
     }
 }
