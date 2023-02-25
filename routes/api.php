@@ -102,6 +102,7 @@ Route::middleware('auth:api')->group(function () {
         Route::put('status', [TattooArtistController::class, 'updateStatus'])->name('companyUpdateStatus');
         Route::put('instagram', [TattooArtistController::class, 'updateInstagram'])->name('companyUpdateInstagram');
         Route::put('name-company', [TattooArtistController::class, 'updateNameCompany'])->name('companyUpdateNameCompany');
+        Route::post('assign-image', [TattooArtistController::class, 'assignImages'])->name('assign-image');
     });
 });
 

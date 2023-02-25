@@ -59,4 +59,6 @@ class Tattoo_artist extends Model
     {
         return $this->morphToMany(Topic::class, 'topicables');
     }
+
+
 }

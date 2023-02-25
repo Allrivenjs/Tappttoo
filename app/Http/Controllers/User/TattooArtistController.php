@@ -12,7 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TattooArtistController extends Controller
 {
-    public function validateUser()
+    public function __construct()
+    {
+        self::validateUser();
+    }
+
+    public static function validateUser()
     {
         try {
             throw_if(!auth()->user()->tattoo_artist()->exists(), \Exception::class, 'You are not a company');
@@ -26,7 +31,6 @@ class TattooArtistController extends Controller
      */
     public function updatePrice(Request $request): \Illuminate\Http\Response
     {
-        $this->validateUser();
         $validate = $request->validate($this->rulesPrice());
         $this->authApi()->user()->tattoo_artist()->update($validate);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
@@ -51,7 +55,6 @@ class TattooArtistController extends Controller
 
     public function updateStatus(Request $request): \Illuminate\Http\Response
     {
-        $this->validateUser();
         $validate = $request->validate($this->rulesStatus());
         $this->authApi()->user()->tattoo_artist()->update($validate);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
@@ -59,7 +62,6 @@ class TattooArtistController extends Controller
 
     public function updateInstagram(Request $request): \Illuminate\Http\Response
     {
-        $this->validateUser();
         $validate = $request->validate($this->rulesInstagram());
         $this->authApi()->user()->tattoo_artist()->update($validate);
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
@@ -67,9 +69,27 @@ class TattooArtistController extends Controller
 
     public function updateNameCompany(Request $request): \Illuminate\Http\Response
     {
-        $this->validateUser();
         $validate = $request->validate($this->rulesNameCompany());
         $this->authApi()->user()->tattoo_artist()->update($validate);
+        return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
+    }
+
+
+    public function assignImages(Request $request): \Illuminate\Http\Response
+    {
+        $validate = $request->validate($this->rulesImages());
+        if ($request->hasFile('images')) {
+            $tattoo_artist = $this->authApi()->user()->tattoo_artist();
+            if ($tattoo_artist->images()->exists()) {
+                $tattoo_artist->images()->delete();
+            }
+            foreach ($request->file('images') as $image) {
+                $tattoo_artist->images()->create([
+                    'url' => $this->uploadFile('public', $image, 'TattooArtist/images'),
+                    'type' => 'public',
+                ]);
+            }
+        }
         return response(null)->setStatusCode(Response::HTTP_ACCEPTED);
     }
 
@@ -101,6 +121,14 @@ class TattooArtistController extends Controller
                 'string',
                 Rule::in(StatusArtist::toArray()),
             ],
+        ];
+    }
+
+    #[ArrayShape(['images' => "string", 'images.*' => "string"])] private function rulesImages(): array
+    {
+        return [
+            'images' => 'required|array|min:1|max:5',
+            'images.*' => 'required|image',
         ];
     }
 }
