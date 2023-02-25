@@ -85,7 +85,7 @@ class Quotation extends Model
         return $this->belongsTo(Room::class);
     }
 
-    public function images()
+    public function images(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Image::class, 'imageable');
     }
