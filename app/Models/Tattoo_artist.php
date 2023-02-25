@@ -18,7 +18,7 @@ class Tattoo_artist extends Model
         'status',
         'user_id',
     ];
-
+    protected $with = ['images'];
 
     public function getCreatedAtAttribute($value): string
     {
