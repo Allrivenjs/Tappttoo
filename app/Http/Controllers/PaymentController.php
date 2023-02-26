@@ -17,7 +17,7 @@ class PaymentController extends Controller
         $user= User::query()->with(['tattoo_artist'])->first();
         return view('payment', [
             'user' => $user,
-            'avatar'=> $this->getImage('public', $user->profile_photo_path)
+            'avatar'=> env('APP_URL') === 'https://tappttoo.shop' ? $this->getImage('public', $user->profile_photo_path) : $user->profile_photo_path
         ]);
     }
 }
