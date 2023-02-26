@@ -48,7 +48,7 @@ trait FileTrait
     public function getImage(string $type, string $path): mixed
     {
         $this->getFile($type, $path);
-        dd($this->file->getContent());
+        dd($this->file->sendContent());
         return $this->file;
     }
 
