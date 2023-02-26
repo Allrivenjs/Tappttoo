@@ -12,6 +12,7 @@ class PaymentController extends Controller
     {
 
         $user= User::query()->with(['tattoo_artist'])->first();
+        dd($user);
         return view('payment', [
             'user' => $user
         ]);
