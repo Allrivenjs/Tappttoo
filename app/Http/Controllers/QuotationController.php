@@ -29,7 +29,7 @@ class QuotationController extends Controller
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $quotation->images()->create([
-                    'path' => (new Controller())->uploadFile('private', $image, 'quotation/images'),
+                    'url' => $this->uploadFile('private', $image, 'quotation/images'),
                     'type' => 'private',
                 ]);
             }
