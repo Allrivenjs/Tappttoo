@@ -80,8 +80,7 @@ class TattooArtistController extends Controller
     {
         $validate = $request->validate($this->rulesImages());
         if ($request->hasFile('images')) {
-            $tattoo_artist = User::query()->find($this->authApi()->user()->getAuthIdentifier())->tattoo_artist();
-            dd($tattoo_artist->first()->images());
+            $tattoo_artist = User::query()->find($this->authApi()->user()->getAuthIdentifier())->tattoo_artist()->first();
             if ($tattoo_artist->images()->exists()) {
                 $tattoo_artist->images()->delete();
             }
