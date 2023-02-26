@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Enums\StatusArtist;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -79,7 +80,7 @@ class TattooArtistController extends Controller
     {
         $validate = $request->validate($this->rulesImages());
         if ($request->hasFile('images')) {
-            $tattoo_artist = $this->authApi()->user()->tattoo_artist();
+            $tattoo_artist = User::query()->find($this->authApi()->user()->getAuthIdentifier())->tattoo_artist();
             if ($tattoo_artist->images()->exists()) {
                 $tattoo_artist->images()->delete();
             }
