@@ -5,11 +5,12 @@ namespace App\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
 trait FileTrait
 {
-    protected mixed $file;
+    protected StreamedResponse $file;
 
     /**
      * @param Request $request
@@ -47,7 +48,7 @@ trait FileTrait
     public function getImage(string $type, string $path): mixed
     {
         $this->getFile($type, $path);
-        dd($this->file);
+        dd($this->file->getContent());
         return $this->file;
     }
 
