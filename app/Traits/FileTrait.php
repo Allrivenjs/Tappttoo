@@ -34,12 +34,13 @@ trait FileTrait
     /**
      * @throws Throwable
      */
-    private function getFile(string $type, string $path): void
+    private function getFile(string $type, string $path, $response = true): void
     {
         self::authorize($type);
         $storage = Storage::disk($type);
         abort_if(! $storage->exists($path), Response::HTTP_NOT_FOUND, 'File not found');
-        $this->file = ($storage->response($path));
+
+        $this->file = $response ? ($storage->response($path)) : ($storage->get($path));
     }
 
     /**
@@ -47,8 +48,7 @@ trait FileTrait
      */
     public function getImage(string $type, string $path): mixed
     {
-        $this->getFile($type, $path);
-        dd($this->file->sendContent());
+        $this->getFile($type, $path, false);
         return $this->file;
     }
 
