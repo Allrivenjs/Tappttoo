@@ -22,7 +22,7 @@
                 <div class="bg-gray-500 transition-opacity bg-opacity-75"></div>
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen">​</span>
                 <div class= "inline-block text-left bg-gray-900 rounded-lg overflow-hidden align-bottom transition-all transform
-            shadow-2xl sm:my-8 sm:align-middle sm:max-w-xl sm:w-full">
+            shadow-2xl sm:align-middle sm:max-w-xl sm:w-full">
                     <div class="items-center w-full mr-auto ml-auto relative max-w-7xl md:px-12 lg:px-24">
                         <div class="grid grid-cols-1">
                             <div class="mt-4 mr-auto mb-4 ml-auto bg-gray-900 max-w-lg">
