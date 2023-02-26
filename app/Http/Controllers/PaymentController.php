@@ -9,11 +9,8 @@ use Illuminate\Support\Str;
 class PaymentController extends Controller
 {
 
-    public function webhook(Request $request)
+    public function webhook(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $request->validate([
-
-        ]);
-
+        return view('payment');
     }
 }

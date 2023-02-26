@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Quotation;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class QuotationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -20,10 +21,10 @@ class QuotationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function store(Request $request): \Illuminate\Http\Response
+    public function store(Request $request): Response
     {
         $quotation = Quotation::create($request->validate(Quotation::validationRules));
         if ($request->hasFile('images')) {
@@ -41,7 +42,7 @@ class QuotationController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Quotation  $quotation
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Quotation $quotation)
     {
@@ -51,9 +52,9 @@ class QuotationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  \App\Models\Quotation  $quotation
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, Quotation $quotation)
     {
@@ -64,7 +65,7 @@ class QuotationController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Quotation  $quotation
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Quotation $quotation)
     {

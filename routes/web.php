@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,3 +41,5 @@ Route::get('policy', function () {
 Route::get('terms', function () {
     return view('terminos');
 })->name('terms');
+
+Route::get('payment', [PaymentController::class, 'webhook'])->name('payment');
