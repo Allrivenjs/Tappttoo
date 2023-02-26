@@ -40,7 +40,7 @@ trait FileTrait
         $storage = Storage::disk($type);
         abort_if(! $storage->exists($path), Response::HTTP_NOT_FOUND, 'File not found');
 
-        $this->file = $response ? ($storage->response($path)) : ($storage->readStream($path));
+        $this->file = $response ? ($storage->response($path)) : (file_get_contents($storage->get($path)));
     }
 
     /**
