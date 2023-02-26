@@ -40,7 +40,7 @@ trait FileTrait
         $storage = Storage::disk($type);
         abort_if(! $storage->exists($path), Response::HTTP_NOT_FOUND, 'File not found');
 
-        $this->file = $response ? ($storage->response($path)) : ($storage->get($path));
+        $this->file = $response ? ($storage->response($path)) : ($storage->get(($path)));
     }
 
     /**
@@ -49,6 +49,7 @@ trait FileTrait
     public function getImage(string $type, string $path): mixed
     {
         $this->getFile($type, $path, false);
+        dd($this->file);
         return $this->file;
     }
 
