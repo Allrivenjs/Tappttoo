@@ -10,7 +10,7 @@ use Throwable;
 
 trait FileTrait
 {
-    protected StreamedResponse $file;
+    protected mixed $file;
 
     /**
      * @param Request $request
@@ -49,7 +49,6 @@ trait FileTrait
     public function getImage(string $type, string $path): mixed
     {
         $this->getFile($type, $path, false);
-        dd($this->file);
         return $this->file;
     }
 
