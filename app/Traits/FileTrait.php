@@ -50,7 +50,7 @@ trait FileTrait
     public function uploadFile(string $type, $file, string $path): string|bool
     {
         self::authorize($type);
-        return str_replace('', '', Storage::disk('public')->put($path, $file));
+        return str_replace('', '', Storage::disk($type)->put($path, $file));
     }
 
     /**
