@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
 
     public function webhook(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('payment');
+
+        $user= User::query()->with(['tattoo_artist'])->first();
+        return view('payment', [
+            'user' => $user
+        ]);
     }
 }
