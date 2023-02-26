@@ -42,6 +42,15 @@ trait FileTrait
     }
 
     /**
+     * @throws Throwable
+     */
+    public function getImage(string $type, string $path): mixed
+    {
+        $this->getFile($type, $path);
+        return $this->file;
+    }
+
+    /**
      * @param string $type
      * @param $file
      * @param string $path

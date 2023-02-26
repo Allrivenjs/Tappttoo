@@ -29,7 +29,7 @@
                                 <div class="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
                                     <img
                                         {{--https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=500--}}
-                                        src="{{ $user->profile_photo_path  }}" class="flex-shrink-0 object-cover object-center btn- flex w-16 h-16 mr-auto -mb-8 ml-auto rounded-full shadow-xl">
+                                        src="{{ $avatar }}" class="flex-shrink-0 object-cover object-center btn- flex w-16 h-16 mr-auto -mb-8 ml-auto rounded-full shadow-xl">
                                     <p class="mt-8 text-2xl font-semibold leading-none text-white tracking-tighter lg:text-3xl"> {{ $user->name }} {{$user->lastname}}</p>
                                     <p class="mt-3 text-base leading-relaxed text-center text-gray-200">
                                         Hola tatuador, estas apunto de adquerir este plan mensual
