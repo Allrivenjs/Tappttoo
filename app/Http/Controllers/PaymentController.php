@@ -46,7 +46,10 @@ class PaymentController extends Controller
         $payment = Payment::query()->where('payment_reference', $request->get('reference'))->first();
         $plan = Plan::query()->find($request->get('plan_id'));
         $user->attachPayment($payment, $plan, $request->get('transaction'), $request->get('transaction_id'));
-        return redirect()->route('payment.success');
+        return response([
+            'message' => 'Pago confirmado',
+            'status' => 'success',
+        ], Response::HTTP_OK);
     }
 
     public function getPlans(Request $request): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
