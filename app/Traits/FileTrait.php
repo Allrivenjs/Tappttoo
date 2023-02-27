@@ -38,8 +38,7 @@ trait FileTrait
     {
         self::authorize($type);
         $storage = Storage::disk($type);
-        abort_if(! $storage->exists($path), Response::HTTP_NOT_FOUND, 'File not found');
-
+        abort_if(! $storage->exists($path) && $response, Response::HTTP_NOT_FOUND, 'File not found');
         $this->file = $response ? ($storage->response($path)) : (base64_encode($storage->get($path)));
     }
 

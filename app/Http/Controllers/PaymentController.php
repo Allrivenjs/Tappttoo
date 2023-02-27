@@ -21,7 +21,6 @@ class PaymentController extends Controller
             'plan_id' => 'required|exists:plans,id',
         ]);
         $this->verifySubscription($user = User::query()->with(['tattoo_artist'])->find($request->get('user_id')));
-        dd($user);
         return view('payment', [
             'user' => $user,
             'payment' => $user->getPaymentOrCreate($request->get('plan_id')),
