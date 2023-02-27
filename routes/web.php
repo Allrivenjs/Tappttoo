@@ -43,3 +43,5 @@ Route::get('terms', function () {
 })->name('terms');
 
 Route::get('payment', [PaymentController::class, 'webhook'])->name('payment');
+Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\{Factories\HasFactory, SoftDeletes};
+use Illuminate\Database\Eloquent\{Builder, Factories\HasFactory, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -22,19 +22,12 @@ class User extends Authenticatable implements MustVerifyEmail
     use Follower;
     use Followable;
 
+    protected $with = ['roles'];
 
-    public function __invoke()
-    {
-        return $this->load('roles');
-    }
-
-    //create observer
     protected static function boot()
     {
         parent::boot();
-        static::created(function ($user) {
-            $user->assignRole('Normal');
-        });
+        static::created(fn ($user) => $user->assignRole('Normal'));
     }
 
     /**
@@ -75,16 +68,63 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-//    public function sendPasswordResetNotification($token)
-//    {
-//
-//    }
 
+    public function hasActiveSubscription(): bool
+    {
+        return $this->subscriptions()
+            ->where('expires_at', '>', Carbon::now())
+            ->exists() && !$this->getPlanSubscriptions();
+    }
+
+    public function getPaymentsPending($plan): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\HasMany|null
+    {
+        return $this->payments()->where('status', Payment::STATUS_PENDING)
+            ->where('payment_amount',Plan::query()->find($plan)->price * 100)
+            ->first();
+    }
+
+    public function getPaymentOrCreate($plan): \Illuminate\Database\Eloquent\Model|Payment|\Illuminate\Database\Eloquent\Relations\HasMany
+    {
+           return $this->getPaymentsPending($plan)
+            ??
+            $this->createPayment(Plan::query()->find($plan));
+    }
+
+    public function getPlanSubscriptions(): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\HasMany|null
+    {
+        return $this->payments()->where('status', Payment::STATUS_SUCCESS)->first();
+    }
+
+    public function createPayment($plan): Payment
+    {
+        $payment = new Payment();
+        $payment->user_id = $this->id;
+        $payment->status = Payment::STATUS_PENDING;
+        $payment->payment_method = 'webhook';
+        $payment->payment_currency = 'COP';
+        $payment->payment_amount = $plan->price * 100;
+        $payment->payment_reference = Str::uuid();
+        $payment->save();
+        return $payment;
+    }
+
+    public function attachPayment($payment, $plan, $payload, $transaction_id): void
+    {
+        $payment->status = Payment::STATUS_SUCCESS;
+        $payment->payload = $payload;
+        $payment->payment_id = $transaction_id;
+        $payment->save();
+        $payment->plan()->attach([
+            $plan->id => [
+                'expires_at' => Carbon::now()->addDays($plan->duration_in_days),
+                'user_id' => $this->id,
+            ],
+        ]);
+    }
 
     public function getCreatedAtAttribute($value): string
     {
         return Carbon::parse($value)->diffForHumans();
-        __DIR__;
     }
 
     public function getUpdatedAtAttribute($value)
@@ -153,5 +193,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function preferences(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
         return $this->morphToMany(Topic::class, 'topicables');
+    }
+
+    public function subscriptions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Plan::class, 'users_plans')->withPivot(['expires_at']);
+    }
+
+    public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 }

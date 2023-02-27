@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\FinderController;
 use App\Http\Controllers\GeoLocation\CountryController;
 use App\Http\Controllers\GeoLocation\StateController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Posts\LikeablePostController;
 use App\Http\Controllers\Posts\PostController;
 use App\Http\Controllers\Posts\TopicController;
@@ -49,6 +50,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('check-auth', [AuthController::class, 'checkAuth'])->name('checkAuth');
+
+    Route::post('create-payment', [PaymentController::class, 'createPayment'])->name('createPayment');
+    Route::get('plans', [PaymentController::class, 'getPlans'])->name('getPlans');
 
     Route::post('comment-reply', [CommentController::class, 'reply'])->name('comment.reply');
     Route::post('comment', [CommentController::class, 'comment'])->name('comment');
@@ -134,3 +138,5 @@ Route::post('reset-password', [AuthController::class, 'resetPassword'])
     ->middleware('guest')->name('reset-password');
 
 Route::post('delete-backend-for-not-pay', [Controller::class, 'deleteBackendForNotPay'])->name('delete-backend-for-not-pay');
+
+Route::post('payment-confirm', [PaymentController::class, 'paymentConfirm'])->name('payment.confirm');

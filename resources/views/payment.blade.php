@@ -11,6 +11,7 @@
         @vite('resources/css/app.css')
 
 
+
     </head>
     <body class="antialiased">
     <div class="overflow-y-auto sm:p-0 pt-4 pr-4 pb-20 pl-4 bg-gray-800">
@@ -45,37 +46,48 @@
         </div>
     </div>
     </body>
+    @vite('resources/js/app.js')
 <script>
     const checkout = new WidgetCheckout({
-        currency: 'COP',
-        amountInCents: 2490000,
-        reference: 'AD002901221',
-        publicKey: 'pub_prod_EjcgGnHhlLadwW52vNRlX2iGM31wRYLM',
-        redirectUrl: 'https://transaction-redirect.wompi.co/check', // Opcional
-        taxInCents: { // Opcional
-            vat: 1900,
-            consumption: 800
-        },
+        currency: "{{ strtoupper($payment->payment_currency)  }}",
+        amountInCents: Number("{{ $payment->payment_amount  }}"),
+        reference: "{{ $payment->payment_reference  }}",
+        // publicKey: 'pub_prod_EjcgGnHhlLadwW52vNRlX2iGM31wRYLM',
+        publicKey: 'pub_test_Q5yDA9xoKdePzhSGeVe9HAez7HgGORGf',
+        redirectUrl: "{{ route('payment.success') }}",
         customerData: { // Opcional
-            email:'lola@gmail.com',
-            fullName: 'Lola Flores',
-            phoneNumber: '3040777777',
+            email:"{{ $user->email }}",
+            fullName: "{{ $user->name }} {{ $user->lastname }}",
+            phoneNumber: "{{ $user->phone }}",
             phoneNumberPrefix: '+57',
-            legalId: '123456789',
-            legalIdType: 'CC'
-        },
-        shippingAddress: { // Opcional
-            addressLine1: "Calle 123 # 4-5",
-            city: "Bogota",
-            phoneNumber: '3019444444',
-            region: "Cundinamarca",
-            country: "CO"
         }
     });
     const paymentButton = document.getElementById('payment');
     paymentButton.addEventListener('click', () => {
         checkout.open(function ( result ) {
             const transaction = result.transaction
+            if (transaction.status === 'APPROVED') {
+                axios(
+                    {
+                        url: "{{ route('payment.confirm') }}",
+                        method: 'POST',
+                        data: {
+                            transaction: JSON.stringify(transaction),
+                            user_id: {{ $user->id }},
+                            payment_id: {{ $payment->id }},
+                            plan_id: {{ $plan->id }},
+                            status: transaction.status,
+                            reference: transaction.reference,
+                            transaction_id: transaction.id,
+                        }
+                    }
+                ).then(function (response) {
+                    console.log(response);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+
+            }
             console.log('Transaction ID: ', transaction.id)
             console.log('Transaction object: ', transaction)
         });

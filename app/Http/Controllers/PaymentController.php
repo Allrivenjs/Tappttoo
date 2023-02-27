@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller
 {
@@ -13,11 +17,40 @@ class PaymentController extends Controller
      */
     public function webhook(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-
-        $user= User::query()->with(['tattoo_artist'])->first();
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'plan_id' => 'required|exists:plans,id',
+        ]);
+        $this->verifySubscription($user = User::query()->with(['tattoo_artist'])->find($request->get('user_id')));
         return view('payment', [
             'user' => $user,
+            'payment' => $user->getPaymentOrCreate($request->get('plan_id')),
+            'plan' => Plan::query()->find($request->get('plan_id')),
             'avatar'=> env('APP_URL') === 'https://tappttoo.shop' ? $this->getImage('public', $user->profile_photo_path) : $user->profile_photo_path
         ]);
+    }
+
+    protected function verifySubscription($user): void
+    {
+        abort_if($user->hasActiveSubscription(), Response::HTTP_UNAUTHORIZED, 'Ya tienes una suscripción activa');
+    }
+
+    public function paymentSuccess(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('payment-success');
+    }
+
+    public function paymentConfirm(Request $request)
+    {
+        $user = User::query()->find($request->get('user_id'));
+        $payment = Payment::query()->where('payment_reference', $request->get('reference'))->first();
+        $plan = Plan::query()->find($request->get('plan_id'));
+        $user->attachPayment($payment, $plan, $request->get('transaction'), $request->get('transaction_id'));
+        return redirect()->route('payment.success');
+    }
+
+    public function getPlans(Request $request): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+    {
+        return response( Plan::all() );
     }
 }
