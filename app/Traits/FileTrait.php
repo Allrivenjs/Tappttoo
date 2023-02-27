@@ -48,7 +48,7 @@ trait FileTrait
     public function getImage(string $type, string $path): mixed
     {
         $this->getFile($type, $path, false);
-        return "data:image/png;base64,{$this->file}";
+        return $this->file ?  "data:image/png;base64,{$this->file}" : null;
     }
 
     /**

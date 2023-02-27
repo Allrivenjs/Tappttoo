@@ -25,7 +25,9 @@ class PaymentController extends Controller
             'user' => $user,
             'payment' => $user->getPaymentOrCreate($request->get('plan_id')),
             'plan' => Plan::query()->find($request->get('plan_id')),
-            'avatar'=> env('APP_URL') === 'https://tappttoo.shop' ? $this->getImage('public', $user->profile_photo_path) : $user->profile_photo_path
+            'avatar'=> env('APP_URL') === 'https://tappttoo.shop' ?
+                $this->getImage('public', $user->profile_photo_path) ?? "https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=500"
+                : $user->profile_photo_path
         ]);
     }
 
