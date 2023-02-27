@@ -6,7 +6,6 @@ use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller
@@ -17,6 +16,7 @@ class PaymentController extends Controller
      */
     public function webhook(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
+        dd($request->all());
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'plan_id' => 'required|exists:plans,id',
