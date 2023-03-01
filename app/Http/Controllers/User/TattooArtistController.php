@@ -15,16 +15,8 @@ class TattooArtistController extends Controller
 {
     public function __construct()
     {
-        self::validateUser();
-    }
-
-    public static function validateUser()
-    {
-        try {
-            throw_if(!auth()->user()->tattoo_artist()->exists(), \Exception::class, 'You are not a company');
-        } catch (\Throwable $e) {
-            Log::error($e->getMessage());
-        }
+        $this->middleware('auth:api');
+        $this->middleware('tattoo.artist');
     }
 
     /**
@@ -80,7 +72,7 @@ class TattooArtistController extends Controller
     {
         $validate = $request->validate($this->rulesImages());
         if ($request->hasFile('images')) {
-            $tattoo_artist = User::query()->find($this->authApi()->user()->getAuthIdentifier())->tattoo_artist()->first();
+            $tattoo_artist = User::query()->find($this->authApi()->user()->getAuthIdentifier())->tattoo_artist()->firstOrFail();
             if ($tattoo_artist->images()->exists()) {
                 $tattoo_artist->images()->delete();
             }
