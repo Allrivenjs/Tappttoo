@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PostController extends Controller
 {
     public const relations = [
-        'user'=>'followers',
+        'user' => 'followers',
         'likeCounter',
         'topics',
         'images',
