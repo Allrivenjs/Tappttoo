@@ -18,6 +18,7 @@ class PostResource extends JsonResource
         return array_merge(parent::toArray($request), [
             'likedByMe'=> $userAuth ? $this->liked($userAuth->getAuthIdentifier()) : false,
             'roles'=> $this->user?->getRoleNames(),
+            'is_following' => $userAuth && $this->followers->find($userAuth->id),
         ]);
     }
 }
