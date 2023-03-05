@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 
 class Chat implements ChatInterface
@@ -93,7 +94,7 @@ class Chat implements ChatInterface
         return Room::query()->with([
             'messages' => fn ($q) => $q->with('user')->orderByDesc('created_at'),
             'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-        ])->find($roomId)->messages;
+        ])->find($roomId)?->messages;
     }
 
     public function matchUser($receiverId, $userId): \Illuminate\Database\Eloquent\Model|Builder|bool|null
