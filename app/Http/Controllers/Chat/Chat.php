@@ -18,21 +18,17 @@ use Illuminate\Support\Str;
 
 class Chat implements ChatInterface
 {
-    public function createRoom(bool $type): Room
+    public function createRoom(bool $type = false): Builder|\Illuminate\Database\Eloquent\Model
     {
-        $name = Str::uuid();
-        $room = new Room();
-        $room->name = $name;
-        $room->type = $type;
-        $room->save();
-
-        return $room;
+        return Room::query()->create([
+            'name' => Str::uuid(),
+            'type' => $type,
+        ]);
     }
 
     public function getUsers($roomId): User | array
     {
         $room = Room::query()->find($roomId);
-
         return $room->users;
     }
 

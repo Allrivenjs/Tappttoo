@@ -43,13 +43,12 @@ class ChatController extends Controller
         return response($response);
     }
 
-    public function createChatRoom($receiver_id): \App\Models\Room
+    public function createChatRoom($receiver_id): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
     {
-        $room = $this->room->createRoom(0);
+        $room = $this->room->createRoom();
         $userId = Auth::guard('api')?->user()?->getAuthIdentifier();
         $this->room->addUser($room->id, $receiver_id);
         $this->room->addUser($room->id, $userId);
-
         return $room;
     }
 
