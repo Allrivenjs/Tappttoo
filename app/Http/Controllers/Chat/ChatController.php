@@ -38,8 +38,8 @@ class ChatController extends Controller
         throw_if(is_null($receiver_id), 'Receiver id is required for query param');
         throw_if((int) $receiver_id == (int) $userId, 'You can not chat with yourself');
         $match = $this->room->matchUser((int) $receiver_id, (int) $userId);
-        $response = $match ?: $this->createChatRoom($receiver_id);
-        return response($response->first());
+        $response = $match ?: $this->createChatRoom($receiver_id)->first();
+        return response($response);
     }
 
     public function createChatRoom($receiver_id): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
