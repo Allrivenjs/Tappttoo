@@ -103,6 +103,6 @@ class Chat implements ChatInterface
                 $query->where('user_id', $userId)
                     ->orWhere('user_id', $receiverId);
             }, '=', 2); // El número 2 indica que deben existir exactamente 2 usuarios en la sala
-        return $room->exists() ? $room : false;
+        return $room->exists() ? $room->first() : false;
     }
 }
