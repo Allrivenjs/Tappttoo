@@ -28,7 +28,7 @@ class ChatController extends Controller
     /**
      * @throws \Throwable
      */
-    public function getExistRoom(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function getExistRoom(Request $request)
     {
         $request->validate([
             'receiver_id' => 'required|integer|exists:users,id',
