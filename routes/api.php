@@ -63,6 +63,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('get-my-rooms', [ChatController::class, 'getRooms'])->name('chat.get-my-rooms');
     Route::get('chat/message/{room_id}', [ChatController::class, 'getMessages'])->name('chat.getMessages');
     Route::post('chat/send-message', [ChatController::class, 'sendMessage'])
+        ->withoutMiddleware('throttle:api')
+        ->middleware('throttle:300,1')
         ->name('chat.send-message');
 
     Route::apiResource('quotation', QuotationController::class)->only('store', 'show')->names('quotation');
