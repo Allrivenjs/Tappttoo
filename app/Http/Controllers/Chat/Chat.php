@@ -108,7 +108,13 @@ class Chat implements ChatInterface
         $personTwo = Room::query()->whereHas('users', function ($query) use ($receiverId) {
             $query->where('user_id', $receiverId);
         })->orderByDesc('created_at')->first();
-
+        $roomExists = Room::query()
+            ->whereHas('users', function ($query) use ($userId, $receiverId) {
+                $query->where('user_id', $userId)
+                    ->orWhere('user_id', $receiverId);
+            }, '=', 2) // El número 2 indica que deben existir exactamente 2 usuarios en la sala
+            ->exists();
+        dd($roomExists);
         if (!is_null($personOne) && !is_null($personTwo)) {
             return $personOne->id === $personTwo->id ? $personOne : false;
         }
