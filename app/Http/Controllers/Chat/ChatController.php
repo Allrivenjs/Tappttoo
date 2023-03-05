@@ -39,7 +39,7 @@ class ChatController extends Controller
         throw_if((int) $receiver_id == (int) $userId, 'You can not chat with yourself');
         $match = $this->room->matchUser((int) $receiver_id, (int) $userId);
         $response = $match ?: $this->createChatRoom($receiver_id);
-        return response($response);
+        return response($response->first());
     }
 
     public function createChatRoom($receiver_id): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
