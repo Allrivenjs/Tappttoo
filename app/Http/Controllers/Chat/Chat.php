@@ -96,7 +96,7 @@ class Chat implements ChatInterface
         ])->find($roomId)->messages;
     }
 
-    public function matchUser($receiverId, $userId): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model| bool
+    public function matchUser($receiverId, $userId): bool|Builder
     {
         $room = Room::query()
             ->whereHas('users', function ($query) use ($userId, $receiverId) {

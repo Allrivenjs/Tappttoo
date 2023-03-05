@@ -14,7 +14,7 @@ interface RoomInterface
 
     public function addUser($roomId, $userId): void;
 
-    public function matchUser($receiverId, $userId);
+    public function matchUser($receiverId, $userId): bool|Builder;
 
 //    public function removeUser($roomId, $userId);
 }
