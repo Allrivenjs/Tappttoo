@@ -11,7 +11,7 @@ class Room extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'type'];
-
+    protected $with = ['users'];
     public function getCreatedAtAttribute($value): string
     {
         return Carbon::parse($value)->diffForHumans();
