@@ -23,7 +23,7 @@ class Chat implements ChatInterface
         return Room::query()->create([
             'name' => Str::uuid(),
             'type' => $type,
-        ]);
+        ])->load('users');
     }
 
     public function getUsers($roomId): User | array
