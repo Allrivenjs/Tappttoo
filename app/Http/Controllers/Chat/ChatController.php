@@ -48,7 +48,7 @@ class ChatController extends Controller
         $userId = Auth::guard('api')?->user()?->getAuthIdentifier();
         $this->room->addUser($room->id, $receiver_id);
         $this->room->addUser($room->id, $userId);
-        return $room;
+        return $room->load('users');
     }
 
     public function sendMessage(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
