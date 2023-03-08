@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Follower;
     use Followable;
 
-    protected $with = ['roles'];
+    protected $with = ['roles', 'city', 'tattoo_artist', 'preferences', 'subscriptions', 'socialAccounts'];
 
     protected static function boot()
     {

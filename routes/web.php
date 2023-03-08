@@ -28,7 +28,7 @@ Route::get('/auth/{driver}/redirect', [Controller::class,'redirectToProvider'])
     ->name('social.auth');
 
 Route::get('/auth/{driver}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
-    ->name('redirectToCallbackSocialProvider');
+    ->name('redirectToCallbackSocialProviderWeb');
 
 Route::get('/reset-password/{token}', function ($token) {
     return view('auth.reset-password', ['token' => $token]);

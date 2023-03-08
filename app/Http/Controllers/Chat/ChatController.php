@@ -8,6 +8,7 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\RateLimiter;
 
 class ChatController extends Controller
 {
@@ -28,7 +29,7 @@ class ChatController extends Controller
     /**
      * @throws \Throwable
      */
-    public function getExistRoom(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    public function getExistRoom(Request $request)
     {
         $request->validate([
             'receiver_id' => 'required|integer|exists:users,id',
@@ -42,14 +43,13 @@ class ChatController extends Controller
         return response($response);
     }
 
-    public function createChatRoom($receiver_id): \App\Models\Room
+    public function createChatRoom($receiver_id): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
     {
-        $room = $this->room->createRoom(0);
+        $room = $this->room->createRoom();
         $userId = Auth::guard('api')?->user()?->getAuthIdentifier();
         $this->room->addUser($room->id, $receiver_id);
         $this->room->addUser($room->id, $userId);
-
-        return $room;
+        return $room->load('users');
     }
 
     public function sendMessage(Request $request): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory

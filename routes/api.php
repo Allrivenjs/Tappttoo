@@ -58,11 +58,14 @@ Route::middleware('auth:api')->group(function () {
     Route::post('comment', [CommentController::class, 'comment'])->name('comment');
     Route::delete('comment/{comment}', [CommentController::class, 'delete'])->name('comment.delete');
 
+    Route::get('chat/markAsRead', [ChatController::class, 'markAsRead'])->name('chat.markAsRead');
+    Route::get('chat/exist-room-or-create', [ChatController::class, 'getExistRoom'])->name('chat.getExistRoom');
     Route::get('get-my-rooms', [ChatController::class, 'getRooms'])->name('chat.get-my-rooms');
     Route::get('chat/message/{room_id}', [ChatController::class, 'getMessages'])->name('chat.getMessages');
-    Route::get('chat/exist-room-or-create', [ChatController::class, 'getExistRoom'])->name('chat.getExistRoom');
-    Route::get('chat/markAsRead', [ChatController::class, 'markAsRead'])->name('chat.markAsRead');
-    Route::post('chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.send-message');
+    Route::post('chat/send-message', [ChatController::class, 'sendMessage'])
+        ->withoutMiddleware('throttle:api')
+        ->middleware('throttle:300,1')
+        ->name('chat.send-message');
 
     Route::apiResource('quotation', QuotationController::class)->only('store', 'show')->names('quotation');
 

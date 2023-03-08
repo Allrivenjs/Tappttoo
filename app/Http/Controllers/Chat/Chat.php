@@ -14,25 +14,22 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 
 class Chat implements ChatInterface
 {
-    public function createRoom(bool $type): Room
+    public function createRoom(bool $type = false): Builder|\Illuminate\Database\Eloquent\Model
     {
-        $name = Str::uuid();
-        $room = new Room();
-        $room->name = $name;
-        $room->type = $type;
-        $room->save();
-
-        return $room;
+        return Room::query()->create([
+            'name' => Str::uuid(),
+            'type' => $type,
+        ]);
     }
 
     public function getUsers($roomId): User | array
     {
         $room = Room::query()->find($roomId);
-
         return $room->users;
     }
 
@@ -43,20 +40,20 @@ class Chat implements ChatInterface
         $room->users()->attach($user);
     }
 
-    public function sendMessage($roomIdId, $message): void
+    public function sendMessage($roomId, $message): void
     {
         $user = Auth::guard('api')->user()->getAuthIdentifier();
         $data = [
             'message' => $message,
             'user_id' => $user,
-            'room_id' => $roomIdId,
+            'room_id' => $roomId,
         ];
         $message = new Message($data);
         $message->save();
-        $user2 = Room::query()->find($roomIdId)->users()->where('user_id', '!=', $user)->first();
+        $user2 = Room::query()->find($roomId)->users()->where('user_id', '!=', $user)->first();
         broadcast(new MessageNotification($data))->toOthers();
         // enviar notificacion al usuario resecptor
-        broadcast(new \App\Notifications\MessageNotification($message, $user2, $roomIdId))->toOthers();
+        broadcast(new \App\Notifications\MessageNotification($message, $user2, $roomId))->toOthers();
 
 
     }
@@ -97,22 +94,16 @@ class Chat implements ChatInterface
         return Room::query()->with([
             'messages' => fn ($q) => $q->with('user')->orderByDesc('created_at'),
             'users' => fn ($q) => $q->where('users.id', '!=', Auth::guard('api')->user()->getAuthIdentifier()),
-        ])->find($roomId)->messages;
+        ])->find($roomId)?->messages;
     }
 
-    public function matchUser($receiverId, $userId): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model| bool
+    public function matchUser($receiverId, $userId): \Illuminate\Database\Eloquent\Model|Builder|bool|null
     {
-        $personOne = Room::query()->whereHas('users', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->orderByDesc('created_at')->first();
-        $personTwo = Room::query()->whereHas('users', function ($query) use ($receiverId) {
-            $query->where('user_id', $receiverId);
-        })->orderByDesc('created_at')->first();
-
-        if (!is_null($personOne) && !is_null($personTwo)) {
-            return $personOne->id === $personTwo->id ? $personOne : false;
-        }
-
-        return false;
+        $room = Room::query()
+            ->whereHas('users', function ($query) use ($userId, $receiverId) {
+                $query->where('user_id', $userId)
+                    ->orWhere('user_id', $receiverId);
+            }, '=', 2); // El número 2 indica que deben existir exactamente 2 usuarios en la sala
+        return $room->exists() ? $room->first() : false;
     }
 }
