@@ -157,7 +157,7 @@ class PostController extends Controller
             'topics' => 'array|required|min:1|max:3',
             'topics.*' => 'integer|exists:topics,id',
             'images' => 'array|required',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|required',
+            'images.*' => 'image|required',
             'taggableUsers' => 'array',
             'taggableUsers.*' => 'integer|exists:users,id',
         ];
