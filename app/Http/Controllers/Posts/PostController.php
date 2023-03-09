@@ -71,6 +71,7 @@ class PostController extends Controller
     {
         $validate = Validator::make($request->all(), self::rules());
         if ($validate->fails()) {
+            Log::log('error', json_encode($request->all()));
             Log::log('error', $validate->errors());
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
