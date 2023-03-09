@@ -42,7 +42,13 @@ Route::get('terms', function () {
     return view('terminos');
 })->name('terms');
 
+
+Route::get('phpinfo', function () {
+    phpinfo();
+});
+
 Route::get('payment', [PaymentController::class, 'webhook'])->name('payment');
 Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
 
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+
