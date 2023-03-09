@@ -72,6 +72,34 @@ class PostController extends Controller
         $validate = Validator::make($request->all(), self::rules());
         if ($validate->fails()) {
             Log::log('error', json_encode($request->all()));
+            //get data image of request
+            $image = $request->file('images');
+            //get name of image
+            $name = $image->getClientOriginalName();
+            //get path of image
+            $path = $image->getRealPath();
+            //get extension of image
+            $extension = $image->getClientOriginalExtension();
+            //get mime type of image
+            $mimeType = $image->getMimeType();
+            //get size of image
+            $size = $image->getSize();
+            //get error of image
+            $error = $image->getError();
+            //get max file size of image
+            $maxFileSize = $image->getMaxFilesize();
+
+            Log::log('error', json_encode([
+                'name' => $name,
+                'path' => $path,
+                'extension' => $extension,
+                'mimeType' => $mimeType,
+                'size' => $size,
+                'error' => $error,
+                'maxFileSize' => $maxFileSize,
+            ]));
+
+            Log::log('error', json_encode($request->all()));
             Log::log('error', $validate->errors());
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
