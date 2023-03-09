@@ -83,6 +83,8 @@
                     }
                 ).then(function (response) {
                     console.log(response);
+                    console.log({{ route('payment.success') }});
+                    {{ redirect()->route('payment.success') }}
                 }).catch(function (error) {
                     console.log(error);
                 });
