@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -67,7 +69,11 @@ class PostController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $request->validate(self::rules());
+        $validate = Validator::make($request->all(), self::rules());
+        if ($validate->fails()) {
+            Log::log('error', $validate->errors());
+            return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
         $post = Post::query()->create([
             'body' => $request->input('body'),
             'slug' => Str::uuid() . Carbon::today()->toString(),
