@@ -198,6 +198,8 @@ return [
         PrettyRoutes\ServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Recca0120\Terminal\TerminalServiceProvider::class,
+        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+
     ],
 
     /*
