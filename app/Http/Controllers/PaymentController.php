@@ -22,7 +22,7 @@ class PaymentController extends Controller
         ]);
         $this->verifySubscription($user = User::query()->with(['tattoo_artist'])->find($request->get('user_id')));
         $avatar = $user->profile_photo_path;
-        $avatar = $avatar  && $user->socialAccounts->count() > 0 ?
+        $avatar = !$avatar  && $user->socialAccounts->count() > 0 ?
                     $user->socialAccounts->first()->avatar
                     :  $this->getImage('public', $avatar);
         return view('payment', [
