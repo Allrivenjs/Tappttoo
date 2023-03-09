@@ -83,8 +83,7 @@
                     }
                 ).then(function (response) {
                     console.log(response);
-                    console.log({{ route('payment.success') }});
-                    {{ redirect()->route('payment.success') }}
+                    window.location.href = "{{ route('payment.success') }}";
                 }).catch(function (error) {
                     console.log(error);
                 });
