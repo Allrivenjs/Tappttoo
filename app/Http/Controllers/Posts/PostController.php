@@ -73,7 +73,7 @@ class PostController extends Controller
         if ($validate->fails()) {
             Log::log('error', json_encode($request->all()));
             //get data image of request
-            $image = $request->file('images');
+            $image = $request->file('images')[0];
             //get name of image
             $name = $image->getClientOriginalName();
             //get path of image
