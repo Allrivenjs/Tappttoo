@@ -43,15 +43,20 @@ Route::get('terms', function () {
 })->name('terms');
 
 
-Route::get('phpinfo', function () {
-    if (app()->environment() !== 'local') {
-        abort(404);
-    }
-    phpinfo();
-});
+
 
 Route::get('payment', [PaymentController::class, 'webhook'])->name('payment');
 Route::get('payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
 
-Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+Route::group([], function () {
+    if (app()->environment() !== 'local') {
+        abort(404);
+    }
+    Route::get('phpinfo', function () {
+        phpinfo();
+    });
+    Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+});
+
+
 
