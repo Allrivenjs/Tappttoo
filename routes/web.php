@@ -44,6 +44,9 @@ Route::get('terms', function () {
 
 
 Route::get('phpinfo', function () {
+    if (app()->environment() !== 'local') {
+        abort(404);
+    }
     phpinfo();
 });
 
