@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller
@@ -61,4 +62,29 @@ class PaymentController extends Controller
     {
         return response( Plan::all() );
     }
+
+    public function storePlan(Request $request): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+    {
+        $validate = $request->validate([
+            'name' => 'required',
+            'price' => 'required',
+            'description' => 'required',
+        ]);
+        $validate['slug'] = Str::slug(($validate['name'].time()));
+        $plan = Plan::query()->create($validate);
+        return response($plan, Response::HTTP_CREATED);
+    }
+
+    public function updatePlan(Request $request, Plan $plan): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+    {
+        $validate = $request->validate([
+            'name' => 'required',
+            'price' => 'required',
+            'description' => 'required',
+        ]);
+        $validate['slug'] = Str::slug(($validate['name'].time()));
+        $plan->update($validate);
+        return response($plan, Response::HTTP_OK);
+    }
+
 }
