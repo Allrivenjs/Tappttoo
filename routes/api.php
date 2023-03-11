@@ -102,7 +102,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('post/delete/{post}', [PostController::class, 'delete'])->name('post.delete');
 
         Route::post('create-plan', [PaymentController::class, 'storePlan'])->name('storePlan');
-        Route::post('update-plan', [PaymentController::class, 'updatePlan'])->name('updatePlan');
+        Route::post('update-plan/{plan}', [PaymentController::class, 'updatePlan'])->name('updatePlan');
 
     });
 
