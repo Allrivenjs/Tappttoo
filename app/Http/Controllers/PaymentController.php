@@ -86,6 +86,6 @@ class PaymentController extends Controller
         $plan->update($validate);
         return response($plan, Response::HTTP_OK);
     }
-    
+
 
 }
