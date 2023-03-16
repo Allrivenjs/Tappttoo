@@ -44,10 +44,14 @@ class PostController extends Controller
                 'comments_lasted'=> [ 'replies', 'owner' ]
             ])->whereHas('topics', function (Builder $query) {
                 $mypreferences = $this->authApi()->user()?->preferences()->pluck('name')->toArray();
-                $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences )->random(2)->pluck('name')->toArray();
+                $ramdomPreferens = Topic::all()->whereNotIn('name', $mypreferences )->random(3)->pluck('name')->toArray();
                 $query->whereIn('name', array_merge($mypreferences ?? [], $ramdomPreferens ?? []));
-            })->orderByDesc('created_at')->simplePaginate(10);
-
+            })->orWhereHas('user', function (Builder $query) {
+                $query->whereHas('subscriptions', function (Builder $query) {
+                    $query->whereDate('expires_at', '<=', Carbon::today());
+                });
+            })
+            ->orderByDesc('created_at')->simplePaginate(10);
         return response($posts->setCollection(PostResource::collection($posts->getCollection())->collection));
     }
 
@@ -71,34 +75,6 @@ class PostController extends Controller
     {
         $validate = Validator::make($request->all(), self::rules());
         if ($validate->fails()) {
-            Log::log('error', json_encode($request->all()));
-            //get data image of request
-            $image = $request->file('images')[0];
-            //get name of image
-            $name = $image->getClientOriginalName();
-            //get path of image
-            $path = $image->getRealPath();
-            //get extension of image
-            $extension = $image->getClientOriginalExtension();
-            //get mime type of image
-            $mimeType = $image->getMimeType();
-            //get size of image
-            $size = $image->getSize();
-            //get error of image
-            $error = $image->getError();
-            //get max file size of image
-            $maxFileSize = $image->getMaxFilesize();
-
-            Log::log('error', json_encode([
-                'name' => $name,
-                'path' => $path,
-                'extension' => $extension,
-                'mimeType' => $mimeType,
-                'size' => $size,
-                'error' => $error,
-                'maxFileSize' => $maxFileSize,
-            ]));
-
             Log::log('error', json_encode($request->all()));
             Log::log('error', $validate->errors());
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
