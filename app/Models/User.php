@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Follower;
     use Followable;
 
-    protected $with = ['roles', 'city', 'tattoo_artist', 'preferences', 'subscriptions', 'socialAccounts'];
+    protected $with = ['roles', 'city', 'tattoo_artist', 'preferences', 'socialAccounts'];
 
     protected static function boot()
     {
@@ -122,6 +122,10 @@ class User extends Authenticatable implements MustVerifyEmail
         ]);
     }
 
+    public function getSubscriptionActive(): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\HasMany|null
+    {
+        return $this->subscriptions()->where('expires_at', '>', Carbon::now())->select('name')->first();
+    }
     public function getCreatedAtAttribute($value): string
     {
         return Carbon::parse($value)->diffForHumans();
