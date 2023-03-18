@@ -33,7 +33,7 @@ class UserResource extends JsonResource
                 'name'=>$this->city->name??null,
                 'state'=>$this->city->state??null
             ],
-            'suscription_active' => $this->getSubscriptionActive(),
+            'subscription_active' => $this->getSubscriptionActive(),
         ]);
     }
 }

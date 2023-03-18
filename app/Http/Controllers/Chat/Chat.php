@@ -69,12 +69,20 @@ class Chat implements ChatInterface
             return Carbon::parse($room->lastMessage->first()->created_at ?? Carbon::now())->format('Y-m-d H:i:s');
         })->map(function ($room) {
             $lastMessage = $room->lastMessage->first();
-
+            $users = [
+                'users' => [
+                    ...$room->users->map(fn ($user) => [
+                        ...$user->toArray(),
+                        'subscription_active' => $user->getSubscriptionActive()
+                    ])
+                ]
+            ];
             if ($lastMessage === null) {
                 return [
                     ...$room->toArray(),
                     'last_message' => [],
                     'quotation' => $room->lastQuotation->first(),
+                    ...$users
                 ];
             }
 
@@ -85,6 +93,7 @@ class Chat implements ChatInterface
                     'created_at' => Carbon::parse($lastMessage->created_at)->diffForHumans(['parts' => 1, 'join'=>true]),
                 ],
                 'quotation' => $room->lastQuotation->first(),
+                ...$users
             ];
         })->toArray());
     }
