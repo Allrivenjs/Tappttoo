@@ -58,6 +58,11 @@ trait AuthTrait
         return response($this->handleSocialiteMethodLogin('google', true));
     }
 
+    private function handleAppleOtherCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        return response($this->handleSocialiteMethodLogin('apple', true));
+    }
+
     private function handleTwitterOtherCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         return response($this->handleSocialiteMethodLogin('twitter', true));
@@ -74,6 +79,10 @@ trait AuthTrait
         return response($this->handleSocialiteMethodLogin('google'));
     }
 
+    private function handleAppleCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        return response($this->handleSocialiteMethodLogin('apple'));
+    }
     private function handleTwitterCallback(): \Illuminate\Http\Response|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         return response($this->handleSocialiteMethodLogin('twitter'));
