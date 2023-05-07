@@ -38,7 +38,6 @@ trait AuthTrait
 
     public function redirectToCallbackSocialProvider($driver, $other = false, $token = null)
     {
-        echo "hola";
         abort_unless(array_key_exists($driver, Config::get('services')), Response::HTTP_NOT_FOUND, 'Driver not found');
         $method = 'handle'.ucfirst($driver);
         $other ? $method .= 'OtherCallback' : $method .= 'Callback';
