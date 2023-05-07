@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'profile_photo_path' => 'https://www.w3schools.com/howto/img_avatar.png',
             'password' => '$2a$10$7oMxkBuQ0PpbVxpJl0ufNerj0TTuZmRxrD76LlyKCaMCh8bpZqVS2',   //admin
         ]);
-        (new UserController)->createTattooArtist($user, Tattoo_artist::factory()->make()->toArray());
+//        (new UserController)->createTattooArtist($user, Tattoo_artist::factory()->make()->toArray());
         $user->assignRole('admin')->assignRole('moderator')->assignRole('tattoo_artist');
 
         $user2 = User::query()->create([
