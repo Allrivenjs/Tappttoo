@@ -27,8 +27,8 @@ Route::get('/image', [Controller::class, 'getImages'])
 Route::get('/auth/{driver}/redirect', [Controller::class,'redirectToProvider'])
     ->name('social.auth');
 
-Route::post('/auth/{driver}/redirect', [Controller::class,'redirectToProvider'])
-    ->name('social.auth.post');
+Route::post('/auth/apple/redirect', [Controller::class,'redirectToProvider'])
+    ->name('social.auth.post')->defaults('driver', 'apple');
 
 Route::get('/auth/{driver}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
     ->name('redirectToCallbackSocialProviderWeb');
