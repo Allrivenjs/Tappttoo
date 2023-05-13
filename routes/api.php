@@ -131,6 +131,8 @@ Route::apiResource('state', StateController::class)->names('state')->only(['inde
 
 Route::get('/auth/{driver}/{other}/{token}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
     ->name('redirectToCallbackSocialProvider');
+Route::get('/auth/{driver}/callback', [Controller::class,'redirectToCallbackSocialProvider'])
+    ->name('redirectToCallbackSocialProviderApi');
 
 Route::post('send-event', function (){
     \Illuminate\Support\Facades\Notification::send(\App\Models\User::query()->first(), new AnymoreNotification('This is our first broadcast message'));
