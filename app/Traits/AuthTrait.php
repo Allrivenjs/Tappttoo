@@ -129,8 +129,8 @@ trait AuthTrait
     {
         $names = explode(' ', $data['full_name']);
         return User::query()->create([
-            'name' => $names[0] ?? $data['name'],
-            'lastname' => $names[1] ?? $data['lastname'],
+            'name' => $names[0] ?? $data['name'] ?? null,
+            'lastname' => $names[1] ?? $data['lastname'] ?? null,
             'email' => $data['email'],
         ]);
     }
