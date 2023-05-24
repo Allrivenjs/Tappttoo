@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use JetBrains\PhpStorm\NoReturn;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\Rules;
@@ -96,8 +97,9 @@ trait AuthTrait
         return $this->loginMethod($user);
     }
 
-    public function findOrCreateUser($socialUser)
+    #[NoReturn] public function findOrCreateUser($socialUser)
     {
+        dd($socialUser, $socialUser->getName(), $socialUser->getEmail(), $socialUser->getId());
         return User::query()->whereHas(
             'socialAccounts',
             fn (Builder $q) => $q->where('social_id', $socialUser->getId())
