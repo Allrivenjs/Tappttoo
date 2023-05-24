@@ -32,8 +32,9 @@ trait AuthTrait
         return auth()->guard('api');
     }
 
-    public function redirectToProvider($driver = null): \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
+    public function redirectToProvider($driver = null, Request $request): \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
     {
+        dd($request->all());
         return Socialite::driver($driver ?? 'apple')->redirect();
     }
 
