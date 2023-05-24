@@ -103,14 +103,15 @@ trait AuthTrait
         return $this->loginMethod($user);
     }
 
-    #[NoReturn] public function findOrCreateUser($socialUser)
+    #[NoReturn] public function findOrCreateUser($socialUser, $provider)
     {
+        $nameofEmail = explode('@', $socialUser->getEmail());
         return User::query()->whereHas(
             'socialAccounts',
             fn (Builder $q) => $q->where('social_id', $socialUser->getId())
         )->orWhere('email', $socialUser->getEmail())
             ->firstOr(fn () => $this->createUser([
-            'full_name' => $socialUser->getName(),
+            'full_name' => $provider == "apple" ? $socialUser->getName() ?? $nameofEmail[0] : $socialUser->getName() ,
             'email' => $socialUser->getEmail(),
         ]));
     }
@@ -118,7 +119,7 @@ trait AuthTrait
     public function createUserProvider($socialUser, string $provider): array
     {
         return [
-            $user = $this->findOrCreateUser($socialUser),
+            $user = $this->findOrCreateUser($socialUser, $provider),
             SocialProfile::query()->with('user')
                 ->where('social_id', $socialUser->getId())
                 ->firstOr(fn () => SocialProfile::query()->create([
