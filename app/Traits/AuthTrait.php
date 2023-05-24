@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\NoReturn;
 use Laravel\Socialite\Facades\Socialite;
@@ -32,10 +33,14 @@ trait AuthTrait
         return auth()->guard('api');
     }
 
-    public function redirectToProvider($driver = null, Request $request): \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
+    public function redirectToProvider($driver, Request $request): \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
     {
-        dd($request->all(), $driver);
-        return Socialite::driver($driver ?? 'apple')->redirect();
+        if ($driver === 'apple') {
+            return Redirect::route('redirectToCallbackSocialProvider',
+                ['driver' => $driver, 'other' => true, 'token' => $request->get('id_token')])
+                ->withCookie(cookie()->forever('token', $request->get('id_token')));
+        }
+        return Socialite::driver($driver)->redirect();
     }
 
     public function redirectToCallbackSocialProvider($driver, $other = false, $token = null)
