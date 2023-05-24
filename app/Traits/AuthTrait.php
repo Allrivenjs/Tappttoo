@@ -35,6 +35,7 @@ trait AuthTrait
 
     public function redirectToProvider($driver, Request $request): \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
     {
+        dd($request->all());
         if ($driver === 'apple') {
             return Redirect::route('redirectToCallbackSocialProvider',
                 ['driver' => $driver, 'other' => true, 'token' => $request->get('id_token')])
@@ -105,7 +106,6 @@ trait AuthTrait
 
     #[NoReturn] public function findOrCreateUser($socialUser)
     {
-        dd($socialUser, $socialUser->getName(), $socialUser->getEmail(), $socialUser->getId());
         return User::query()->whereHas(
             'socialAccounts',
             fn (Builder $q) => $q->where('social_id', $socialUser->getId())
@@ -137,7 +137,7 @@ trait AuthTrait
     {
         $names = explode(' ', $data['full_name']);
         return User::query()->create([
-            'name' => $names[0] ?? $data['name'] ?? null,
+            'name' => $names[0] ?? $data['name'],
             'lastname' => $names[1] ?? $data['lastname'] ?? null,
             'email' => $data['email'],
         ]);
