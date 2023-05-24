@@ -35,7 +35,6 @@ trait AuthTrait
 
     public function redirectToProvider($driver, Request $request): \Symfony\Component\HttpFoundation\RedirectResponse|\Illuminate\Http\RedirectResponse
     {
-        dd($request->all());
         if ($driver === 'apple') {
             return Redirect::route('redirectToCallbackSocialProvider',
                 ['driver' => $driver, 'other' => true, 'token' => $request->get('id_token')])
