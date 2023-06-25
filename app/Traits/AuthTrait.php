@@ -12,6 +12,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
@@ -99,7 +100,10 @@ trait AuthTrait
     {
         $socialite = Socialite::driver($provider);
         $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
-        dd($this->token, $socialUser);
+        Log::log('info', 'Socialite user:');
+        Log::log('info', $socialUser);
+        Log::log('info', $this->token);
+        Log::log('info', $provider);
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
     }
