@@ -101,7 +101,12 @@ trait AuthTrait
         $socialite = Socialite::driver($provider);
         Log::log('info', $this->token);
         Log::log('info', 'Socialite user:');
-        $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
+        $socialUser = null;
+        if ($provider == 'apple') {
+            $socialUser = $socialite->userFromToken($this->token);
+        } else {
+            $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
+        }
         Log::log('info', $socialUser);
         Log::log('info', $provider);
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
