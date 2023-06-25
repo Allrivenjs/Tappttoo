@@ -99,10 +99,10 @@ trait AuthTrait
     private function handleSocialiteMethodLogin($provider, $other = false): array
     {
         $socialite = Socialite::driver($provider);
-        $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
-        Log::log('info', 'Socialite user:');
-        Log::log('info', $socialUser);
         Log::log('info', $this->token);
+        Log::log('info', 'Socialite user:');
+        $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
+        Log::log('info', $socialUser);
         Log::log('info', $provider);
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
