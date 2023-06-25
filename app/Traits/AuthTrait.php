@@ -99,6 +99,7 @@ trait AuthTrait
     {
         $socialite = Socialite::driver($provider);
         $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
+        dd($this->token, $socialUser);
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
     }
