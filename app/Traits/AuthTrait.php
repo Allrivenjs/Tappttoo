@@ -12,6 +12,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Redirect;
@@ -101,13 +102,18 @@ trait AuthTrait
         $socialite = Socialite::driver($provider);
         $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
          if ($provider == 'apple') {
-             $user = Socialite::driver('apple')->userFromToken($this->token);
-        // Obtener el nombre y el correo electrónico del usuario
-                     $name = $user->name;
-                     $email = $user->email;
-                     Log::log('info', $name);
-                        Log::log('info', $email);
-                        Log::log('info', json_encode($user));
+             $url = 'https://appleid.apple.com/auth/user';
+
+             $response = Http::withHeaders([
+                 'Authorization' => 'Bearer ' . $this->token
+             ])->get($url);
+
+             if ($response->successful()) {
+                 $user = $response->json();
+                 Log::log('info', $user);
+             } else {
+                 Log::error('Error al obtener los datos del usuario');
+             }
          }
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
