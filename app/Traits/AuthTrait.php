@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-
 use App\Models\SocialProfile;
 use App\Models\User;
 use Carbon\Carbon;
@@ -13,7 +12,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Redirect;
@@ -101,76 +99,18 @@ trait AuthTrait
     private function handleSocialiteMethodLogin($provider, $other = false): array
     {
         $socialite = Socialite::driver($provider);
-        Log::log('info', $this->token);
-        Log::log('info', 'Socialite user:');
         $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
-        Log::log('info', json_encode($socialUser));
-        Log::log('info', $provider);
-        $this->getApple($this->token);
+         if ($provider == 'apple') {
+             $user = Socialite::driver('apple')->userFromToken($this->token);
+        // Obtener el nombre y el correo electrónico del usuario
+                     $name = $user->name;
+                     $email = $user->email;
+                     Log::log('info', $name);
+                        Log::log('info', $email);
+                        Log::log('info', json_encode($user));
+         }
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
-    }
-
-    private function getApple($token){
-        // The client ID is the "Services ID" value that you get during setup
-        $client_id = \config('services.apple.client_id');
-
-// The client secret is a ECDSA signed JWT using the key you get from the developer portal
-// Generating the JWT:
-// https://developer.apple.com/documentation/signinwithapplerestapi/generate_and_validate_tokens#3262048
-
-// You can generate the secret from the Ruby code in this repository
-        $client_secret = \config('services.apple.client_secret');
-
-// Redirect URLs must be registered with Apple. You can register up to 10.
-// Apple will throw an error with IP address URLs on the authorization screen,
-// and will not let you add localhost in the developer portal.
-        $redirect_uri = \config('services.apple.redirect');
-
-
-        // Token endpoint docs:
-        // https://developer.apple.com/documentation/signinwithapplerestapi/generate_and_validate_tokens
-
-        $response = Http::post('https://appleid.apple.com/auth/token', [
-            'grant_type' => 'authorization_code',
-            'code' => $token,
-            'redirect_uri' => $redirect_uri,
-            'client_id' => $client_id,
-            'client_secret' => $client_secret,
-        ]);
-        Log::log('info', $response);
-
-        if(!isset($response->access_token)) {
-            Log::log('error', $response);
-        }
-        $claims = explode('.', $response->id_token)[1];
-        $claims = json_decode(base64_decode($claims));
-
-        Log::log('info', $claims);
-
-        $_SESSION['state'] = bin2hex(random_bytes(5));
-
-        $authorize_url = 'https://appleid.apple.com/auth/authorize'.'?'.http_build_query([
-                'response_type' => 'code',
-                'response_mode' => 'form_post',
-                'client_id' => $client_id,
-                'redirect_uri' => $redirect_uri,
-                'state' => $_SESSION['state'],
-                'scope' => 'name email',
-            ]);
-        Log::log('info', $authorize_url);
-        function http($url, $params=false) {
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            if($params)
-                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Accept: application/json',
-                'User-Agent: curl', # Apple requires a user agent header at the token endpoint
-            ]);
-            $response = curl_exec($ch);
-            return json_decode($response);
-        }
     }
 
     #[NoReturn] public function findOrCreateUser($socialUser, $provider)
