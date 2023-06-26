@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "ext-pdo": "*",
         "bancolombia-dev/wompi-php": "^1.0",
         "beyondcode/laravel-websockets": "^1.13",
         "doctrine/dbal": "^3.6",
@@ -26,7 +27,7 @@
         "socialiteproviders/apple": "^5.5",
         "socialiteproviders/google": "^4.1",
         "spatie/laravel-permission": "^5.5",
-        "ext-pdo": "*"
+        "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ccc435f970f1cf0690cccb4d2ae57084",
+    "content-hash": "2319983a3300a498e53c7be2b8592005",
     "packages": [
         {
             "name": "bancolombia-dev/wompi-php",
