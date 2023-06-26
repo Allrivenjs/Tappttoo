@@ -105,8 +105,8 @@ trait AuthTrait
          if ($provider == 'apple') {
              $data = json_decode($this->token, true);
              $tok = Provider::verify($this->token);
-             Log::log('info', $data);
-             Log::log('info', $tok);
+             Log::log('info', json_encode($data));
+             Log::log('info', json_encode($tok));
 
          }
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
