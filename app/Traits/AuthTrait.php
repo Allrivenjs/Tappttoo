@@ -104,7 +104,12 @@ trait AuthTrait
         $socialUser = null;
         Log::log('info', $provider);
         if ($provider == 'apple') {
-            $socialUser = $socialite->userFromToken($this->token);
+            try {
+                $socialUser = $socialite->userFromToken($this->token);
+            } catch (\Exception $e) {
+                Log::log('info', $e->getMessage());
+                return ['error' => $e->getMessage()];
+            }
         } else {
             $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
         }
