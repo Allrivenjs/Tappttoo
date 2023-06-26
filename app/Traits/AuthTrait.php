@@ -102,6 +102,7 @@ trait AuthTrait
         Log::log('info', $this->token);
         Log::log('info', 'Socialite user:');
         $socialUser = null;
+        Log::log('info', $provider);
         if ($provider == 'apple') {
             $socialUser = $socialite->userFromToken($this->token);
         } else {
