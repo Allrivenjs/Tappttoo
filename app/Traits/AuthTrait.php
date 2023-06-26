@@ -102,13 +102,6 @@ trait AuthTrait
     {
         $socialite = Socialite::driver($provider);
         $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
-         if ($provider == 'apple') {
-             $data = json_decode($this->token, true);
-             $tok = Provider::verify($this->token);
-             Log::log('info', json_encode($data));
-             Log::log('info', json_encode($tok));
-
-         }
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
     }
