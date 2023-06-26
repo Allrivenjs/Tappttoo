@@ -112,7 +112,7 @@ trait AuthTrait
                  $user = $response->json();
                  Log::log('info', $user);
              } else {
-                 Log::error('Error al obtener los datos del usuario');
+                 Log::error('Error al obtener los datos del usuario' . $response->body());
              }
          }
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
