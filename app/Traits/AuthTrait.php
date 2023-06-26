@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\NoReturn;
 use Laravel\Socialite\Facades\Socialite;
+use SocialiteProviders\Apple\Provider;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\Rules;
 
@@ -102,18 +103,8 @@ trait AuthTrait
         $socialite = Socialite::driver($provider);
         $socialUser = !$other ? $socialite->stateless()->user() : $socialite->userFromToken($this->token);
          if ($provider == 'apple') {
-             $url = 'https://appleid.apple.com/auth/user';
-
-             $response = Http::withHeaders([
-                 'Authorization' => 'Bearer ' . $this->token
-             ])->get($url);
-
-             if ($response->successful()) {
-                 $user = $response->json();
-                 Log::log('info', $user);
-             } else {
-                 Log::error('Error al obtener los datos del usuario' . $response->body());
-             }
+             $data = json_decode($this->token, true);
+             $tok = Provider::verify($this->token);
          }
         list($user, $created) = $this->createUserProvider($socialUser, $provider);
         return $this->loginMethod($user);
