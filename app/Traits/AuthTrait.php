@@ -13,6 +13,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Redirect;
@@ -130,13 +131,14 @@ trait AuthTrait
         // Token endpoint docs:
         // https://developer.apple.com/documentation/signinwithapplerestapi/generate_and_validate_tokens
 
-        $response = http('https://appleid.apple.com/auth/token', [
+        $response = Http::post('https://appleid.apple.com/auth/token', [
             'grant_type' => 'authorization_code',
             'code' => $token,
             'redirect_uri' => $redirect_uri,
             'client_id' => $client_id,
             'client_secret' => $client_secret,
         ]);
+        Log::log('info', $response);
 
         if(!isset($response->access_token)) {
             Log::log('error', $response);
