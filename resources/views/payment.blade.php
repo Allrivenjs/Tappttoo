@@ -52,8 +52,8 @@
         currency: "{{ strtoupper($payment->payment_currency)  }}",
         amountInCents: Number("{{ $payment->payment_amount  }}"),
         reference: "{{ $payment->payment_reference  }}",
-        // publicKey: 'pub_prod_EjcgGnHhlLadwW52vNRlX2iGM31wRYLM',
-        publicKey: 'pub_test_Q5yDA9xoKdePzhSGeVe9HAez7HgGORGf',
+        publicKey: 'pub_prod_EjcgGnHhlLadwW52vNRlX2iGM31wRYLM',
+        // publicKey: 'pub_test_Q5yDA9xoKdePzhSGeVe9HAez7HgGORGf',
         redirectUrl: "{{ route('payment.success') }}",
         customerData: { // Opcional
             email:"{{ $user->email }}",
