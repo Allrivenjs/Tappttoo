@@ -15,7 +15,7 @@ class MessageNotification extends Notification implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(public $message, public $user, public $room){}
+    public function __construct(public $message, public $user, public $room, public $sender){}
 
     /**
      * Get the notification's delivery channels.
@@ -38,7 +38,7 @@ class MessageNotification extends Notification implements ShouldBroadcast
     {
         return [
             'message' => $this->message,
-            'user' => $this->user,
+            'user' => $this->sender,
             'room' => $this->room,
         ];
     }

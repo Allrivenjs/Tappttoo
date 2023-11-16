@@ -42,20 +42,20 @@ class Chat implements ChatInterface
 
     public function sendMessage($roomId, $message): void
     {
-        $user = Auth::guard('api')->user()->getAuthIdentifier();
+        $user = Auth::guard('api')->user();
         $data = [
             'message' => $message,
-            'user_id' => $user,
+            'user_id' => $user->getAuthIdentifier(),
             'room_id' => $roomId,
         ];
         $message = new Message($data);
         $message->save();
-        $user2 = Room::query()->find($roomId)->users()->where('user_id', '!=', $user)->first();
+        $user2 = Room::query()->find($roomId)->users()->where('user_id', '!=', $user->getAuthIdentifier())->first();
         $user2 = User::find($user2->id);
-        $user2->notify(new \App\Notifications\MessageNotification($message, $user, $roomId));
+        $user2->notify(new \App\Notifications\MessageNotification($message, $user2, $roomId, $user));
         broadcast(new MessageNotification($data))->toOthers();
         // enviar notificacion al usuario resecptor
-        broadcast(new \App\Notifications\MessageNotification($message, $user, $roomId))->toOthers();
+        broadcast(new \App\Notifications\MessageNotification($message, $user2, $roomId, $user))->toOthers();
     }
 
     public function getRooms(): array
