@@ -55,9 +55,7 @@ class Chat implements ChatInterface
         $user2->notify(new \App\Notifications\MessageNotification($message, $user, $roomId));
         broadcast(new MessageNotification($data))->toOthers();
         // enviar notificacion al usuario resecptor
-//        broadcast(new \App\Notifications\MessageNotification($message, $user2, $roomId))->toOthers();
-
-
+        broadcast(new \App\Notifications\MessageNotification($message, $user, $roomId))->toOthers();
     }
 
     public function getRooms(): array
